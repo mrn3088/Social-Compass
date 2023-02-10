@@ -25,6 +25,6 @@ public class ShowMapActivity extends AppCompatActivity {
 
         locationService.getLocation().observe(this, loc ->{
             textView.setText(Double.toString(loc.first) + " , " + Double.toString(loc.second));
-        })
+        });
     }
 }
