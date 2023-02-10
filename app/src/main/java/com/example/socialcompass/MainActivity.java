@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(this, ShowMap.class);
+        Intent intent = new Intent(this, ShowMapActivity.class);
         if(false) {
             startActivity(intent);
         }
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
             Utilities.displayAlert(this, "your coordinates are innacurate!");
         } else {
             // if all checks pass open map
-            Intent intent = new Intent(this, ShowMap.class);
+            Intent intent = new Intent(this, ShowMapActivity.class);
             startActivity(intent);
         }
     }
