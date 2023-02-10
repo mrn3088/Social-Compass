@@ -15,19 +15,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Intent intent = new Intent(this, ShowMap.class);
-        if(false) {
+        if(true) {
             startActivity(intent);
         }
     }
 
     public void onSubmitLabelsClicked(View view) {
         // if no labels have been added display error
-        if(false) {
+        if (true) {
             Utilities.displayAlert(this, "you must enter at least one label before proceeding!");
-        // if label strings are too long display error
-        } else if(false) {
+            // if label strings are too long display error
+        } else if (false) {
             Utilities.displayAlert(this, "your label strings must be less then 12 characters!");
-        // if coordinates are innacurate display error
+            // if coordinates are innacurate display error
         } else if (false) {
             Utilities.displayAlert(this, "your coordinates are innacurate!");
         } else {
@@ -35,4 +35,5 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ShowMap.class);
             startActivity(intent);
         }
+    }
 }
