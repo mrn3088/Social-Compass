@@ -13,7 +13,6 @@ public class MainActivity extends AppCompatActivity {
     // IF SHARED PREFERENCES DON'T EXIST STAY ON PAGE
     // ELSE IMMEDAITLY LEAVE MAIN ACTIVITY AND LOAD MAP!
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

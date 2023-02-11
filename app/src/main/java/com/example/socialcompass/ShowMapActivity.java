@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 
 public class ShowMapActivity extends AppCompatActivity {
-
     private LocationService locationService;
 
     @Override

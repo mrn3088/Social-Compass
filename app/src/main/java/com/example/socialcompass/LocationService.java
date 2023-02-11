@@ -24,7 +24,6 @@ public class LocationService implements LocationListener {
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
 
-
     public static LocationService singleton(Activity activity) {
         if (instance == null) {
             instance = new LocationService(activity);
