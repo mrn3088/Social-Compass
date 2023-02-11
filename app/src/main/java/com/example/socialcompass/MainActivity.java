@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,15 +17,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Display Radians of phone orientation
         OrientationService orientationService = OrientationService.singleton(this);
         TextView view = (TextView) findViewById(R.id.ori);
         orientationService.getOrientation().observe(this, orientation -> {
             view.setText(Float.toString(orientation));
                 });
-//        Intent intent = new Intent(this, ShowMapActivity.class);
-//        if(true) {
-//            startActivity(intent);
-//        }
     }
 
 
@@ -44,5 +42,10 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ShowMapActivity.class);
             startActivity(intent);
         }
+    }
+
+    public void onLaunchMapClicked(View view) {
+        Intent intent = new Intent(this, ShowMapActivity.class);
+        startActivity(intent);
     }
 }
