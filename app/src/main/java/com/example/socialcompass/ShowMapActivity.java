@@ -21,7 +21,7 @@ public class ShowMapActivity extends AppCompatActivity {
             @Override
             public void onChanged(Float aFloat) {
                 float degree = (float)((float) 360.0-(aFloat*180/Math.PI));
-                view.setRotation(degree);
+                //view.setRotation(degree);
                 ConstraintLayout compass = findViewById(R.id.compass);
                 ConstraintProperties cp = new ConstraintProperties(compass);
                 cp.rotation(degree);
