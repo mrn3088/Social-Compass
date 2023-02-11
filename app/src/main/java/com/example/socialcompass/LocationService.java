@@ -2,6 +2,7 @@ package com.example.socialcompass;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,12 +21,14 @@ public class LocationService implements LocationListener {
     private MutableLiveData<Pair<Double, Double>> locationValue;
 
     private final LocationManager locationManager;
+    private SharedPreferences pref;
+    private SharedPreferences.Editor editor;
+
 
     public static LocationService singleton(Activity activity) {
         if (instance == null) {
             instance = new LocationService(activity);
         }
-
         return instance;
     }
 
@@ -38,7 +41,8 @@ public class LocationService implements LocationListener {
         this.locationValue = new MutableLiveData<>();
         this.activity = activity;
         this.locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
-
+        this.pref = activity.getPreferences(Context.MODE_PRIVATE);
+        this.editor = pref.edit();
         //Register sensor listeners
         this.registerLocationListener();
     }
@@ -49,7 +53,7 @@ public class LocationService implements LocationListener {
             throw new IllegalStateException("Apps needs location permission to get latest location");
         }
 
-        this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, this);
     }
 
     @Override
@@ -57,6 +61,9 @@ public class LocationService implements LocationListener {
         this.locationValue.postValue(new Pair<Double, Double>(location.getLatitude(),
                 location.getLongitude())
         );
+        editor.putString("mostRecentLong", String.valueOf(location.getLongitude()));
+        editor.putString("mostRecentLat", String.valueOf(location.getLatitude()));
+        editor.apply();
     }
 
     public void unregisterLocationListener(){
