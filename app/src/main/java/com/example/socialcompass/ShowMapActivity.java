@@ -7,7 +7,10 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.widget.TextView;
 
+
 public class ShowMapActivity extends AppCompatActivity {
+
+    private LocationService locationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,10 +22,8 @@ public class ShowMapActivity extends AppCompatActivity {
 
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 200);
         }
-
-        locationService.LocationService.singleton(this);
+        locationService = LocationService.singleton(this);
         TextView textView = (TextView) findViewById(R.id.coordinatesDisplay);
-
         locationService.getLocation().observe(this, loc ->{
             textView.setText(Double.toString(loc.first) + " , " + Double.toString(loc.second));
         });
