@@ -1,10 +1,12 @@
 package com.example.socialcompass;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     // IF SHARED PREFERENCES DON'T EXIST STAY ON PAGE
@@ -14,11 +16,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(this, ShowMapActivity.class);
-        if(false) {
-            startActivity(intent);
-        }
+        OrientationService orientationService = OrientationService.singleton(this);
+        TextView view = (TextView) findViewById(R.id.ori);
+        orientationService.getOrientation().observe(this, orientation -> {
+            view.setText(Float.toString(orientation));
+                });
+//        Intent intent = new Intent(this, ShowMapActivity.class);
+//        if(true) {
+//            startActivity(intent);
+//        }
     }
+
+
 
     public void onSubmitLabelsClicked(View view) {
         // if no labels have been added display error
