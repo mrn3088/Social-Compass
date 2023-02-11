@@ -12,6 +12,7 @@ public class ShowMapActivity extends AppCompatActivity {
 
     private LocationService locationService;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

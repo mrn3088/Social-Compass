@@ -70,6 +70,5 @@ public class LocationService implements LocationListener {
 
     public LiveData<Pair<Double,Double>> getLocation() {
         return this.locationValue;
-
     }
 }
