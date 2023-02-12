@@ -54,13 +54,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         // label names cannot be empty
-        if (labelNames.stream().anyMatch(String::isEmpty)) {
+        if (!Utilities.namedLabels(labelNames)) {
             Utilities.displayAlert(this, "you must enter at least one label before proceeding!");
             return;
         }
 
-        // label names cannot exceed 12 characters
-        if (labelNames.stream().anyMatch(name -> name.length() >= Utilities.MAX_LABEL_LENGTH)) {
+        // label names cannot exceed 20 characters
+        if (!Utilities.validLabelLengths(labelNames)) {
             Utilities.displayAlert(this, "your label strings must be less then 12 characters!");
             return;
         }
@@ -80,9 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 .map(Optional::get)
                 .collect(Collectors.toList());
 
-        if (coordinates.stream().anyMatch(cord ->
-                (cord[0] > 90.0f || cord[0] < -90.0f
-                        || cord[1] > 180.0f || cord[1] < -180.0f))) {
+        if (!Utilities.validCoordinates(coordinates)) {
             Utilities.displayAlert(this, "your location does not exist!");
             return;
         }

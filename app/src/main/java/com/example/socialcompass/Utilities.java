@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.Pair;
 
+import java.util.List;
 import java.util.Optional;
 
 public class Utilities {
@@ -69,8 +70,33 @@ public class Utilities {
     }
 
 
+    public static boolean namedLabels(List<String> labelNames) {
+        int totalNames = 0;
+        for(int i = 0; i < labelNames.size(); i++) {
+            if(!labelNames.get(i).isBlank()) {
+                totalNames ++;
+            }
+        }
+        return totalNames == 3;
+    }
 
+    public static boolean validLabelLengths(List<String> labelNames) {
+        for(int i = 0; i < labelNames.size(); i++) {
+            if(labelNames.get(i).length() > 20) {
+                return false;
+            }
+        }
+        return true;
+    }
 
+    public static boolean validCoordinates(List<float[]> coordinates) {
+        for(int i = 0; i < coordinates.size(); i++) {
+            if(Math.abs(coordinates.get(i)[0]) > 90 || Math.abs(coordinates.get(i)[1]) > 180) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 
