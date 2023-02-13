@@ -52,7 +52,7 @@ public class LabelParsingTests {
         testList.add("aaaaaaaaaaaaaaaaaaa");
         assertEquals(true, Utilities.validLabelLengths(testList));
         // check for element with 20 characters
-        testList.add("aaaaaaaaaaaaaaaaaaaa");
+        testList.add("aaaaaaaaaaaaaaaaaaaaa");
         assertEquals(false, Utilities.validLabelLengths(testList));
     }
 
