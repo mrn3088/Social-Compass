@@ -1,11 +1,15 @@
 package com.example.socialcompass;
 
+import static com.example.socialcompass.Utilities.parseCoordinate;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class LabelParsingTests {
 
@@ -58,8 +62,31 @@ public class LabelParsingTests {
 
     @Test
     public void parseCoordinatesTest() {
-        // HOW TO TEST PARSE COORDINATES METHOD????
+        String validInput = "23.3456 45.6789";
+        Optional<float[]> result = parseCoordinate(validInput);
+
+        assertTrue(result.isPresent());
+        float[] cordArr = result.get();
+        assertEquals(23.3456f, cordArr[0], 0.0001f);
+        assertEquals(45.6789f, cordArr[1], 0.0001f);
+
+        String invalidInput = "23.3456";
+
+        Optional<float[]> resultInvalid = parseCoordinate(invalidInput);
+
+        assertFalse(resultInvalid.isPresent());
+
+        invalidInput = "abc def";
+        result = parseCoordinate(invalidInput);
+
+        assertFalse(result.isPresent());
+
+        invalidInput = "0 0 0";
+        result = parseCoordinate(invalidInput);
+
+        assertFalse(result.isPresent());
     }
+
 
     @Test
     public void validCoordinatesTest() {
