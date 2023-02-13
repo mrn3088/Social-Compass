@@ -95,7 +95,50 @@ public class RelativeAngleTests {
 
     @Test
     public void testRelativeAngle(){
-        float offset = 0.1f;
-        Pair<Float, Float> location;
+        float offset = 0.2f;
+        float expectedAngle1 = 0.0f;
+        float realAngle1 = Utilities.relativeAngleUtils(32.0, -117.0, 90.0, -117.0);
+        System.out.println(realAngle1);
+        if(realAngle1>=expectedAngle1-offset && realAngle1<=expectedAngle1+offset){
+            assertTrue(true);
+        }else{
+            assertTrue(false);
+        }
+
+        float expectedAngle2 = 0.0f;
+        float realAngle2 = Utilities.relativeAngleUtils(32.0, -117.0, 35.0, -117.0);
+        System.out.println(realAngle1);
+        if(realAngle2>=expectedAngle2-offset && realAngle2<=expectedAngle2+offset){
+            assertTrue(true);
+        }else{
+            assertTrue(false);
+        }
+
+        float expectedAngle3 = 90.0f;
+        float realAngle3 = Utilities.relativeAngleUtils(32.0, -117.0, 32.01, 0.0);
+        System.out.println(realAngle3);
+        if(realAngle3>=expectedAngle3-offset && realAngle3<=expectedAngle3+offset){
+            assertTrue(true);
+        }else{
+            assertTrue(false);
+        }
+
+        float expectedAngle4 = 270.0f;
+        float realAngle4 = Utilities.relativeAngleUtils(32.0, -117.0, 32.01, -120.0);
+        System.out.println(realAngle4);
+        if(realAngle4>=expectedAngle4-offset && realAngle4<=expectedAngle4+offset){
+            assertTrue(true);
+        }else{
+            assertTrue(false);
+        }
+
+        float expectedAngle5 = 45.0f;
+        float realAngle5 = Utilities.relativeAngleUtils(20.0, 30.0, 40.0, 50.0);
+        System.out.println(realAngle5);
+        if(realAngle5>=expectedAngle5-offset && realAngle5<=expectedAngle5+offset){
+            assertTrue(true);
+        }else{
+            assertTrue(false);
+        }
     }
 }

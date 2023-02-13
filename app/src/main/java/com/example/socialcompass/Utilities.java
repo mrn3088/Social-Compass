@@ -32,8 +32,12 @@ public class Utilities {
     }
 
     public static float relativeAngle(Pair<Double, Double> currentLocation, Pair<Double, Double> destination){
-        Double latitudeDifference = destination.first-currentLocation.first;
-        Double longitudeDifference = destination.second-currentLocation.second;
+        return relativeAngleUtils(currentLocation.first, currentLocation.second, destination.first, destination.second);
+
+    }
+    public static float relativeAngleUtils(Double userLat, Double userLong, Double destLat, Double destLong){
+        Double latitudeDifference = destLat-userLat;
+        Double longitudeDifference = destLong - userLong;
 
         if(latitudeDifference>0 && longitudeDifference>0){
             return (float) radiansToDegreesDouble(Math.atan(longitudeDifference/latitudeDifference));
@@ -52,7 +56,6 @@ public class Utilities {
         }
 
         return 0f;
-
     }
 
     public static Optional<float[]> parseCoordinate(String str) {
