@@ -34,7 +34,7 @@ jobs:
         arguments: build
         
     - name: label tests
-    run: ./labelParsingTests
+    run: ./gradlew LabelParsingTests
     
     - name: Android Test Report
     uses: asadmansr/android-test-report-action@v1.2.0
