@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
                 (TextView)findViewById(R.id.label_3_coordinates)
         };
 
+        String manual_rotation = ((TextView)findViewById(R.id.orientation_input)).getText().toString();
+
         List<String> labelNames = Arrays.stream(labelNameViews)
                 .map(TextView::getText)
                 .map(CharSequence::toString)
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
         editor.apply();
 
         Intent intent = new Intent(this, ShowMapActivity.class);
+        intent.putExtra("manual_rotation", manual_rotation);
         startActivity(intent);
 
     }

@@ -7,10 +7,12 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Pair;
+import android.view.View;
 import android.widget.TextView;
 
 public class ShowMapActivity extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class ShowMapActivity extends AppCompatActivity {
     private Pair<Double, Double> destination3;
     private String label3;
     private Pair<Double, Double> previousLocation = Pair.create(0.0, 0.0);
+    private int manual_rotation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +49,27 @@ public class ShowMapActivity extends AppCompatActivity {
 
         TextView north = (TextView) findViewById(R.id.North);
 
-        orientationService.getOrientation().observe(this, new Observer<Float>() {
-            @Override
-            public void onChanged(Float aFloat) {
-                ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
-                float degree = 360 - Utilities.radiansToDegreesFloat(aFloat);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            this.manual_rotation = Integer.valueOf(extras.getString("manual_rotation"));
+        }
 
-                northlayoutparams.circleAngle = degree;
+        if (!(this.manual_rotation >= 0) && (this.manual_rotation <360)) {
+            orientationService.getOrientation().observe(this, new Observer<Float>() {
+                @Override
+                public void onChanged(Float aFloat) {
+                    ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
+                    float degree = 360 - Utilities.radiansToDegreesFloat(aFloat);
 
-            }
-        });
+                    northlayoutparams.circleAngle = degree;
+
+                }
+            });
+        } else {
+            ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
+            northlayoutparams.circleAngle = manual_rotation;
+        }
+
 
         locationService.getLocation().observe(this, new Observer<Pair<Double, Double>>() {
             @Override
@@ -93,6 +107,11 @@ public class ShowMapActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void onBackClicked(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override

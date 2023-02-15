@@ -171,4 +171,27 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.875" />
 
+    <EditText
+        android:id="@+id/orientation_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        android:text="999"
+        app:layout_constraintBottom_toTopOf="@+id/label_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_labels" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Orientation:"
+        app:layout_constraintBottom_toTopOf="@+id/label_1"
+        app:layout_constraintEnd_toStartOf="@+id/orientation_input"
+        app:layout_constraintHorizontal_bias="0.581"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_labels" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
