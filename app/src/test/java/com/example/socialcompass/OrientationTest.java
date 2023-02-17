@@ -47,4 +47,31 @@ public class OrientationTest {
             assertEquals(expected, observed, 0.002);
         });
     }
+
+    @Test
+    public void orientation_service_multiple_changes() {
+        float testValueOne = (float) Math.PI;
+        float testValueTwo = (float) 0;
+        float testValueThree = (float) (Math.PI / 2);
+
+        var scenario = ActivityScenario.launch(ShowMapActivity.class);
+        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.onActivity(activity -> {
+            var orientationService = OrientationService.singleton(activity);
+
+            var mockOrientation = new MutableLiveData<Float>();
+            orientationService.setMockOrientationData(mockOrientation);
+            // We don't want to have to do this! It's not our job to tell the activity!
+            activity.reobserveOrientation();
+
+            mockOrientation.setValue(testValueOne);
+            mockOrientation.setValue(testValueTwo);
+            mockOrientation.setValue(testValueThree);
+            //TextView textView = activity.findViewById(R.id.orientationText);
+
+            var expected = 360 - Utilities.radiansToDegreesFloat(testValueThree);
+            var observed = activity.getOrientation();
+            assertEquals(expected, observed, 0.002);
+        });
+    }
 }
