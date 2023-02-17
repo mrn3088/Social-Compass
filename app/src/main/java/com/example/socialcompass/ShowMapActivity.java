@@ -29,6 +29,7 @@ public class ShowMapActivity extends AppCompatActivity {
     private String label3;
     private Pair<Double, Double> previousLocation = Pair.create(0.0, 0.0);
     private int manual_rotation;
+    private float orientation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +47,6 @@ public class ShowMapActivity extends AppCompatActivity {
         orientationService = OrientationService.singleton(this);
         compass = (ConstraintLayout) findViewById(R.id.compass);
         cp = new ConstraintProperties(compass);
-
         TextView north = (TextView) findViewById(R.id.North);
 
         Bundle extras = getIntent().getExtras();
@@ -55,16 +55,7 @@ public class ShowMapActivity extends AppCompatActivity {
         }
 
         if (!(this.manual_rotation >= 0) && (this.manual_rotation <360)) {
-            orientationService.getOrientation().observe(this, new Observer<Float>() {
-                @Override
-                public void onChanged(Float aFloat) {
-                    ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
-                    float degree = 360 - Utilities.radiansToDegreesFloat(aFloat);
-
-                    northlayoutparams.circleAngle = degree;
-
-                }
-            });
+            this.reobserveOrientation();
         } else {
             ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
             northlayoutparams.circleAngle = manual_rotation;
@@ -109,6 +100,20 @@ public class ShowMapActivity extends AppCompatActivity {
         });
     }
 
+    public void reobserveOrientation() {
+        TextView north = (TextView) findViewById(R.id.North);
+
+        orientationService.getOrientation().observe(this, new Observer<Float>() {
+            @Override
+            public void onChanged(Float aFloat) {
+                ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
+                float degree = 360 - Utilities.radiansToDegreesFloat(aFloat);
+                orientation = degree;
+                northlayoutparams.circleAngle = degree;
+
+            }
+        });
+    }
     public void onBackClicked(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -130,6 +135,8 @@ public class ShowMapActivity extends AppCompatActivity {
         label2 = preferences.getString("label2Name", "Label2");
         label3 = preferences.getString("label3Name", "Label3");
     }
+
+    public float getOrientation() {return orientation;}
 
 
 }

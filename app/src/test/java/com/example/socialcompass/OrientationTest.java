@@ -1,0 +1,50 @@
+package com.example.socialcompass;
+
+import static org.junit.Assert.assertEquals;
+
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.test.core.app.ActivityScenario;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import androidx.test.rule.GrantPermissionRule;
+
+@RunWith(RobolectricTestRunner.class)
+public class OrientationTest {
+    @Rule
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+
+    @Rule
+    public GrantPermissionRule fRuntimePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
+
+    @Rule
+    public GrantPermissionRule fRuntimePermissionRuleCoarse = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+
+    @Test
+    public void orientation_service() {
+        float testValue = (float) Math.PI;
+
+        var scenario = ActivityScenario.launch(ShowMapActivity.class);
+        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.onActivity(activity -> {
+            var orientationService = OrientationService.singleton(activity);
+
+            var mockOrientation = new MutableLiveData<Float>();
+            orientationService.setMockOrientationData(mockOrientation);
+            // We don't want to have to do this! It's not our job to tell the activity!
+            activity.reobserveOrientation();
+
+            mockOrientation.setValue(testValue);
+            //TextView textView = activity.findViewById(R.id.orientationText);
+
+            var expected = 360 - Utilities.radiansToDegreesFloat(testValue);
+            var observed = activity.getOrientation();
+            assertEquals(expected, observed, 0.002);
+        });
+    }
+}
