@@ -61,10 +61,14 @@ public class ShowMapActivity extends AppCompatActivity {
             northlayoutparams.circleAngle = manual_rotation;
         }
 
+        this.reobserveLocation();
+    }
 
+    public void reobserveLocation() {
         locationService.getLocation().observe(this, new Observer<Pair<Double, Double>>() {
             @Override
             public void onChanged(Pair<Double, Double> currentLocation) {
+                TextView north = (TextView) findViewById(R.id.North);
 
                 if(currentLocation == null){
                     currentLocation = previousLocation;
@@ -138,5 +142,5 @@ public class ShowMapActivity extends AppCompatActivity {
 
     public float getOrientation() {return orientation;}
 
-
+    public Pair<Double, Double> getPreviousLocation() {return previousLocation;}
 }
