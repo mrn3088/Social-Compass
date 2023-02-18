@@ -49,4 +49,28 @@ public class LocationTests {
             assertEquals(expected.second, observed.second, 0.002);
         });
     }
+
+    @Test
+    public void locationUpdatesWithChange() {
+        Pair<Double, Double> testValue = Pair.create(35.006, 78.5546);
+        Pair<Double, Double> testValueTwo = Pair.create(56.9987, 10.002);
+        Pair<Double, Double> testValueThree = Pair.create(34.555, 45.6676);
+        var scenario = ActivityScenario.launch(ShowMapActivity.class);
+        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.onActivity(activity -> {
+            var locationService = LocationService.singleton(activity);
+
+            var mockLocation = new MutableLiveData<Pair<Double, Double>>();
+            locationService.setMockOrientationSource(mockLocation);
+            activity.reobserveLocation();
+            mockLocation.setValue(testValue);
+            mockLocation.setValue(testValueTwo);
+            mockLocation.setValue(testValueThree);
+
+            var expected = testValueThree;
+            var observed = activity.getPreviousLocation();
+            assertEquals(expected.first, observed.first, 0.002);
+            assertEquals(expected.second, observed.second, 0.002);
+        });
+    }
 }
