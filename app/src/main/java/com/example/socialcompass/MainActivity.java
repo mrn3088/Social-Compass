@@ -56,13 +56,13 @@ public class MainActivity extends AppCompatActivity {
                 (TextView)findViewById(R.id.label_3_coordinates)
         };
 
-        String manual_rotation = ((TextView)findViewById(R.id.orientation_input)).getText().toString();
-        String manual = Utilities.USE_PHONE_ORIENTATION;
-        if (!manual_rotation.equals("") && !Utilities.validOrientation(manual_rotation)) {
+        String manualRotationStr = ((TextView)findViewById(R.id.orientation_input)).getText().toString();
+        String manualRotationOpt = Utilities.USE_PHONE_ORIENTATION;
+        if (!manualRotationStr.equals("") && !Utilities.validOrientation(manualRotationStr)) {
             Utilities.displayAlert(this, "Orientation needs to be a integer between 0 and 359!");
             return;
         } else {
-            manual = manual_rotation;
+            manualRotationOpt = manualRotationStr;
         }
 
 
@@ -124,8 +124,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("label" + (i + 1) + "Name", labelNames.get(i));
         }
 
-        editor.putString("manual_rotation", manual);
-        editor.putString("manual_rotation_display", manual_rotation);
+        editor.putString("manual_rotation", manualRotationOpt);
         editor.apply();
 
 
@@ -144,7 +143,11 @@ public class MainActivity extends AppCompatActivity {
         label2 = preferences.getString("label2Name", "Label2");
         label3 = preferences.getString("label3Name", "Label3");
 
-        manual_rotation = Integer.parseInt(preferences.getString("manual_rotation_display", ""));
+        manual_rotation = -1;
+        try {
+            manual_rotation = Integer.parseInt(preferences.getString("manual_rotation", "-1"));
+        } catch (NumberFormatException e) {}
+
         TextView[] labelNameViews = {
                 (TextView)findViewById(R.id.label_1_name),
                 (TextView)findViewById(R.id.label_2_name),
@@ -167,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         String cord1AsString = destination1.first + " " + destination1.second;
         String cord2AsString = destination2.first + " " + destination2.second;
         String cord3AsString = destination3.first + " " + destination3.second;
-        String orientationString = "" + manual_rotation;
+        String orientationString = manual_rotation == -1 ? "" : "" + manual_rotation;
 
         labelCoordinateViews[0].setText(cord1AsString);
         labelCoordinateViews[1].setText(cord2AsString);

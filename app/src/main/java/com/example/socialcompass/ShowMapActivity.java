@@ -146,7 +146,10 @@ public class ShowMapActivity extends AppCompatActivity {
         label1 = preferences.getString("label1Name", "Label1");
         label2 = preferences.getString("label2Name", "Label2");
         label3 = preferences.getString("label3Name", "Label3");
-        manual_rotation = Integer.parseInt(preferences.getString("manual_rotation", "-1"));
+        manual_rotation = -1;
+        try {
+            Integer.parseInt(preferences.getString("manual_rotation", "-1"));
+        } catch (NumberFormatException e) {}
     }
 
     public float getOrientation() {return orientation;}
