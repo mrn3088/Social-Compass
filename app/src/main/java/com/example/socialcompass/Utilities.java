@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public class Utilities {
     static final int MAX_LABEL_LENGTH = 20;
+    static final String USE_PHONE_ORIENTATION = "-1";
 
     public static void displayAlert(Activity activity, String message) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
@@ -33,8 +34,8 @@ public class Utilities {
 
     public static float relativeAngle(Pair<Double, Double> currentLocation, Pair<Double, Double> destination){
         return relativeAngleUtils(currentLocation.first, currentLocation.second, destination.first, destination.second);
-
     }
+
     public static float relativeAngleUtils(Double userLat, Double userLong, Double destLat, Double destLong){
         Double latitudeDifference = destLat-userLat;
         Double longitudeDifference = destLong - userLong;
@@ -94,11 +95,26 @@ public class Utilities {
 
     public static boolean validCoordinates(List<float[]> coordinates) {
         for(int i = 0; i < coordinates.size(); i++) {
-            if(Math.abs(coordinates.get(i)[0]) > 90 || Math.abs(coordinates.get(i)[1]) > 180) {
+            if (!validCoordinates(coordinates.get(i))) {
                 return false;
             }
         }
         return true;
+    }
+
+    public static boolean validCoordinates(float[] coordinate) {
+        return (Math.abs(coordinate[0]) <= 90 && Math.abs(coordinate[1]) <= 180);
+    }
+
+
+    public static boolean validOrientation(String orientation) {
+        if (orientation.equals(USE_PHONE_ORIENTATION)) return true;
+        try {
+            int orientationValue = Integer.parseInt(orientation);
+            return orientationValue <= 359 && orientationValue >= 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
 

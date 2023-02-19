@@ -3,11 +3,15 @@ package com.example.socialcompass;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Editable;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -18,11 +22,21 @@ import java.util.stream.Collectors;
 public class MainActivity extends AppCompatActivity {
     // IF SHARED PREFERENCES DON'T EXIST STAY ON PAGE
     // ELSE IMMEDAITLY LEAVE MAIN ACTIVITY AND LOAD MAP!
+    private Pair<Double, Double> destination1;
+    private String label1;
+    private Pair<Double, Double> destination2;
+    private String label2;
+    private Pair<Double, Double> destination3;
+    private String label3;
+    private Pair<Double, Double> previousLocation = Pair.create(0.0, 0.0);
+    private int manual_rotation;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        this.loadProfile();
         //Display Radians of phone orientation
     }
 
@@ -43,6 +57,15 @@ public class MainActivity extends AppCompatActivity {
         };
 
         String manual_rotation = ((TextView)findViewById(R.id.orientation_input)).getText().toString();
+        String manual = Utilities.USE_PHONE_ORIENTATION;
+        if (!manual_rotation.equals("") && !Utilities.validOrientation(manual_rotation)) {
+            Utilities.displayAlert(this, "Orientation needs to be a integer between 0 and 359!");
+            return;
+        } else {
+            manual = manual_rotation;
+        }
+
+
 
         List<String> labelNames = Arrays.stream(labelNameViews)
                 .map(TextView::getText)
@@ -72,20 +95,24 @@ public class MainActivity extends AppCompatActivity {
                 .collect(Collectors.toList());
 
 
-        if (maybeCoordinates.stream().anyMatch(cord -> !cord.isPresent())) {
+        if (maybeCoordinates.stream().allMatch(cord -> !cord.isPresent())) {
             Utilities.displayAlert(this, "your coordinates are not entered in correct format!");
             return;
         }
 
-        //noinspection OptionalGetWithoutIsPresent already checked
         List<float[]> coordinates = maybeCoordinates.stream()
-                .map(Optional::get)
+                .map(cord -> {
+                    if (cord.isPresent()) {
+                        if (!Utilities.validCoordinates(cord.get())) {
+                            Utilities.displayAlert(this, "your location does not exist!");
+                        }
+                        return cord.get();
+                    }
+                    return new float[]{-360f, -360f};
+                })
                 .collect(Collectors.toList());
 
-        if (!Utilities.validCoordinates(coordinates)) {
-            Utilities.displayAlert(this, "your location does not exist!");
-            return;
-        }
+
 
         // if all checks pass open map
         SharedPreferences preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
@@ -96,11 +123,60 @@ public class MainActivity extends AppCompatActivity {
             editor.putFloat("label" + (i + 1) + "Long", coordinates.get(i)[1]);
             editor.putString("label" + (i + 1) + "Name", labelNames.get(i));
         }
+
+        editor.putString("manual_rotation", manual);
+        editor.putString("manual_rotation_display", manual_rotation);
         editor.apply();
 
+
         Intent intent = new Intent(this, ShowMapActivity.class);
-        intent.putExtra("manual_rotation", manual_rotation);
+
         startActivity(intent);
+
+    }
+
+    public void loadProfile(){
+        preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
+        destination1 = Pair.create((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1Long", 0f));
+        destination2 = Pair.create((double) preferences.getFloat("label2Lat", 0f), (double) preferences.getFloat("label2Long", 0f));
+        destination3 = Pair.create((double) preferences.getFloat("label3Lat", 0f), (double) preferences.getFloat("label3Long", 0f));
+        label1 = preferences.getString("label1Name", "Label1");
+        label2 = preferences.getString("label2Name", "Label2");
+        label3 = preferences.getString("label3Name", "Label3");
+
+        manual_rotation = Integer.parseInt(preferences.getString("manual_rotation_display", ""));
+        TextView[] labelNameViews = {
+                (TextView)findViewById(R.id.label_1_name),
+                (TextView)findViewById(R.id.label_2_name),
+                (TextView)findViewById(R.id.label_3_name)
+        };
+
+        labelNameViews[0].setText(label1);
+        labelNameViews[1].setText(label2);
+        labelNameViews[2].setText(label3);
+
+
+
+        TextView[] labelCoordinateViews = {
+                (TextView)findViewById(R.id.label_1_coordinates),
+                (TextView)findViewById(R.id.label_2_coordinates),
+                (TextView)findViewById(R.id.label_3_coordinates)
+        };
+
+
+        String cord1AsString = destination1.first + " " + destination1.second;
+        String cord2AsString = destination2.first + " " + destination2.second;
+        String cord3AsString = destination3.first + " " + destination3.second;
+        String orientationString = "" + manual_rotation;
+
+        labelCoordinateViews[0].setText(cord1AsString);
+        labelCoordinateViews[1].setText(cord2AsString);
+        labelCoordinateViews[2].setText(cord3AsString);
+
+        EditText orientationEditText = (EditText)findViewById(R.id.orientation_input);
+        Editable orientationEditable = orientationEditText.getText();
+        orientationEditable.replace(0, orientationEditable.length(), orientationString);
+
 
     }
 

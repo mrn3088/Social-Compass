@@ -25,7 +25,6 @@ public class LocationService implements LocationListener {
         if (instance == null) {
             instance = new LocationService(activity);
         }
-
         return instance;
     }
 

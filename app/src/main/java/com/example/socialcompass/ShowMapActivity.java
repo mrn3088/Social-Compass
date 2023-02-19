@@ -49,12 +49,7 @@ public class ShowMapActivity extends AppCompatActivity {
         cp = new ConstraintProperties(compass);
         TextView north = (TextView) findViewById(R.id.North);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            this.manual_rotation = Integer.valueOf(extras.getString("manual_rotation"));
-        }
-
-        if (!(this.manual_rotation >= 0) && (this.manual_rotation <360)) {
+        if (!((this.manual_rotation >= 0) && (this.manual_rotation < 360))) {
             this.reobserveOrientation();
         } else {
             ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
@@ -80,24 +75,36 @@ public class ShowMapActivity extends AppCompatActivity {
                 TextView text2 = (TextView) findViewById(R.id.label2);
                 TextView text3 = (TextView) findViewById(R.id.label3);
 
-                text1.setText(label1);
-                text2.setText(label2);
-                text3.setText(label3);
 
                 ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
                 ConstraintLayout.LayoutParams label1layoutparams = (ConstraintLayout.LayoutParams) text1.getLayoutParams();
                 ConstraintLayout.LayoutParams label2layoutparams = (ConstraintLayout.LayoutParams) text2.getLayoutParams();
                 ConstraintLayout.LayoutParams label3layoutparams = (ConstraintLayout.LayoutParams) text3.getLayoutParams();
 
-                float angle1 = Utilities.relativeAngle(currentLocation, destination1);
-                float angle2 = Utilities.relativeAngle(currentLocation, destination2);
-                float angle3 = Utilities.relativeAngle(currentLocation, destination3);
-
                 float northAngle = northlayoutparams.circleAngle;
+                if(destination1.first>-360f && destination1.second>-360f){
+                    text1.setText(label1);
+                    float angle1 = Utilities.relativeAngle(currentLocation, destination1);
+                    label1layoutparams.circleAngle = ((northAngle+angle1)%360);
+                }else{
+                    text1.setText("");
+                }
 
-                label1layoutparams.circleAngle = ((northAngle+angle1)%360);
-                label2layoutparams.circleAngle = ((northAngle+angle2)%360);
-                label3layoutparams.circleAngle = ((northAngle+angle3)%360);
+                if(destination2.first>-360f && destination2.second>-360f){
+                    text2.setText(label2);
+                    float angle2 = Utilities.relativeAngle(currentLocation, destination2);
+                    label2layoutparams.circleAngle = ((northAngle+angle2)%360);
+                }else{
+                    text2.setText("");
+                }
+
+                if(destination3.first>-360f && destination3.second>-360f){
+                    text3.setText(label3);
+                    float angle3 = Utilities.relativeAngle(currentLocation, destination3);
+                    label3layoutparams.circleAngle = ((northAngle+angle3)%360);
+                }else{
+                    text3.setText("");
+                }
 
 
             }
@@ -118,6 +125,7 @@ public class ShowMapActivity extends AppCompatActivity {
             }
         });
     }
+
     public void onBackClicked(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
@@ -132,15 +140,16 @@ public class ShowMapActivity extends AppCompatActivity {
 
     public void loadProfile(){
         preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
-        destination1= Pair.create((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1long", 0f));
-        destination2 = Pair.create((double) preferences.getFloat("label2Lat", 0f), (double) preferences.getFloat("label2long", 0f));
-        destination3 = Pair.create((double) preferences.getFloat("label3Lat", 0f), (double) preferences.getFloat("label3long", 0f));
+        destination1 = Pair.create((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1Long", 0f));
+        destination2 = Pair.create((double) preferences.getFloat("label2Lat", 0f), (double) preferences.getFloat("label2Long", 0f));
+        destination3 = Pair.create((double) preferences.getFloat("label3Lat", 0f), (double) preferences.getFloat("label3Long", 0f));
         label1 = preferences.getString("label1Name", "Label1");
         label2 = preferences.getString("label2Name", "Label2");
         label3 = preferences.getString("label3Name", "Label3");
+        manual_rotation = Integer.parseInt(preferences.getString("manual_rotation", "-1"));
     }
 
     public float getOrientation() {return orientation;}
 
-    public Pair<Double, Double> getPreviousLocation() {return previousLocation;}
+    public Pair<Double, Double> getPreviousLocation() { return previousLocation; }
 }

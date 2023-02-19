@@ -177,7 +177,6 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="number"
-        android:text="999"
         app:layout_constraintBottom_toTopOf="@+id/label_1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
