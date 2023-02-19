@@ -1,19 +1,10 @@
 package com.example.socialcompass;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
     // IF SHARED PREFERENCES DON'T EXIST STAY ON PAGE
@@ -23,82 +14,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //Display Radians of phone orientation
+        Intent intent = new Intent(this, ShowMap.class);
+        if(true) {
+            startActivity(intent);
+        }
     }
-
-
 
     public void onSubmitLabelsClicked(View view) {
         // if no labels have been added display error
-        TextView[] labelNameViews = {
-                (TextView)findViewById(R.id.label_1_name),
-                (TextView)findViewById(R.id.label_2_name),
-                (TextView)findViewById(R.id.label_3_name)
-        };
-
-        TextView[] labelCoordinateViews = {
-                (TextView)findViewById(R.id.label_1_coordinates),
-                (TextView)findViewById(R.id.label_2_coordinates),
-                (TextView)findViewById(R.id.label_3_coordinates)
-        };
-
-        List<String> labelNames = Arrays.stream(labelNameViews)
-                .map(TextView::getText)
-                .map(CharSequence::toString)
-                .collect(Collectors.toList());
-
-        List<String> labelCords = Arrays.stream(labelCoordinateViews)
-                .map(TextView::getText)
-                .map(CharSequence::toString)
-                .collect(Collectors.toList());
-
-
-        // label names cannot be empty
-        if (!Utilities.namedLabels(labelNames)) {
+        if (true) {
             Utilities.displayAlert(this, "you must enter at least one label before proceeding!");
-            return;
-        }
-
-        // label names cannot exceed 20 characters
-        if (!Utilities.validLabelLengths(labelNames)) {
+            // if label strings are too long display error
+        } else if (false) {
             Utilities.displayAlert(this, "your label strings must be less then 12 characters!");
-            return;
+            // if coordinates are innacurate display error
+        } else if (false) {
+            Utilities.displayAlert(this, "your coordinates are innacurate!");
+        } else {
+            // if all checks pass open map
+            Intent intent = new Intent(this, ShowMap.class);
+            startActivity(intent);
         }
-
-        List<Optional<float[]>> maybeCoordinates = labelCords.stream()
-                .map(Utilities::parseCoordinate)
-                .collect(Collectors.toList());
-
-
-        if (maybeCoordinates.stream().anyMatch(cord -> !cord.isPresent())) {
-            Utilities.displayAlert(this, "your coordinates are not entered in correct format!");
-            return;
-        }
-
-        //noinspection OptionalGetWithoutIsPresent already checked
-        List<float[]> coordinates = maybeCoordinates.stream()
-                .map(Optional::get)
-                .collect(Collectors.toList());
-
-        if (!Utilities.validCoordinates(coordinates)) {
-            Utilities.displayAlert(this, "your location does not exist!");
-            return;
-        }
-
-        // if all checks pass open map
-        SharedPreferences preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-
-        for (int i = 0; i < coordinates.size(); i++) {
-            editor.putFloat("label" + (i + 1) + "Lat", coordinates.get(i)[0]);
-            editor.putFloat("label" + (i + 1) + "Long", coordinates.get(i)[1]);
-            editor.putString("label" + (i + 1) + "Name", labelNames.get(i));
-        }
-        editor.apply();
-
-        Intent intent = new Intent(this, ShowMapActivity.class);
-        startActivity(intent);
-
     }
-
 }
