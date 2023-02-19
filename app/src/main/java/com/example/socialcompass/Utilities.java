@@ -4,13 +4,22 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.Pair;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class Utilities {
     static final int MAX_LABEL_LENGTH = 20;
     static final String USE_PHONE_ORIENTATION = "-1";
-
+    static final String INCORRECT_EMPTY = "You need to enter at least one location!";
+    static final String INCORRECT_FORMAT = "your coordinates are not entered in correct format!\nPl" +
+            "ease enter two number separated by a space.";
+    static final String INCORRECT_LOCATION = "your location does not exist:\n" +
+            "Latitude should be in [-90, 90], Longitude should be in [-180, 180]";
+    static final Map<String, String> valueDisplayMap = new HashMap<>(){{
+        put("-360.0 -360.0", "");
+    }};
     public static void displayAlert(Activity activity, String message) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
         alertBuilder
@@ -115,6 +124,10 @@ public class Utilities {
         } catch (NumberFormatException e) {
             return false;
         }
+    }
+
+    public static String getDisplayStr(String str) {
+        return valueDisplayMap.getOrDefault(str, str);
     }
 }
 

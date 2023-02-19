@@ -148,7 +148,7 @@ public class ShowMapActivity extends AppCompatActivity {
         label3 = preferences.getString("label3Name", "Label3");
         manual_rotation = -1;
         try {
-            Integer.parseInt(preferences.getString("manual_rotation", "-1"));
+            manual_rotation = Integer.parseInt(preferences.getString("manual_rotation", "-1"));
         } catch (NumberFormatException e) {}
     }
 

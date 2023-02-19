@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -96,15 +98,22 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (maybeCoordinates.stream().allMatch(cord -> !cord.isPresent())) {
-            Utilities.displayAlert(this, "your coordinates are not entered in correct format!");
+            Utilities.displayAlert(this, Utilities.INCORRECT_EMPTY);
             return;
         }
+
+        if (maybeCoordinates.stream().anyMatch(cord -> cord.isPresent()
+                && !Utilities.validCoordinates(cord.get()))){
+            Utilities.displayAlert(this, Utilities.INCORRECT_FORMAT);
+            return;
+        }
+
 
         List<float[]> coordinates = maybeCoordinates.stream()
                 .map(cord -> {
                     if (cord.isPresent()) {
                         if (!Utilities.validCoordinates(cord.get())) {
-                            Utilities.displayAlert(this, "your location does not exist!");
+                            Utilities.displayAlert(this, Utilities.INCORRECT_LOCATION);
                         }
                         return cord.get();
                     }
@@ -139,6 +148,8 @@ public class MainActivity extends AppCompatActivity {
         destination1 = Pair.create((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1Long", 0f));
         destination2 = Pair.create((double) preferences.getFloat("label2Lat", 0f), (double) preferences.getFloat("label2Long", 0f));
         destination3 = Pair.create((double) preferences.getFloat("label3Lat", 0f), (double) preferences.getFloat("label3Long", 0f));
+
+
         label1 = preferences.getString("label1Name", "Label1");
         label2 = preferences.getString("label2Name", "Label2");
         label3 = preferences.getString("label3Name", "Label3");
@@ -154,6 +165,8 @@ public class MainActivity extends AppCompatActivity {
                 (TextView)findViewById(R.id.label_3_name)
         };
 
+
+
         labelNameViews[0].setText(label1);
         labelNameViews[1].setText(label2);
         labelNameViews[2].setText(label3);
@@ -167,9 +180,9 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
-        String cord1AsString = destination1.first + " " + destination1.second;
-        String cord2AsString = destination2.first + " " + destination2.second;
-        String cord3AsString = destination3.first + " " + destination3.second;
+        String cord1AsString = Utilities.getDisplayStr(destination1.first + " " + destination1.second);
+        String cord2AsString = Utilities.getDisplayStr(destination2.first + " " + destination2.second);
+        String cord3AsString = Utilities.getDisplayStr(destination3.first + " " + destination3.second);
         String orientationString = manual_rotation == -1 ? "" : "" + manual_rotation;
 
         labelCoordinateViews[0].setText(cord1AsString);

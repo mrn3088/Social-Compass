@@ -83,16 +83,15 @@
             tools:layout_editor_absoluteX="167dp"
             tools:layout_editor_absoluteY="-21dp"/>
 
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onBackClicked"
+            android:text="Back"
+            tools:layout_editor_absoluteX="156dp"
+            tools:layout_editor_absoluteY="433dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="628dp"
-        android:onClick="onBackClicked"
-        android:text="Back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
