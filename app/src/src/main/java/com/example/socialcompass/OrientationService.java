@@ -17,12 +17,19 @@ public class OrientationService implements SensorEventListener {
     private float[] magnetometerReading;
     private MutableLiveData<Float> azimuth;
 
+    /**
+     * init OrientationService
+     * @param activity Context needed to initiate SensorManager
+     */
     protected OrientationService(Activity activity){
         this.azimuth = new MutableLiveData<>();
         this.sensorManager = (SensorManager) activity.getSystemService(Context.SENSOR_SERVICE);
         this.registerSensorListeners();
     }
 
+    /**
+     * Register sensor listeners
+     */
     private void registerSensorListeners(){
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
@@ -30,6 +37,11 @@ public class OrientationService implements SensorEventListener {
                 SensorManager.SENSOR_DELAY_NORMAL);
     }
 
+    /**
+     * Singleton for OrientationService
+     * @param activity Context needed to initiate SensorManager
+     * @return OrientationService instance
+     */
     public static OrientationService singleton(Activity activity){
         if(instance == null){
             instance = new OrientationService(activity);
@@ -37,7 +49,10 @@ public class OrientationService implements SensorEventListener {
         return instance;
     }
 
-
+    /**
+     * Called when sensor values have changed.
+     * @param event The new sensor event
+     */
     @Override
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
@@ -52,14 +67,20 @@ public class OrientationService implements SensorEventListener {
         }
     }
 
+    /**
+     * Called when the accuracy of the registered sensor has changed.
+     */
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
     }
 
+    /**
+     * Called when both sensor data is available
+     */
     private void onBothSensorDataAvailable(){
         if(accelerometerReading == null || magnetometerReading== null){
-            throw new IllegalArgumentException("Both sensors must be available yo compute orientation.");
+            throw new IllegalArgumentException("Both sensors must be available to compute orientation.");
         }
 
         float[] r = new float[9];
@@ -75,23 +96,40 @@ public class OrientationService implements SensorEventListener {
         }
     }
 
+    /**
+     * Unregister sensor listeners
+     */
     public void unregisterSensorListeners(){
         sensorManager.unregisterListener(this);
     }
 
+    /**
+     * Get orientation
+     * @return orientation
+     */
     public LiveData<Float> getOrientation(){
         return this.azimuth;
     }
 
+    /**
+     * Set mock orientation data
+     * @param mockDataSource mock data source
+     */
     public void setMockOrientationSource(MutableLiveData<Float> mockDataSource){
         unregisterSensorListeners();
         this.azimuth = mockDataSource;
     }
 
+    /**
+     * Called when the activity is starting.
+     */
     protected void onPause(){
         this.unregisterSensorListeners();
     }
 
+    /**
+     * Called when the activity will start interacting with the user.
+     */
     public void setMockOrientationData(MutableLiveData<Float> mockData) {
         unregisterSensorListeners();
         this.azimuth = mockData;

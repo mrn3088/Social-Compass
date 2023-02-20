@@ -21,10 +21,17 @@ public class LocationService implements LocationListener {
 
     private final LocationManager locationManager;
 
+    /**
+     * Singleton for LocationService
+     *
+     * @param activity Context needed to initiate LocationManager
+     * @return LocationService instance
+     */
     public static LocationService singleton(Activity activity) {
         if (instance == null) {
             instance = new LocationService(activity);
         }
+
         return instance;
     }
 
@@ -41,7 +48,10 @@ public class LocationService implements LocationListener {
         //Register sensor listeners
         this.registerLocationListener();
     }
-
+    
+    /**
+     * Register location listener
+     */
     private void registerLocationListener() {
         if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -51,6 +61,11 @@ public class LocationService implements LocationListener {
         this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
     }
 
+    /**
+     * Callback for location updates
+     *
+     * @param location New location
+     */
     @Override
     public void onLocationChanged(@NonNull Location location) {
         this.locationValue.postValue(new Pair<Double, Double>(location.getLatitude(),
@@ -58,19 +73,35 @@ public class LocationService implements LocationListener {
         );
     }
 
+    /**
+     * Unregister location listener
+     */
     public void unregisterLocationListener(){
         locationManager.removeUpdates(this);
     }
 
+    /**
+     * Set mock location source
+     *
+     * @param mockDataSource Mock location source
+     */
     public void setMockOrientationSource(MutableLiveData<Pair<Double,Double>> mockDataSource){
         unregisterLocationListener();
         this.locationValue = mockDataSource;
     }
 
+    /**
+     * Get location
+     *
+     * @return Location
+     */
     public LiveData<Pair<Double,Double>> getLocation() {
         return this.locationValue;
     }
 
+    /**
+     * Unregister location listener on pause
+     */
     public void onPause(){
         this.unregisterLocationListener();
     }

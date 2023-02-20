@@ -53,7 +53,7 @@ public class ShowMapActivity extends AppCompatActivity {
             this.reobserveOrientation();
         } else {
             ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
-            northlayoutparams.circleAngle = manual_rotation;
+            northlayoutparams.circleAngle = 360.0f-manual_rotation;
         }
 
         this.reobserveLocation();
@@ -155,4 +155,8 @@ public class ShowMapActivity extends AppCompatActivity {
     public float getOrientation() {return orientation;}
 
     public Pair<Double, Double> getPreviousLocation() { return previousLocation; }
+
+    public void setDestination1(Double latitude, Double longitude){
+        destination1 = Pair.create(latitude, longitude);
+    }
 }

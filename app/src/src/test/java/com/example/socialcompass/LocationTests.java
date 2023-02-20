@@ -30,6 +30,9 @@ public class LocationTests {
     @Rule
     public GrantPermissionRule fRuntimePermissionRuleCoarse = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_COARSE_LOCATION);
 
+    /**
+     * Test that location can be set correctly
+     */
     @Test
     public void locationSet() {
         Pair<Double, Double> testValue = Pair.create(35.006, 78.5546);
@@ -50,6 +53,9 @@ public class LocationTests {
         });
     }
 
+    /**
+     * Test that location can be updated correctly
+     */
     @Test
     public void locationUpdatesWithChange() {
         Pair<Double, Double> testValue = Pair.create(35.006, 78.5546);

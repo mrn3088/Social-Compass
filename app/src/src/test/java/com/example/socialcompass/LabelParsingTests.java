@@ -13,8 +13,11 @@ import java.util.Optional;
 
 public class LabelParsingTests {
 
+    /**
+     * namedLabels() method tests
+     */
     @Test
-    public void checkNumLabels() {
+    public void checkNamedLabels() {
         // accurate number of labels
        ArrayList<String> testList = new ArrayList<>();
        testList.add("labelOne"); testList.add("labelTwo"); testList.add("labelThree");
@@ -38,6 +41,9 @@ public class LabelParsingTests {
         assertEquals(false, Utilities.namedLabels(testList));
     }
 
+    /**
+     * validLabelLengths() method tests
+     */
     @Test
     public void checkLabelSizes(){
         ArrayList<String> testList = new ArrayList<>();
@@ -60,6 +66,9 @@ public class LabelParsingTests {
         assertEquals(false, Utilities.validLabelLengths(testList));
     }
 
+    /**
+     * parseCoordinate() method tests
+     */
     @Test
     public void parseCoordinatesTest() {
         String validInput = "23.3456 45.6789";
@@ -88,6 +97,9 @@ public class LabelParsingTests {
     }
 
 
+    /**
+     * validCoordinates() method tests
+     */
     @Test
     public void validCoordinatesTest() {
         ArrayList<float[]> testList = new ArrayList<>();
@@ -129,7 +141,9 @@ public class LabelParsingTests {
         assertEquals(false, Utilities.validCoordinates(testList));
     }
 
-
+    /**
+     * radiansToDegreesDouble() method tests
+     */
     public static class RelativeAngleTests {
         @Test
         public void testRadiansToDegreeFloat(){
@@ -172,6 +186,9 @@ public class LabelParsingTests {
             }
         }
 
+        /**
+         * radiansToDegreesFloat() method tests
+         */
         @Test
         public void testRadiansToDegreeDouble(){
             float offset = 0.1f;
@@ -213,6 +230,9 @@ public class LabelParsingTests {
             }
         }
 
+        /**
+         * relativeAngle() method tests
+         */
         @Test
         public void testRelativeAngle(){
 

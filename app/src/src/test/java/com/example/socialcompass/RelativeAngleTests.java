@@ -11,6 +11,9 @@ import org.junit.Test;
 import java.util.ArrayList;
 
 public class RelativeAngleTests {
+    /**
+     * Test radiansToDegreesDouble() method
+     */
     @Test
     public void testRadiansToDegreeFloat(){
         double offset = 0.1;
@@ -52,6 +55,9 @@ public class RelativeAngleTests {
         }
     }
 
+    /**
+     * Test radiansToDegreesFloat() method
+     */
     @Test
     public void testRadiansToDegreeDouble(){
         float offset = 0.1f;
@@ -93,6 +99,9 @@ public class RelativeAngleTests {
         }
     }
 
+    /**
+     * Test relativeAngleUtils() method
+     */
     @Test
     public void testRelativeAngle(){
         float offset = 0.2f;

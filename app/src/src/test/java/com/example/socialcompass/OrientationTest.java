@@ -25,6 +25,9 @@ public class OrientationTest {
     @Rule
     public GrantPermissionRule fRuntimePermissionRuleCoarse = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_COARSE_LOCATION);
 
+    /**
+     * Test that orientation can be set correctly
+     */
     @Test
     public void orientation_service() {
         float testValue = (float) Math.PI;
@@ -48,6 +51,9 @@ public class OrientationTest {
         });
     }
 
+    /**
+     * Test that orientation can be updated correctly
+     */
     @Test
     public void orientation_service_multiple_changes() {
         float testValueOne = (float) Math.PI;
