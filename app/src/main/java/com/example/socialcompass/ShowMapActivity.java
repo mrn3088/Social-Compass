@@ -24,8 +24,8 @@ import android.widget.TextView;
  * This class is ShowMapActivity class used to support show map page
  */
 public class ShowMapActivity extends AppCompatActivity {
-    private OrientationService orientationService;
-    private LocationService locationService;
+    private Service orientationService;
+    private Service locationService;
     private ConstraintLayout compass;
     private ConstraintProperties cp;
     private SharedPreferences preferences;
@@ -86,7 +86,7 @@ public class ShowMapActivity extends AppCompatActivity {
      * Reobserve the orientation of the device
      */
     public void reobserveLocation() {
-        locationService.getLocation().observe(this, new Observer<Pair<Double, Double>>() {
+        ((LocationService)locationService).getLocation().observe(this, new Observer<Pair<Double, Double>>() {
             @Override
             public void onChanged(Pair<Double, Double> currentLocation) {
                 TextView north = (TextView) findViewById(R.id.North);
@@ -168,7 +168,7 @@ public class ShowMapActivity extends AppCompatActivity {
     public void reobserveOrientation() {
         TextView north = (TextView) findViewById(R.id.North);
 
-        orientationService.getOrientation().observe(this, new Observer<Float>() {
+        ((OrientationService)orientationService).getOrientation().observe(this, new Observer<Float>() {
             @Override
             public void onChanged(Float aFloat) {
                 ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();

@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
         // label names cannot exceed 20 characters
         if (!Utilities.validLabelLengths(labelNames)) {
-            Utilities.displayAlert(this, "your label strings must be less then 12 characters!");
+            Utilities.displayAlert(this, "your label strings must be less then or equal to "+Utilities.MAX_LABEL_LENGTH+" characters!");
             return;
         }
 
