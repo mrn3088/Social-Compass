@@ -159,4 +159,9 @@ public class ShowMapActivity extends AppCompatActivity {
     public void setDestination1(Double latitude, Double longitude){
         destination1 = Pair.create(latitude, longitude);
     }
+
+    public void setOrientation(float orientation){
+        this.orientation = orientation;
+    }
+
 }
