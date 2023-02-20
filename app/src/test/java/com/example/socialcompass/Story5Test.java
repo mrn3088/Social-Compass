@@ -53,8 +53,8 @@ public class Story5Test {
             ConstraintLayout.LayoutParams text1layoutparams =  (ConstraintLayout.LayoutParams) text1.getLayoutParams();
             float text1Angle = text1layoutparams.circleAngle;
 
-            var expected = 252.83f;
-            assertEquals(252.83, text1Angle, 0.1);
+            var expected = 252.826f;
+            assertEquals(252.826f, text1Angle, 0.1f);
 
             Pair<Double, Double> destination2 = Pair.create(21.0,31.0);
             activity.setDestination1(21.0, 31.0);
