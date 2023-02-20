@@ -1,3 +1,7 @@
+/**
+ * This file has tests for location service
+ */
+
 package com.example.socialcompass;
 
 import static org.junit.Assert.assertEquals;

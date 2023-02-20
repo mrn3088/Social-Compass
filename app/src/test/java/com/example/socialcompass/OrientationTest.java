@@ -1,3 +1,7 @@
+/**
+ * This file has tests for orientation service
+ */
+
 package com.example.socialcompass;
 
 import static org.junit.Assert.assertEquals;

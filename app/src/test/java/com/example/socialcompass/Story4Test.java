@@ -1,3 +1,7 @@
+/**
+ * This file has tests for User Story 4
+ */
+
 package com.example.socialcompass;
 
 import static org.junit.Assert.assertEquals;
@@ -27,6 +31,9 @@ public class Story4Test {
     @Rule
     public GrantPermissionRule fRuntimePermissionRuleCoarse = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_COARSE_LOCATION);
 
+    /**
+     * The test for user turning the phone
+     */
     @Test
     public void orientationSet(){
         float testValueOne = (float) Math.PI;

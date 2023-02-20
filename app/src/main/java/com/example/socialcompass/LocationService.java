@@ -1,3 +1,8 @@
+/**
+ * This file has LocationService class which is used
+ * to track the location
+ */
+
 package com.example.socialcompass;
 
 import android.app.Activity;
@@ -13,6 +18,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+/**
+ * This class is LocationService class used to track users' location
+ */
 public class LocationService implements LocationListener {
     private static LocationService instance;
     private Activity activity;

@@ -1,3 +1,7 @@
+/**
+ * This file has tests for User Story 2
+ */
+
 package com.example.socialcompass;
 
 import static org.junit.Assert.assertEquals;

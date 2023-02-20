@@ -1,3 +1,6 @@
+/**
+ * This file has OrientationService class which is used to track orientation
+ */
 package com.example.socialcompass;
 
 import android.app.Activity;
@@ -10,6 +13,10 @@ import android.hardware.SensorManager;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+
+/**
+ *  This class is OrientationService class used to track users' location
+ */
 public class OrientationService implements SensorEventListener {
     private static OrientationService instance;
     private final SensorManager sensorManager;

@@ -1,3 +1,7 @@
+/**
+ * This file has MainActivity class used to support main page
+ */
+
 package com.example.socialcompass;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +25,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ *  This class is MainActivity class used to support main page
+ */
 public class MainActivity extends AppCompatActivity {
     // IF SHARED PREFERENCES DON'T EXIST STAY ON PAGE
     // ELSE IMMEDIATELY LEAVE MAIN ACTIVITY AND LOAD MAP!
@@ -143,6 +150,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * save the data into sharedPreference
+     */
     public void loadProfile(){
         preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
         destination1 = Pair.create((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1Long", 0f));

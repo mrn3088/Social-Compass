@@ -1,3 +1,7 @@
+/**
+ * This file has tests for User Story 5
+ */
+
 package com.example.socialcompass;
 
 import static org.junit.Assert.assertEquals;
@@ -18,6 +22,7 @@ import org.robolectric.RobolectricTestRunner;
 
 import androidx.test.rule.GrantPermissionRule;
 
+
 @RunWith(RobolectricTestRunner.class)
 public class Story5Test {
     @Rule
@@ -28,6 +33,10 @@ public class Story5Test {
 
     @Rule
     public GrantPermissionRule fRuntimePermissionRuleCoarse = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_COARSE_LOCATION);
+
+    /**
+     * This is the test for user changing location
+     */
     @Test
     public void locationSet() {
         Pair<Double, Double> testValue = Pair.create(35.006, 78.5546);
@@ -41,11 +50,11 @@ public class Story5Test {
             orientationService.setMockOrientationData(mockOrientation);
 
 
-            
+
             activity.setOrientation(0f);
             activity.reobserveOrientation();
             var mockLocation = new MutableLiveData<Pair<Double, Double>>();
-            
+
             locationService.setMockOrientationSource(mockLocation);
             activity.reobserveLocation();
             mockLocation.setValue(testValue);

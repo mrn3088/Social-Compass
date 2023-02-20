@@ -1,3 +1,8 @@
+/**
+ * This file has tests for relative angles
+ */
+
+
 package com.example.socialcompass;
 
 import static org.junit.Assert.assertEquals;

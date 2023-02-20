@@ -1,3 +1,7 @@
+/**
+ * This file has tests for label parsing
+ */
+
 package com.example.socialcompass;
 
 import static com.example.socialcompass.Utilities.parseCoordinate;
