@@ -89,6 +89,10 @@
             android:layout_height="wrap_content"
             android:onClick="onBackClicked"
             android:text="Back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBaseline_toBottomOf="parent"
+            app:layout_constraintBaseline_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:layout_editor_absoluteX="156dp"
             tools:layout_editor_absoluteY="433dp" />
 

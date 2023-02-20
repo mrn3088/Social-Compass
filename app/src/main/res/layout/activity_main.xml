@@ -10,163 +10,187 @@
         android:id="@+id/welcome_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome To Social Compass!!"
-        android:textSize="16sp"
+        android:text="@string/welcome_to_social_compass"
         android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintVertical_bias="0.1" />
 
     <TextView
         android:id="@+id/enter_labels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="please enter your labels below!"
-        android:textSize="16sp"
+        android:text="please enter two numbers separated by space as coordinates"
         android:textColor="@color/black"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.15"
-        app:layout_constraintHorizontal_bias="0.5" />
+        app:layout_constraintVertical_bias="0.15" />
+
 
     <TextView
         android:id="@+id/label_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Label 1:"
-        android:textSize="12sp"
-        app:layout_constraintVertical_bias="0.30"
-        app:layout_constraintHorizontal_bias="0.1"
+        android:text="@string/label_1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.303" />
 
     <TextView
         android:id="@+id/label_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Label 2:"
-        app:layout_constraintVertical_bias="0.5"
-        app:layout_constraintHorizontal_bias="0.1"
+        android:text="@string/label_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498" />
 
     <TextView
         android:id="@+id/label_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Label 3:"
-        app:layout_constraintVertical_bias="0.7"
-        app:layout_constraintHorizontal_bias="0.1"
+        android:text="@string/label_3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.699" />
 
     <EditText
         android:id="@+id/label_1_name"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
+        android:layout_width="165dp"
+        android:layout_height="60dp"
         android:ems="10"
+        android:autofillHints="@string/name"
         android:inputType="textPersonName"
-        android:hint="Name:"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintVertical_bias="0.35"
+        android:text="@string/my_home"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35" />
 
     <EditText
         android:id="@+id/label_1_coordinates"
         android:layout_width="140dp"
         android:layout_height="40dp"
         android:ems="10"
+        android:hint="Lat[space]Long"
         android:inputType="textPersonName"
-        android:hint="Coordinates:"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintVertical_bias="0.35"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.369" />
 
     <EditText
         android:id="@+id/label_2_name"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
+        android:layout_width="165dp"
+        android:layout_height="60dp"
         android:ems="10"
+        android:hint="@string/name"
         android:inputType="textPersonName"
-        android:hint="Name"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintVertical_bias="0.55"
+        android:text="@string/parents"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.557" />
 
     <EditText
         android:id="@+id/label_2_coordinates"
         android:layout_width="140dp"
         android:layout_height="40dp"
         android:ems="10"
+        android:hint="Lat[space]Long"
         android:inputType="textPersonName"
-        android:hint="Coordinates"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintVertical_bias="0.55"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.57" />
 
     <EditText
         android:id="@+id/label_3_name"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
+        android:layout_width="165dp"
+        android:layout_height="60dp"
         android:ems="10"
+        android:hint="@string/name"
         android:inputType="textPersonName"
-        android:hint="Name"
-        app:layout_constraintVertical_bias="0.75"
-        app:layout_constraintHorizontal_bias="0.1"
+        android:text="@string/best_friend_s"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.101"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.77" />
 
     <EditText
         android:id="@+id/label_3_coordinates"
         android:layout_width="140dp"
         android:layout_height="40dp"
         android:ems="10"
+        android:hint="Lat[space]Long"
         android:inputType="textPersonName"
-        android:hint="Coordinates"
-        app:layout_constraintVertical_bias="0.75"
-        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.777" />
 
     <Button
         android:id="@+id/submit_labels"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="enter labels"
-        app:layout_constraintVertical_bias="0.85"
-        app:layout_constraintHorizontal_bias="0.5"
+        android:onClick="onSubmitLabelsClicked"
+        android:text="@string/submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:onClick="onSubmitLabelsClicked"/>
+        app:layout_constraintVertical_bias="0.875" />
+
+    <EditText
+        android:id="@+id/orientation_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBottom_toTopOf="@+id/label_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_labels" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Orientation:"
+        app:layout_constraintBottom_toTopOf="@+id/label_1"
+        app:layout_constraintEnd_toStartOf="@+id/orientation_input"
+        app:layout_constraintHorizontal_bias="0.581"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/enter_labels" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
