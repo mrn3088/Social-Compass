@@ -17,7 +17,7 @@ import androidx.lifecycle.MutableLiveData;
 /**
  *  This class is OrientationService class used to track users' location
  */
-public class OrientationService implements SensorEventListener {
+public class OrientationService implements SensorEventListener, Service {
     private static OrientationService instance;
     private final SensorManager sensorManager;
     private float[] accelerometerReading;
@@ -37,7 +37,7 @@ public class OrientationService implements SensorEventListener {
     /**
      * Register sensor listeners
      */
-    private void registerSensorListeners(){
+    public void registerSensorListeners(){
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                 SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
@@ -130,7 +130,7 @@ public class OrientationService implements SensorEventListener {
     /**
      * Called when the activity is starting.
      */
-    protected void onPause(){
+    public void onPause(){
         this.unregisterSensorListeners();
     }
 
