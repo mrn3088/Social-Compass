@@ -1,16 +1,97 @@
-g<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ShowMap">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="174dp"
-        tools:layout_editor_absoluteY="312dp" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/compass"
+        android:layout_width="400dp"
+        android:layout_height="500dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/compass_border"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="50dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/compass" />
+
+        <TextView
+            android:id="@+id/North"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="0"
+            android:text="N"
+            android:textSize="40dp"
+            app:layout_constraintCircle="@+id/compass"
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintCircleRadius="165dp"
+            tools:layout_editor_absoluteX="167dp"
+            tools:layout_editor_absoluteY="-21dp" />
+
+        <TextView
+            android:id="@+id/label1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="0"
+            android:text="Label1"
+            android:textSize="20dp"
+            app:layout_constraintCircle="@+id/compass"
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintCircleRadius="165dp"
+            tools:layout_editor_absoluteX="167dp"
+            tools:layout_editor_absoluteY="-21dp" />
+        <TextView
+            android:id="@+id/label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="0"
+            android:text="Label2"
+            android:textSize="20dp"
+            app:layout_constraintCircle="@+id/compass"
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintCircleRadius="165dp"
+            tools:layout_editor_absoluteX="167dp"
+            tools:layout_editor_absoluteY="-21dp"/>
+        <TextView
+            android:id="@+id/label3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="0"
+            android:text="Label3"
+            android:textSize="20dp"
+            app:layout_constraintCircle="@+id/compass"
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintCircleRadius="165dp"
+            tools:layout_editor_absoluteX="167dp"
+            tools:layout_editor_absoluteY="-21dp"/>
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onBackClicked"
+            android:text="Back"
+            tools:layout_editor_absoluteX="156dp"
+            tools:layout_editor_absoluteY="433dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
