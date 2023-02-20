@@ -21,7 +21,7 @@ import androidx.lifecycle.MutableLiveData;
 /**
  * This class is LocationService class used to track users' location
  */
-public class LocationService implements LocationListener {
+public class LocationService implements LocationListener, Service {
     private static LocationService instance;
     private Activity activity;
 
@@ -54,13 +54,13 @@ public class LocationService implements LocationListener {
         this.locationManager = (LocationManager) activity.getSystemService(Context.LOCATION_SERVICE);
 
         //Register sensor listeners
-        this.registerLocationListener();
+        this.registerSensorListeners();
     }
     
     /**
      * Register location listener
      */
-    private void registerLocationListener() {
+    public void registerSensorListeners() {
         if (ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             throw new IllegalStateException("Apps needs location permission to get latest location");
@@ -76,6 +76,7 @@ public class LocationService implements LocationListener {
      */
     @Override
     public void onLocationChanged(@NonNull Location location) {
+
         this.locationValue.postValue(new Pair<Double, Double>(location.getLatitude(),
                 location.getLongitude())
         );
@@ -84,7 +85,7 @@ public class LocationService implements LocationListener {
     /**
      * Unregister location listener
      */
-    public void unregisterLocationListener(){
+    public void unregisterSensorListeners(){
         locationManager.removeUpdates(this);
     }
 
@@ -94,7 +95,7 @@ public class LocationService implements LocationListener {
      * @param mockDataSource Mock location source
      */
     public void setMockOrientationSource(MutableLiveData<Pair<Double,Double>> mockDataSource){
-        unregisterLocationListener();
+        unregisterSensorListeners();
         this.locationValue = mockDataSource;
     }
 
@@ -111,6 +112,6 @@ public class LocationService implements LocationListener {
      * Unregister location listener on pause
      */
     public void onPause(){
-        this.unregisterLocationListener();
+        this.unregisterSensorListeners();
     }
 }
