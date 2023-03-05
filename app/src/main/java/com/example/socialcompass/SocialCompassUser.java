@@ -5,30 +5,35 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
-import com.google.gson.annotation.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
 
 @Entity(tableName = "users")
 public class SocialCompassUser {
     @PrimaryKey
-    @SerializedName("userID")
+    @SerializedName("public_code")
     @NonNull
-    public String userID;
+    public String public_code;
 
-    @SerializedName("username")
+    @SerializedName("label")
     @NonNull
-    public String name;
+    public String label;
 
-    @SerializedName("location")
+    @SerializedName("latitude")
     @NonNull
-    public Position location;
+    public float latitude;
 
-    public Note(@NonNull String userID, @NonNull String name, @NonNull Position location) {
-        this.userID = userID;
-        this.name = name;
-        this.location = location;
+    @SerializedName("longitude")
+    @NonNull
+    public float longitude;
+
+    public SocialCompassUser(@NonNull String public_code, @NonNull String label, @NonNull float latitude, float longitude) {
+        this.public_code = public_code;
+        this.label = label;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public static SocialCompassUser fromJSON(String json) {
+        return new Gson().fromJson(json, SocialCompassUser.class);
     }
 }

@@ -11,16 +11,15 @@ import java.util.List;
 @Dao
 public abstract class SocialCompassDao {
     @Upsert
-    public abstract long upsert(String userID);
+    public abstract long upsert(SocialCompassUser user);
 
-    //TODO: What to replace for @Query??
-//    @Query("SELECT EXISTS(SELECT 1 FROM notes WHERE title = :title)")
-//    public abstract boolean exists(String userID);
-//
-//
-//    @Query("SELECT * FROM notes WHERE title = :title")
-//    public abstract  get(String userID);
-//
-//    @Query("SELECT * FROM notes ORDER BY title")
-//    public abstract  getAll();
+    @Query("SELECT EXISTS(SELECT 1 FROM users WHERE public_code = :public_code)")
+    public abstract boolean exists(String public_code);
+
+
+    @Query("SELECT * FROM users WHERE public_code = :public_code")
+    public abstract LiveData<SocialCompassUser> get(String public_code);
+
+    @Query("SELECT * FROM users ORDER BY public_code")
+    public abstract LiveData<List<SocialCompassUser>> getAll();
 }
