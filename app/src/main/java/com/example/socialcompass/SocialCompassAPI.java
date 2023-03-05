@@ -1,7 +1,11 @@
 package com.example.socialcompass;
 
+import static com.example.socialcompass.SocialCompassRepository.JSON;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -57,12 +61,13 @@ public class SocialCompassAPI {
     }
 
     public void addUser(SocialCompassUser user) throws InterruptedException {
-        RequestBody body = new FormBody.Builder()
-                .add("public_code", user.public_code)
-                .add("label", user.label)
-                .add("latitude", String.valueOf(user.latitude))
-                .add("longitude", String.valueOf(user.longitude))
-                .build();
+        Gson gson = new Gson();
+        RequestBody body = RequestBody.create(gson.toJson(user), JSON);
+//                .add("public_code", user.public_code)
+//                .add("label", user.label)
+//                .add("latitude", String.valueOf(user.latitude))
+//                .add("longitude", String.valueOf(user.longitude))
+//                .build();
 
         String noSpaceID = user.public_code.replace(" ", "%20");
         Request request = new Request.Builder()

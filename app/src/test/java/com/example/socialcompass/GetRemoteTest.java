@@ -13,7 +13,6 @@ public class GetRemoteTest {
 
     @Test
     public void GetRemoteTest1() throws Exception {
-        assertEquals(1,1);
         SocialCompassAPI api = new SocialCompassAPI();
         api = api.provide();
         SocialCompassUser currUser = api.getUser("123-456-7890");
@@ -22,4 +21,5 @@ public class GetRemoteTest {
         assertEquals(currUser.latitude, -48.876667, 1);
         assertEquals(currUser.longitude, -123.393333, 1);
     }
+
 }
