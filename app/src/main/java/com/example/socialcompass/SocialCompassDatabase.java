@@ -7,7 +7,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Position.class}, version = 1, exportSchema = false)
+@Database(entities = {SocialCompassUser.class}, version = 1, exportSchema = false)
 public abstract class SocialCompassDatabase extends RoomDatabase {
     private volatile static SocialCompassDatabase instance = null;
 

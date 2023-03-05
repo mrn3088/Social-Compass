@@ -6,7 +6,6 @@ import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
-import com.google.gson.annotation.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -26,7 +25,7 @@ public class SocialCompassUser {
     @NonNull
     public Position location;
 
-    public Note(@NonNull String userID, @NonNull String name, @NonNull Position location) {
+    public SocialCompassUser(@NonNull String userID, @NonNull String name, @NonNull Position location) {
         this.userID = userID;
         this.name = name;
         this.location = location;
