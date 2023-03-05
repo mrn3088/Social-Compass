@@ -8,10 +8,8 @@ package com.example.socialcompass;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -25,7 +23,7 @@ public class LocationService implements LocationListener, Service {
     private static LocationService instance;
     private Activity activity;
 
-    private MutableLiveData<Pair<Double, Double>> locationValue;
+    private MutableLiveData<Position> locationValue;
 
     private final LocationManager locationManager;
 
@@ -48,6 +46,7 @@ public class LocationService implements LocationListener, Service {
      *
      * @param activity Context needed to initiate LocationManager
      */
+
     protected LocationService(Activity activity) {
         this.locationValue = new MutableLiveData<>();
         this.activity = activity;
@@ -74,12 +73,8 @@ public class LocationService implements LocationListener, Service {
      *
      * @param location New location
      */
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-
-        this.locationValue.postValue(new Pair<Double, Double>(location.getLatitude(),
-                location.getLongitude())
-        );
+    public void onLocationChanged(@NonNull Position location) {
+        this.locationValue.postValue(location);
     }
 
     /**
@@ -94,7 +89,7 @@ public class LocationService implements LocationListener, Service {
      *
      * @param mockDataSource Mock location source
      */
-    public void setMockOrientationSource(MutableLiveData<Pair<Double,Double>> mockDataSource){
+    public void setMockOrientationSource(MutableLiveData<Position> mockDataSource){
         unregisterSensorListeners();
         this.locationValue = mockDataSource;
     }
@@ -104,7 +99,7 @@ public class LocationService implements LocationListener, Service {
      *
      * @return Location
      */
-    public LiveData<Pair<Double,Double>> getLocation() {
+    public LiveData<Position> getLocation() {
         return this.locationValue;
     }
 
@@ -113,5 +108,10 @@ public class LocationService implements LocationListener, Service {
      */
     public void onPause(){
         this.unregisterSensorListeners();
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull android.location.Location location) {
+
     }
 }

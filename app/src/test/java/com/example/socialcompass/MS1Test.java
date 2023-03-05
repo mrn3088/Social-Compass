@@ -38,7 +38,7 @@ public class MS1Test {
     public void testMS1(){
 
         float myOrientation = (float)Math.PI;
-        Pair<Double, Double> myPosition = Pair.create(0.0, 0.0);
+        Position myPosition = new Position(0,0);
 
         //start MainActivity
         var scenario = ActivityScenario.launch(MainActivity.class);
@@ -63,7 +63,7 @@ public class MS1Test {
             activity.reobserveOrientation();
 
             var locationService = LocationService.singleton(activity);
-            var mockLocation = new MutableLiveData<Pair<Double, Double>>();
+            var mockLocation = new MutableLiveData<Position>();
             mockLocation.setValue(myPosition);
             locationService.setMockOrientationSource(mockLocation);
             activity.reobserveLocation();

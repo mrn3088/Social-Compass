@@ -37,7 +37,7 @@ public class Story2Test {
     @Test
     public void testParentDirection(){
 
-        Pair<Double, Double> myPosition = Pair.create(0.0, 0.0);
+        Position myPosition = new Position(0.0, 0.0);
         float myOrientation = (float)Math.PI;
         double parentLongitude = 45.0;
         double parentLatitude = 45.0;
@@ -45,7 +45,7 @@ public class Story2Test {
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
             var locationService = LocationService.singleton(activity);
-            var mockLocation = new MutableLiveData<Pair<Double, Double>>();
+            var mockLocation = new MutableLiveData<Position>();
             locationService.setMockOrientationSource(mockLocation);
             mockLocation.setValue(myPosition);
 
