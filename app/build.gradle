@@ -41,6 +41,18 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.test:rules:1.5.0'
     testImplementation 'junit:junit:4.13.2'
+
+    def gson_version = "2.10.1"
+    implementation "com.googe.code.gson:gson:$gson_version"
+
+    def room_version = "2.5.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    def okhttp_version = "4.10.0"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+
+
     testImplementation 'androidx.test.ext:junit:1.1.3'
     testImplementation 'org.robolectric:robolectric:4.7.3'
     testImplementation 'androidx.test:core:1.5.0'
