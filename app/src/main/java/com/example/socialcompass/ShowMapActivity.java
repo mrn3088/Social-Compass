@@ -8,7 +8,6 @@ package com.example.socialcompass;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintProperties;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 
@@ -16,7 +15,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
 
@@ -29,13 +27,13 @@ public class ShowMapActivity extends AppCompatActivity {
     private ConstraintLayout compass;
     private ConstraintProperties cp;
     private SharedPreferences preferences;
-    private Pair<Double, Double> destination1;
+    private Position destination1;
     private String label1;
-    private Pair<Double, Double> destination2;
+    private Position destination2;
     private String label2;
-    private Pair<Double, Double> destination3;
+    private Position destination3;
     private String label3;
-    private Pair<Double, Double> previousLocation = Pair.create(0.0, 0.0);
+    private Position previousLocation = new Position(0,0);
     private int manual_rotation;
     private float orientation;
 
@@ -86,9 +84,9 @@ public class ShowMapActivity extends AppCompatActivity {
      * Reobserve the orientation of the device
      */
     public void reobserveLocation() {
-        ((LocationService)locationService).getLocation().observe(this, new Observer<Pair<Double, Double>>() {
+        ((LocationService)locationService).getLocation().observe(this, new Observer<Position>() {
             @Override
-            public void onChanged(Pair<Double, Double> currentLocation) {
+            public void onChanged(Position currentLocation) {
                 TextView north = (TextView) findViewById(R.id.North);
 
                 if(currentLocation == null){
@@ -98,7 +96,7 @@ public class ShowMapActivity extends AppCompatActivity {
                 }
 
                 /*
-                Get the view of three cooridate labels
+                Get the view of three coordinate labels
                  */
                 TextView text1 = (TextView) findViewById(R.id.label1);
                 TextView text2 = (TextView) findViewById(R.id.label2);
@@ -115,12 +113,12 @@ public class ShowMapActivity extends AppCompatActivity {
                 /*
                 Update three coordinate labels according to new orientation
                  */
-                if(destination1.first>-360f && destination1.second>-360f){
+                if(destination1.getLatitude()>-360f && destination1.getLongitude()>-360f){
                     /*
                     Set coordinate 1
                      */
                     text1.setText(label1);
-                    float angle1 = Utilities.relativeAngle(currentLocation, destination1);
+                    float angle1 = locationCalculations.relativeAngle(currentLocation, destination1);
                     label1layoutparams.circleAngle = ((northAngle+angle1)%360);
                 }else{
                     /*
@@ -129,12 +127,12 @@ public class ShowMapActivity extends AppCompatActivity {
                     text1.setText("");
                 }
 
-                if(destination2.first>-360f && destination2.second>-360f){
+                if(destination2.getLatitude()>-360f && destination2.getLongitude()>-360f){
                     /*
                     Set coordinate 2
                      */
                     text2.setText(label2);
-                    float angle2 = Utilities.relativeAngle(currentLocation, destination2);
+                    float angle2 = locationCalculations.relativeAngle(currentLocation, destination2);
                     label2layoutparams.circleAngle = ((northAngle+angle2)%360);
                 }else{
                     /*
@@ -143,12 +141,12 @@ public class ShowMapActivity extends AppCompatActivity {
                     text2.setText("");
                 }
 
-                if(destination3.first>-360f && destination3.second>-360f){
+                if(destination3.getLatitude()>-360f && destination3.getLongitude()>-360f){
                     /*
                     Set coordinate 3
                      */
                     text3.setText(label3);
-                    float angle3 = Utilities.relativeAngle(currentLocation, destination3);
+                    float angle3 = locationCalculations.relativeAngle(currentLocation, destination3);
                     label3layoutparams.circleAngle = ((northAngle+angle3)%360);
                 }else{
                     /*
@@ -201,9 +199,9 @@ public class ShowMapActivity extends AppCompatActivity {
      */
     public void loadProfile(){
         preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
-        destination1 = Pair.create((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1Long", 0f));
-        destination2 = Pair.create((double) preferences.getFloat("label2Lat", 0f), (double) preferences.getFloat("label2Long", 0f));
-        destination3 = Pair.create((double) preferences.getFloat("label3Lat", 0f), (double) preferences.getFloat("label3Long", 0f));
+        destination1 = new Position((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1Long", 0f));
+        destination2 = new Position((double) preferences.getFloat("label2Lat", 0f), (double) preferences.getFloat("label2Long", 0f));
+        destination3 = new Position((double) preferences.getFloat("label3Lat", 0f), (double) preferences.getFloat("label3Long", 0f));
         label1 = preferences.getString("label1Name", "Label1");
         label2 = preferences.getString("label2Name", "Label2");
         label3 = preferences.getString("label3Name", "Label3");
@@ -223,18 +221,18 @@ public class ShowMapActivity extends AppCompatActivity {
      * get the previous location of the device
      * @return previousLocation
      */
-    public Pair<Double, Double> getPreviousLocation() { return previousLocation; }
+    public Position getPreviousLocation() { return previousLocation; }
 
     /**
      * For test use only
      * @param latitude, longitude
      */
     public void setDestination1(Double latitude, Double longitude){
-        destination1 = Pair.create(latitude, longitude);
+        destination1 = new Position(latitude, longitude);
     }
 
     /**
-     * FOr test use only
+     * For test use only
      * @param orientation
      */
     public void setOrientation(float orientation){

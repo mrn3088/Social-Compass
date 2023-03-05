@@ -39,7 +39,7 @@ public class Story5Test {
      */
     @Test
     public void locationSet() {
-        Pair<Double, Double> testValue = Pair.create(35.006, 78.5546);
+        Position testValue = new Position(35.006, 78.5546);
         var scenario = ActivityScenario.launch(ShowMapActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
@@ -53,7 +53,7 @@ public class Story5Test {
 
             activity.setOrientation(0f);
             activity.reobserveOrientation();
-            var mockLocation = new MutableLiveData<Pair<Double, Double>>();
+            var mockLocation = new MutableLiveData<Position>();
 
             locationService.setMockOrientationSource(mockLocation);
             activity.reobserveLocation();

@@ -6,8 +6,6 @@ package com.example.socialcompass;
 
 import static org.junit.Assert.assertEquals;
 
-import android.util.Pair;
-
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
@@ -19,9 +17,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import androidx.test.rule.GrantPermissionRule;
-
-import java.util.List;
-import java.util.Optional;
 
 @RunWith(RobolectricTestRunner.class)
 public class LocationTests {
@@ -39,21 +34,21 @@ public class LocationTests {
      */
     @Test
     public void locationSet() {
-        Pair<Double, Double> testValue = Pair.create(35.006, 78.5546);
+        Position testValue = new Position(35.006, 78.5546);
         var scenario = ActivityScenario.launch(ShowMapActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
             var locationService = LocationService.singleton(activity);
 
-            var mockLocation = new MutableLiveData<Pair<Double, Double>>();
+            MutableLiveData<Position> mockLocation = new MutableLiveData<>();
             locationService.setMockOrientationSource(mockLocation);
             activity.reobserveLocation();
             mockLocation.setValue(testValue);
 
             var expected = testValue;
             var observed = activity.getPreviousLocation();
-            assertEquals(expected.first, observed.first, 0.002);
-            assertEquals(expected.second, observed.second, 0.002);
+            assertEquals(expected.getLatitude(), observed.getLatitude(), 0.002);
+            assertEquals(expected.getLongitude(), observed.getLongitude(), 0.002);
         });
     }
 
@@ -62,15 +57,15 @@ public class LocationTests {
      */
     @Test
     public void locationUpdatesWithChange() {
-        Pair<Double, Double> testValue = Pair.create(35.006, 78.5546);
-        Pair<Double, Double> testValueTwo = Pair.create(56.9987, 10.002);
-        Pair<Double, Double> testValueThree = Pair.create(34.555, 45.6676);
+        Position testValue = new Position(35.006, 78.5546);
+        Position testValueTwo = new Position(56.9987, 10.002);
+        Position testValueThree = new Position(34.555, 45.6676);
         var scenario = ActivityScenario.launch(ShowMapActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
             var locationService = LocationService.singleton(activity);
 
-            var mockLocation = new MutableLiveData<Pair<Double, Double>>();
+            var mockLocation = new MutableLiveData<Position>();
             locationService.setMockOrientationSource(mockLocation);
             activity.reobserveLocation();
             mockLocation.setValue(testValue);
@@ -79,8 +74,8 @@ public class LocationTests {
 
             var expected = testValueThree;
             var observed = activity.getPreviousLocation();
-            assertEquals(expected.first, observed.first, 0.002);
-            assertEquals(expected.second, observed.second, 0.002);
+            assertEquals(expected.getLongitude(), observed.getLongitude(), 0.002);
+            assertEquals(expected.getLatitude(), observed.getLatitude(), 0.002);
         });
     }
 }
