@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/friendID"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AddFriendActivity">
@@ -24,6 +23,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
         android:text="TextView"
+        android:textIsSelectable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/usersID" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName2"
+        android:id="@+id/friendID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -56,8 +56,8 @@
         android:text="Save"
         android:onClick="onSaveClicked"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/editTextTextPersonName2"
-        app:layout_constraintTop_toTopOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintStart_toEndOf="@+id/friendID"
+        app:layout_constraintTop_toTopOf="@+id/friendID" />
 
     <Button
         android:id="@+id/backB"
@@ -65,8 +65,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:text="Back"
+        android:onClick="onBackClicked"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
+        app:layout_constraintTop_toBottomOf="@+id/friendID" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

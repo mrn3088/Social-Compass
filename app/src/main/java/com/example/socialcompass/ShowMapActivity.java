@@ -36,6 +36,7 @@ public class ShowMapActivity extends AppCompatActivity {
     private Position previousLocation = new Position(0,0);
     private int manual_rotation;
     private float orientation;
+    private String uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,8 @@ public class ShowMapActivity extends AppCompatActivity {
 
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 200);
         }
+
+        uid = getIntent().getStringExtra("uid");
 
         /*
         Get location service and orientation service object
@@ -184,6 +187,12 @@ public class ShowMapActivity extends AppCompatActivity {
     public void onBackClicked(View view) {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public void onAddFriendsClicked(View view) {
+        Intent i = new Intent(this, AddFriendActivity.class);
+        i.putExtra("uid", uid);
+        startActivity(i);
     }
 
 

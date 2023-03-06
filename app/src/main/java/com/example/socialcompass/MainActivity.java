@@ -33,17 +33,26 @@ public class MainActivity extends AppCompatActivity {
     // IF SHARED PREFERENCES DON'T EXIST STAY ON PAGE
     // ELSE IMMEDIATELY LEAVE MAIN ACTIVITY AND LOAD MAP!
     private int manual_rotation;
-    private String uniqueID;
-    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // check if there is an active user
+        // if no active user exists, prompt registration
+        // else move immediatly to map
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        String uid  = preferences.getString("uid", "No value");
+        if (uid != "No value") {
+            Intent intent = new Intent(this, ShowMapActivity.class);
+            intent.putExtra("uid", uid);
+            startActivity(intent);
+        }
+
+
     }
 
     public void onSubmitLabelsClicked(View view) {
-        // if no labels have been added display error
 
         String manualRotationStr = ((TextView)findViewById(R.id.orientation_input)).getText().toString();
         String manualRotationOpt = Utilities.USE_PHONE_ORIENTATION;
@@ -54,19 +63,15 @@ public class MainActivity extends AppCompatActivity {
             manualRotationOpt = manualRotationStr;
         }
 
-
-
-        // if all checks pass open map
-        SharedPreferences preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putString("manual_rotation", manualRotationOpt);
-        editor.apply();
 
-        uniqueID = UUID.randomUUID().toString();
+        String uniqueID = UUID.randomUUID().toString();
         TextView tv = findViewById(R.id.displayName);
-        editor.putString("name",tv.getText().toString());
-        editor.putString("uid",uniqueID);
+        editor.putString("name", tv.getText().toString());
+        editor.putString("uid", uniqueID);
         editor.apply();
         SocialCompassUser theUser = new SocialCompassUser(uniqueID, tv.getText().toString(), 0, 0);
         SocialCompassAPI api = new SocialCompassAPI();
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, ShowMapActivity.class);
-
+        intent.putExtra("uid", uniqueID);
         startActivity(intent);
 
     }

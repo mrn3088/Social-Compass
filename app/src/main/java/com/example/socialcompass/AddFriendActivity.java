@@ -2,6 +2,7 @@ package com.example.socialcompass;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -26,8 +27,8 @@ public class AddFriendActivity extends AppCompatActivity {
         TextView usersID = findViewById(R.id.usersID);
         friendsID = findViewById(R.id.friendID);
 
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        String uid  = preferences.getString("uid", "");
+        String uid = getIntent().getStringExtra("uid");
+
 
         usersID.setText(uid);
     }
@@ -42,5 +43,11 @@ public class AddFriendActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void onBackClicked(View view) {
+        Intent intent = new Intent(this, ShowMapActivity.class);
+
+        startActivity(intent);
     }
 }
