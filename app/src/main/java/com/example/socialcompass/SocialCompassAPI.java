@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -18,6 +19,9 @@ import okhttp3.Response;
 
 public class SocialCompassAPI {
     private volatile static SocialCompassAPI instance = null;
+
+
+    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     private OkHttpClient client;
 
@@ -53,8 +57,7 @@ public class SocialCompassAPI {
         t.start(); // spawn thread
         t.join();  // wait for thread to finish
 
-        if(fullBody[0] == null) {
-            throw new NoSuchElementException("No user with that id found");
+        if(fullBody[0] == null) {throw new NoSuchElementException("No user with that id found");
         }
         var user =  SocialCompassUser.fromJSON(fullBody[0]);
         return user;
@@ -62,17 +65,15 @@ public class SocialCompassAPI {
 
     public void addUser(SocialCompassUser user) throws InterruptedException {
         Gson gson = new Gson();
-        RequestBody body = RequestBody.create(gson.toJson(user), JSON);
-//                .add("public_code", user.public_code)
-//                .add("label", user.label)
-//                .add("latitude", String.valueOf(user.latitude))
-//                .add("longitude", String.valueOf(user.longitude))
-//                .build();
+        AdaptedUser newUser = new AdaptedUser(user);
+
+        RequestBody body = RequestBody.create(gson.toJson(newUser).toString(), JSON);
+
 
         String noSpaceID = user.public_code.replace(" ", "%20");
         Request request = new Request.Builder()
                 .url("https://socialcompass.goto.ucsd.edu/location/" + noSpaceID)
-                .method("PUT", body)
+                .put(body)
                 .build();
 
         Thread t = new Thread(new Runnable() {
