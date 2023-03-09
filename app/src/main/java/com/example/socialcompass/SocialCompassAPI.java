@@ -30,7 +30,7 @@ public class SocialCompassAPI {
     }
 
     public static SocialCompassAPI provide() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new SocialCompassAPI();
         }
         return instance;
@@ -47,19 +47,22 @@ public class SocialCompassAPI {
             @Override
             public void run() {
                 try (Response response = client.newCall(request).execute()) {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (!response.isSuccessful())
+                        throw new IOException("Unexpected code " + response);
                     fullBody[0] = response.body().string();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }});
+            }
+        });
 
         t.start(); // spawn thread
         t.join();  // wait for thread to finish
 
-        if(fullBody[0] == null) {throw new NoSuchElementException("No user with that id found");
+        if (fullBody[0] == null) {
+            throw new NoSuchElementException("No user with that id found");
         }
-        var user =  SocialCompassUser.fromJSON(fullBody[0]);
+        var user = SocialCompassUser.fromJSON(fullBody[0]);
         return user;
     }
 
@@ -80,11 +83,13 @@ public class SocialCompassAPI {
             @Override
             public void run() {
                 try (Response response = client.newCall(request).execute()) {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (!response.isSuccessful())
+                        throw new IOException("Unexpected code " + response);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }});
+            }
+        });
 
         t.start();
         t.join();
