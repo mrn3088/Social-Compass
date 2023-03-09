@@ -26,14 +26,15 @@ public class Utilities {
             "ease enter two number separated by a space.";
     static final String INCORRECT_LOCATION = "your location does not exist:\n" +
             "Latitude should be in [-90, 90], Longitude should be in [-180, 180]";
-    static final Map<String, String> valueDisplayMap = new HashMap<>(){{
+    static final Map<String, String> valueDisplayMap = new HashMap<>() {{
         put("-360.0 -360.0", "");
     }};
 
     /**
      * Display an alert dialog
+     *
      * @param activity Activity to display alert on
-     * @param message Message to display
+     * @param message  Message to display
      */
     public static void displayAlert(Activity activity, String message) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
@@ -51,59 +52,63 @@ public class Utilities {
 
     /**
      * Convert radians to degrees
+     *
      * @param rad Radians
      * @return Degrees float
      */
-    public static float radiansToDegreesFloat(float rad){
-        return (float)(rad*180/Math.PI);
+    public static float radiansToDegreesFloat(float rad) {
+        return (float) (rad * 180 / Math.PI);
     }
 
     /**
      * Convert radians to degrees
+     *
      * @param rad Radians
      * @return Degrees double
      */
-    public static double radiansToDegreesDouble(double rad){
-        return (double) rad*180/Math.PI;
+    public static double radiansToDegreesDouble(double rad) {
+        return (double) rad * 180 / Math.PI;
     }
 
     /**
      * find the relative angle between two points
+     *
      * @param currentLocation current location
-     * @param destination destination
+     * @param destination     destination
      * @return relative angle
      */
-    public static float relativeAngle(Pair<Double, Double> currentLocation, Pair<Double, Double> destination){
+    public static float relativeAngle(Pair<Double, Double> currentLocation, Pair<Double, Double> destination) {
         return relativeAngleUtils(currentLocation.first, currentLocation.second, destination.first, destination.second);
     }
 
 
     /**
      * find the relative angle between two points
-     * @param userLat user latitude
+     *
+     * @param userLat  user latitude
      * @param userLong user longitude
-     * @param destLat destination latitude
+     * @param destLat  destination latitude
      * @param destLong destination longitude
      * @return relative angle
      */
-    public static float relativeAngleUtils(Double userLat, Double userLong, Double destLat, Double destLong){
-        Double latitudeDifference = destLat-userLat;
+    public static float relativeAngleUtils(Double userLat, Double userLong, Double destLat, Double destLong) {
+        Double latitudeDifference = destLat - userLat;
         Double longitudeDifference = destLong - userLong;
 
-        if(latitudeDifference>0 && longitudeDifference>0){
-            return (float) radiansToDegreesDouble(Math.atan(longitudeDifference/latitudeDifference));
+        if (latitudeDifference > 0 && longitudeDifference > 0) {
+            return (float) radiansToDegreesDouble(Math.atan(longitudeDifference / latitudeDifference));
         }
 
-        if(latitudeDifference<0 && longitudeDifference>0){
-            return (float) (180 - radiansToDegreesDouble(Math.atan(-longitudeDifference/latitudeDifference)));
+        if (latitudeDifference < 0 && longitudeDifference > 0) {
+            return (float) (180 - radiansToDegreesDouble(Math.atan(-longitudeDifference / latitudeDifference)));
         }
 
-        if(latitudeDifference<0 && longitudeDifference<0){
-            return (float) (180 + radiansToDegreesDouble(Math.atan(longitudeDifference/latitudeDifference)));
+        if (latitudeDifference < 0 && longitudeDifference < 0) {
+            return (float) (180 + radiansToDegreesDouble(Math.atan(longitudeDifference / latitudeDifference)));
         }
 
-        if(latitudeDifference>0 && longitudeDifference<0){
-            return (float) (360 - radiansToDegreesDouble(Math.atan(-longitudeDifference/latitudeDifference)));
+        if (latitudeDifference > 0 && longitudeDifference < 0) {
+            return (float) (360 - radiansToDegreesDouble(Math.atan(-longitudeDifference / latitudeDifference)));
         }
 
         return 0f;
@@ -111,6 +116,7 @@ public class Utilities {
 
     /**
      * Parse a coordinate string into a float array
+     *
      * @param str Coordinate string
      * @return Optional float array of latitude and longitude
      */
@@ -131,14 +137,15 @@ public class Utilities {
 
     /**
      * Parse a label string into a string
+     *
      * @param labelNames Label string
      * @return true if total number of labels is 3, false otherwise
      */
     public static boolean namedLabels(List<String> labelNames) {
         int totalNames = 0;
-        for(int i = 0; i < labelNames.size(); i++) {
-            if(!labelNames.get(i).isBlank()) {
-                totalNames ++;
+        for (int i = 0; i < labelNames.size(); i++) {
+            if (!labelNames.get(i).isBlank()) {
+                totalNames++;
             }
         }
         return totalNames == 3;
@@ -146,12 +153,13 @@ public class Utilities {
 
     /**
      * Check if label lengths are valid
+     *
      * @param labelNames List of label names
      * @return true if all label lengths are less than 20, false otherwise
      */
     public static boolean validLabelLengths(List<String> labelNames) {
-        for(int i = 0; i < labelNames.size(); i++) {
-            if(labelNames.get(i).length() > 20) {
+        for (int i = 0; i < labelNames.size(); i++) {
+            if (labelNames.get(i).length() > 20) {
                 return false;
             }
         }
@@ -160,11 +168,12 @@ public class Utilities {
 
     /**
      * Check if coordinates are valid
+     *
      * @param coordinates List of coordinates
      * @return true if all coordinates are within the valid range, false otherwise
      */
     public static boolean validCoordinates(List<float[]> coordinates) {
-        for(int i = 0; i < coordinates.size(); i++) {
+        for (int i = 0; i < coordinates.size(); i++) {
             if (!validCoordinates(coordinates.get(i))) {
                 return false;
             }
@@ -174,6 +183,7 @@ public class Utilities {
 
     /**
      * Check if coordinates are valid
+     *
      * @param coordinate
      * @return true if coordinates are valid false otherwise
      */
@@ -184,6 +194,7 @@ public class Utilities {
 
     /**
      * Check if orientation is valid
+     *
      * @param orientation
      * @return true if orientation is valid false otherwise
      */
@@ -199,6 +210,7 @@ public class Utilities {
 
     /**
      * display string
+     *
      * @param str
      * @return the string to display
      */

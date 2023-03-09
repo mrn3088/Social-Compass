@@ -55,7 +55,7 @@ public class LocationService implements LocationListener, Service {
         //Register sensor listeners
         this.registerSensorListeners();
     }
-    
+
     /**
      * Register location listener
      */
@@ -80,7 +80,7 @@ public class LocationService implements LocationListener, Service {
     /**
      * Unregister location listener
      */
-    public void unregisterSensorListeners(){
+    public void unregisterSensorListeners() {
         locationManager.removeUpdates(this);
     }
 
@@ -89,7 +89,7 @@ public class LocationService implements LocationListener, Service {
      *
      * @param mockDataSource Mock location source
      */
-    public void setMockOrientationSource(MutableLiveData<Position> mockDataSource){
+    public void setMockOrientationSource(MutableLiveData<Position> mockDataSource) {
         unregisterSensorListeners();
         this.locationValue = mockDataSource;
     }
@@ -106,7 +106,7 @@ public class LocationService implements LocationListener, Service {
     /**
      * Unregister location listener on pause
      */
-    public void onPause(){
+    public void onPause() {
         this.unregisterSensorListeners();
     }
 
