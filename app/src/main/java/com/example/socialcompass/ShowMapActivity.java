@@ -8,6 +8,7 @@ package com.example.socialcompass;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintProperties;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.Observer;
 
@@ -15,7 +16,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 /**
@@ -43,6 +46,8 @@ public class ShowMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
         this.loadProfile();
+        addNewUserView(180, 500, "new one");
+        addNewUserView(270, 250, "new two");
 
         /*
         Ask for user's permission for location tracking
@@ -79,8 +84,8 @@ public class ShowMapActivity extends AppCompatActivity {
             ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
             northlayoutparams.circleAngle = 360.0f - manual_rotation;
         }
-
         this.reobserveLocation();
+
     }
 
     /**
@@ -255,5 +260,32 @@ public class ShowMapActivity extends AppCompatActivity {
      */
     public void setOrientation(float orientation) {
         this.orientation = orientation;
+    }
+
+    public void addNewUserView(int angle, int radius, String str) {
+        // Get a reference to the ConstraintLayout
+        ConstraintLayout constraintLayout = this.findViewById(R.id.compass);
+
+// Inflate a new instance of the TextView using label_template as a template
+        TextView newTextView = new TextView(this);
+        newTextView.setText(str);
+        newTextView.setRotation(0);
+        newTextView.setId(View.generateViewId());
+        newTextView.setTextSize(20);
+        constraintLayout.addView(newTextView);
+        ConstraintLayout.LayoutParams layoutparams = new ConstraintLayout.LayoutParams(
+                ConstraintLayout.LayoutParams.WRAP_CONTENT,
+                ConstraintLayout.LayoutParams.WRAP_CONTENT
+        );
+        newTextView.setLayoutParams(layoutparams);
+        ConstraintSet cons = new ConstraintSet();
+        cons.clone(constraintLayout);
+        cons.constrainCircle(newTextView.getId(),
+                R.id.compass,
+                radius,
+                angle
+        );
+        cons.applyTo(constraintLayout);
+
     }
 }

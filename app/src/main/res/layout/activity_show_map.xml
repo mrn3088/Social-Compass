@@ -45,7 +45,18 @@
             app:layout_constraintCircleRadius="165dp"
             tools:layout_editor_absoluteX="167dp"
             tools:layout_editor_absoluteY="-21dp" />
-
+        <TextView
+            android:id="@+id/label_template"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rotation="0"
+            android:text="label_template"
+            android:textSize="20dp"
+            app:layout_constraintCircle="@+id/compass"
+            app:layout_constraintCircleAngle="0"
+            app:layout_constraintCircleRadius="165dp"
+            tools:layout_editor_absoluteX="167dp"
+            tools:layout_editor_absoluteY="-21dp" />
         <TextView
             android:id="@+id/label1"
             android:layout_width="wrap_content"
