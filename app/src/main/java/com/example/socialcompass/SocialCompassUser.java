@@ -39,6 +39,18 @@ public class SocialCompassUser {
 
     }
 
+    public String getLabel() {
+        return this.label;
+    }
+
+    public float getLatitude() {
+        return this.latitude;
+    }
+
+    public float getLongitude() {
+        return this.longitude;
+    }
+
     public static SocialCompassUser fromJSON(String json) {
         return new Gson().fromJson(json, SocialCompassUser.class);
     }
