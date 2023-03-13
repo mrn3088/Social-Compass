@@ -10,16 +10,23 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintProperties;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class is ShowMapActivity class used to support show map page
@@ -41,13 +48,13 @@ public class ShowMapActivity extends AppCompatActivity {
     private float orientation;
     private String uid;
 
+    private Map<String, String> userIDs = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
         this.loadProfile();
-        addNewUserView(180, 500, "new one");
-        addNewUserView(270, 250, "new two");
 
         /*
         Ask for user's permission for location tracking
@@ -213,12 +220,13 @@ public class ShowMapActivity extends AppCompatActivity {
      */
     public void loadProfile() {
         preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
-        destination1 = new Position((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1Long", 0f));
-        destination2 = new Position((double) preferences.getFloat("label2Lat", 0f), (double) preferences.getFloat("label2Long", 0f));
-        destination3 = new Position((double) preferences.getFloat("label3Lat", 0f), (double) preferences.getFloat("label3Long", 0f));
-        label1 = preferences.getString("label1Name", "Label1");
-        label2 = preferences.getString("label2Name", "Label2");
-        label3 = preferences.getString("label3Name", "Label3");
+//        destination1 = new Position((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1Long", 0f));
+//        destination2 = new Position((double) preferences.getFloat("label2Lat", 0f), (double) preferences.getFloat("label2Long", 0f));
+//        destination3 = new Position((double) preferences.getFloat("label3Lat", 0f), (double) preferences.getFloat("label3Long", 0f));
+//        label1 = preferences.getString("label1Name", "Label1");
+//        label2 = preferences.getString("label2Name", "Label2");
+//        label3 = preferences.getString("label3Name", "Label3");
+        loadUsers();
         manual_rotation = -1;
         try {
             manual_rotation = Integer.parseInt(preferences.getString("manual_rotation", "-1"));
@@ -262,7 +270,7 @@ public class ShowMapActivity extends AppCompatActivity {
         this.orientation = orientation;
     }
 
-    public void addNewUserView(int angle, int radius, String str) {
+    public void addNewUserView(float angle, int radius, String str, String public_code) {
         // Get a reference to the ConstraintLayout
         ConstraintLayout constraintLayout = this.findViewById(R.id.compass);
 
@@ -270,7 +278,9 @@ public class ShowMapActivity extends AppCompatActivity {
         TextView newTextView = new TextView(this);
         newTextView.setText(str);
         newTextView.setRotation(0);
-        newTextView.setId(View.generateViewId());
+        var id = View.generateViewId();
+        userIDs.put("" + id, public_code);
+        newTextView.setId(id);
         newTextView.setTextSize(20);
         constraintLayout.addView(newTextView);
         ConstraintLayout.LayoutParams layoutparams = new ConstraintLayout.LayoutParams(
@@ -286,6 +296,44 @@ public class ShowMapActivity extends AppCompatActivity {
                 angle
         );
         cons.applyTo(constraintLayout);
+    }
+
+    // return
+    private Pair<Float, Integer> calculateLocation(float x, float y) {
+        return new Pair<>(0.0f, 0);
+    }
+
+    private void updateUserView(TextView view, SocialCompassUser user) {
+        var theLoc = calculateLocation(user.getLatitude(), user.getLongitude());
+        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
+        layoutParams.circleAngle = theLoc.first;
+        layoutParams.circleRadius = theLoc.second;
+    }
+
+    private void loadUsers() {
+        var db = SocialCompassDatabase.provide(this.getApplicationContext());
+        var dao = db.getDao();
+        var users = dao.getAll().getValue();
+        var api = SocialCompassAPI.provide();
+        if (userIDs.isEmpty()) {
+            for (var user : users) {
+                var theLoc = calculateLocation(user.getLatitude(), user.getLongitude());
+                addNewUserView(theLoc.first, theLoc.second, user.getLabel(), user.private_code);
+            }
+        } else {
+            for (var id : userIDs.keySet()) {
+                int idInt = Integer.parseInt(id);
+                TextView userView = findViewById(idInt);
+                String publicCode = userIDs.get(id);
+                SocialCompassUser theUser;
+                try {
+                    theUser = api.getUser(publicCode);
+                    updateUserView(userView, theUser);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
     }
 }
