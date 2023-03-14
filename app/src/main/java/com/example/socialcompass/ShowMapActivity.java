@@ -38,6 +38,15 @@ public class ShowMapActivity extends AppCompatActivity {
     private ConstraintProperties cp;
     private SharedPreferences preferences;
     private Position destination1;
+
+    private int state = 2;
+
+    private int dpscale = 450;
+
+    private int distanceScale = 10;
+
+    private Position current = new Position(30, -110);
+
     private String label1;
     private Position destination2;
     private String label2;
@@ -105,74 +114,23 @@ public class ShowMapActivity extends AppCompatActivity {
         ((LocationService) locationService).getLocation().observe(this, new Observer<Position>() {
             @Override
             public void onChanged(Position currentLocation) {
-                TextView north = (TextView) findViewById(R.id.North);
 
-                if (currentLocation == null) {
-                    currentLocation = previousLocation;
-                } else {
-                    previousLocation = currentLocation;
+                current = currentLocation;
+
+                var api = SocialCompassAPI.provide();
+
+                for (var id : userIDs.keySet()) {
+                    int idInt = Integer.parseInt(id);
+                    TextView userView = findViewById(idInt);
+                    String publicCode = userIDs.get(id);
+                    SocialCompassUser theUser;
+                    try {
+                        theUser = api.getUser(publicCode);
+                        updateUserView(userView, theUser);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
-
-                /*
-                Get the view of three coordinate labels
-                 */
-                TextView text1 = (TextView) findViewById(R.id.label1);
-                TextView text2 = (TextView) findViewById(R.id.label2);
-                TextView text3 = (TextView) findViewById(R.id.label3);
-
-
-                ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
-                ConstraintLayout.LayoutParams label1layoutparams = (ConstraintLayout.LayoutParams) text1.getLayoutParams();
-                ConstraintLayout.LayoutParams label2layoutparams = (ConstraintLayout.LayoutParams) text2.getLayoutParams();
-                ConstraintLayout.LayoutParams label3layoutparams = (ConstraintLayout.LayoutParams) text3.getLayoutParams();
-
-                float northAngle = northlayoutparams.circleAngle;
-
-                /*
-                Update three coordinate labels according to new orientation
-                 */
-                if (destination1.getLatitude() > -360f && destination1.getLongitude() > -360f) {
-                    /*
-                    Set coordinate 1
-                     */
-                    text1.setText(label1);
-                    float angle1 = locationCalculations.relativeAngle(currentLocation, destination1);
-                    label1layoutparams.circleAngle = ((northAngle + angle1) % 360);
-                } else {
-                    /*
-                    No input of coordinate 1.
-                     */
-                    text1.setText("");
-                }
-
-                if (destination2.getLatitude() > -360f && destination2.getLongitude() > -360f) {
-                    /*
-                    Set coordinate 2
-                     */
-                    text2.setText(label2);
-                    float angle2 = locationCalculations.relativeAngle(currentLocation, destination2);
-                    label2layoutparams.circleAngle = ((northAngle + angle2) % 360);
-                } else {
-                    /*
-                    No input of coordinate 2
-                     */
-                    text2.setText("");
-                }
-
-                if (destination3.getLatitude() > -360f && destination3.getLongitude() > -360f) {
-                    /*
-                    Set coordinate 3
-                     */
-                    text3.setText(label3);
-                    float angle3 = locationCalculations.relativeAngle(currentLocation, destination3);
-                    label3layoutparams.circleAngle = ((northAngle + angle3) % 360);
-                } else {
-                    /*
-                    No input of coordinate 3
-                     */
-                    text3.setText("");
-                }
-
 
             }
         });
@@ -307,7 +265,13 @@ public class ShowMapActivity extends AppCompatActivity {
 
     // return
     private Pair<Float, Integer> calculateLocation(float x, float y) {
-        return new Pair<>(180.0f, 300);
+        double distance = Utilities.calculateDistance(current.getLatitude(), current.getLongitude(), x, y);
+        Integer radius = (int)(dpscale*distance/distanceScale);
+        Float relativeAngle = Utilities.relativeAngleUtils(current.getLatitude(), current.getLongitude(), (double) x, (double) y);
+        TextView north = (TextView) findViewById(R.id.North);
+        ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
+        Float northAngle = northlayoutparams.circleAngle;
+        return new Pair<>((relativeAngle+northAngle)%360, radius);
     }
 
     private void updateUserView(TextView view, SocialCompassUser user) {
@@ -315,6 +279,40 @@ public class ShowMapActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
         layoutParams.circleAngle = theLoc.first;
         layoutParams.circleRadius = theLoc.second;
+    }
+    public void onZoomInClicked(View view) {
+        if(state>1 && state<=4){
+            state--;
+            if(state == 1){
+                this.distanceScale = 1;
+            }else if(state == 2){
+                this.distanceScale = 10;
+            }else if(state == 3){
+                this.distanceScale = 100;
+            }else{
+                this.distanceScale = 500;
+            }
+            this.reobserveLocation();
+        } else {
+            Utilities.displayAlert(this, "Cannot zoom in more!");
+        }
+    }
+    public void onZoomOutClicked(View view){
+        if(state>=1 && state<4){
+            state++;
+            if(state == 1){
+                this.distanceScale = 1;
+            }else if(state == 2){
+                this.distanceScale = 10;
+            }else if(state == 3){
+                this.distanceScale = 100;
+            }else{
+                this.distanceScale = 500;
+            }
+            this.reobserveLocation();
+        }else{
+            Utilities.displayAlert(this, "Cannot zoom out more!");
+        }
     }
 
     //    public void loadUsers() {
