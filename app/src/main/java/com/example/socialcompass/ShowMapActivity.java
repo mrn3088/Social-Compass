@@ -46,7 +46,7 @@ public class ShowMapActivity extends AppCompatActivity {
 
     private int distanceScale = 10;
 
-    private Position current;
+    private Position current = new Position(60, -130);
 
     private String label1;
     private Position destination2;
