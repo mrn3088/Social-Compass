@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +46,7 @@ public class ShowMapActivity extends AppCompatActivity {
 
     private int distanceScale = 10;
 
-    private Position current = new Position(30, -110);
+    private Position current;
 
     private String label1;
     private Position destination2;
@@ -270,7 +271,19 @@ public class ShowMapActivity extends AppCompatActivity {
         Float relativeAngle = Utilities.relativeAngleUtils(current.getLatitude(), current.getLongitude(), (double) x, (double) y);
         TextView north = (TextView) findViewById(R.id.North);
         ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
+
         Float northAngle = northlayoutparams.circleAngle;
+
+        if(radius>450){
+            radius = 450;
+        }
+
+        Log.d("Distance", Double.toString(distance));
+        Log.d("current lat", Double.toString(current.getLatitude()));
+        Log.d("current long", Double.toString(current.getLongitude()));
+        Log.d("x", Float.toString(x));
+        Log.d("y", Float.toString(y));
+        Log.d("dp", Integer.toString(radius));
         return new Pair<>((relativeAngle+northAngle)%360, radius);
     }
 
@@ -346,6 +359,7 @@ public class ShowMapActivity extends AppCompatActivity {
         var api = SocialCompassAPI.provide();
         if (userIDs.isEmpty()) {
             for (var user : users) {
+                Log.d("code", user.public_code);
                 var theLoc = calculateLocation(user.getLatitude(), user.getLongitude());
                 addNewUserView(theLoc.first, theLoc.second, user.getLabel(), user.private_code);
             }
