@@ -9,7 +9,9 @@ public class AddRemoteTest {
     public void addRemoteTest1() throws Exception {
         SocialCompassAPI api = new SocialCompassAPI();
         api = api.provide();
-        SocialCompassUser newUser = new SocialCompassUser("555-555-5555", "Dwayne Barak Johnson", 0, 0);
+
+        SocialCompassUser newUser = new SocialCompassUser("a-non-existing-id",
+                "a-non-existing-id", "Dwayne Barak Johnson", 0, 0);
         try {
             api.addUser(newUser);
         } catch (InterruptedException e) {

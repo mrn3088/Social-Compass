@@ -29,16 +29,16 @@ import okio.BufferedSink;
 public class SocialCompassAPI {
     private volatile static SocialCompassAPI instance = null;
 
-    private OkHttpClient client;
-    public static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
 
+    public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
+    private OkHttpClient client;
     public SocialCompassAPI() {
         this.client = new OkHttpClient();
     }
 
     public static SocialCompassAPI provide() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new SocialCompassAPI();
         }
         return instance;
@@ -60,15 +60,16 @@ public class SocialCompassAPI {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }});
+            }
+        });
 
         t.start(); // spawn thread
         t.join();  // wait for thread to finish
 
-        if(fullBody[0] == null) {
+        if (fullBody[0] == null) {
             throw new NoSuchElementException("No user with that id found");
         }
-        var user =  SocialCompassUser.fromJSON(fullBody[0]);
+        var user = SocialCompassUser.fromJSON(fullBody[0]);
         return user;
     }
 
@@ -76,8 +77,7 @@ public class SocialCompassAPI {
 
         Gson gson = new Gson();
         AdaptedUser newUser = new AdaptedUser(user);
-        RequestBody body =  RequestBody.create(gson.toJson(newUser), JSON);
-
+        RequestBody body = RequestBody.create(gson.toJson(newUser).toString(), JSON);
         String noSpaceID = user.public_code.replace(" ", "%20");
         Request request = new Request.Builder()
                 .url("https://socialcompass.goto.ucsd.edu/location/" + noSpaceID)
@@ -87,12 +87,14 @@ public class SocialCompassAPI {
             @Override
             public void run() {
                 try (Response response = client.newCall(request).execute()) {
-                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    if (!response.isSuccessful())
+                        throw new IOException("Unexpected code " + response);
                 } catch (IOException e) {
                     System.out.println(e.toString());
                     e.printStackTrace();
                 }
-            }});
+            }
+        });
 
         t.start();
         t.join();

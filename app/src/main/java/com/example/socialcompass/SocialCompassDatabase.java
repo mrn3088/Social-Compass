@@ -14,7 +14,7 @@ public abstract class SocialCompassDatabase extends RoomDatabase {
     public abstract SocialCompassDao getDao();
 
     public synchronized static SocialCompassDatabase provide(Context context) {
-        if(instance == null) {
+        if (instance == null) {
             instance = SocialCompassDatabase.make(context);
         }
         return instance;
@@ -28,7 +28,7 @@ public abstract class SocialCompassDatabase extends RoomDatabase {
 
     @VisibleForTesting
     public static void inject(SocialCompassDatabase testDatabase) {
-        if(instance != null) {
+        if (instance != null) {
             instance.close();
         }
         instance = testDatabase;

@@ -8,6 +8,7 @@ package com.example.socialcompass;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
@@ -22,6 +23,7 @@ import androidx.lifecycle.MutableLiveData;
 public class LocationService implements LocationListener, Service {
     private static LocationService instance;
     private Activity activity;
+    
 
     private MutableLiveData<Position> locationValue;
 
@@ -55,7 +57,7 @@ public class LocationService implements LocationListener, Service {
         //Register sensor listeners
         this.registerSensorListeners();
     }
-    
+
     /**
      * Register location listener
      */
@@ -75,12 +77,13 @@ public class LocationService implements LocationListener, Service {
      */
     public void onLocationChanged(@NonNull Position location) {
         this.locationValue.postValue(location);
+
     }
 
     /**
      * Unregister location listener
      */
-    public void unregisterSensorListeners(){
+    public void unregisterSensorListeners() {
         locationManager.removeUpdates(this);
     }
 
@@ -89,7 +92,7 @@ public class LocationService implements LocationListener, Service {
      *
      * @param mockDataSource Mock location source
      */
-    public void setMockOrientationSource(MutableLiveData<Position> mockDataSource){
+    public void setMockOrientationSource(MutableLiveData<Position> mockDataSource) {
         unregisterSensorListeners();
         this.locationValue = mockDataSource;
     }
@@ -106,12 +109,14 @@ public class LocationService implements LocationListener, Service {
     /**
      * Unregister location listener on pause
      */
-    public void onPause(){
+    public void onPause() {
         this.unregisterSensorListeners();
     }
 
     @Override
-    public void onLocationChanged(@NonNull android.location.Location location) {
+    public void onLocationChanged(@NonNull Location location) {
+        Position newPosition = new Position (location.getLatitude(), location.getLongitude());
+        onLocationChanged(newPosition);
 
     }
 }
