@@ -264,7 +264,7 @@ public class ShowMapActivity extends AppCompatActivity {
         newTextView.setText(str);
         newTextView.setRotation(0);
         var id = View.generateViewId();
-        userIDs.put("" + id, public_code);
+        userIDs.put(Integer.toString(id), public_code);
         newTextView.setId(id);
         newTextView.setTextSize(20);
         constraintLayout.addView(newTextView);
@@ -307,10 +307,20 @@ public class ShowMapActivity extends AppCompatActivity {
     }
 
     private void updateUserView(TextView view, SocialCompassUser user) {
+        ConstraintLayout constraintLayout = this.findViewById(R.id.compass);
         var theLoc = calculateLocation(user.getLatitude(), user.getLongitude());
-        ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
-        layoutParams.circleAngle = theLoc.first;
-        layoutParams.circleRadius = theLoc.second;
+        //ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
+        //layoutParams.circleAngle = theLoc.first;
+        //layoutParams.circleRadius = theLoc.second;
+        ConstraintSet cons = new ConstraintSet();
+        cons.clone(constraintLayout);
+        cons.constrainCircle(view.getId(),
+                R.id.compass,
+                theLoc.second,
+                theLoc.first
+        );
+        cons.applyTo(constraintLayout);
+
         Log.d("updated", Integer.toString(theLoc.second));
     }
     public void onZoomInClicked(View view) {
