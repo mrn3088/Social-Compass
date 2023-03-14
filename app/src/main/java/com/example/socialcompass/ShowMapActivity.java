@@ -81,12 +81,12 @@ public class ShowMapActivity extends AppCompatActivity {
         }
         var db = SocialCompassDatabase.provide(this.getApplicationContext());
         var dao = db.getDao();
-        dao.upsert(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 60.5f, -130.5f));
-        try {
-            api.addUser(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 60.5f, -130.5f));
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+//        dao.upsert(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 60.5f, -130.5f));
+//        try {
+//            api.addUser(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 60.5f, -130.5f));
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
         this.loadProfile();
 
         /*
@@ -136,7 +136,7 @@ public class ShowMapActivity extends AppCompatActivity {
 
                 current = currentLocation;
 
-                Log.d("observeLocation", "entered this");
+                Log.d("observeLocations", "entered this");
                 var api = SocialCompassAPI.provide();
 
                 for (var id : userIDs.keySet()) {
