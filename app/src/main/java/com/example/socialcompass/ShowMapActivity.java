@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,12 +62,31 @@ public class ShowMapActivity extends AppCompatActivity {
     private Map<String, String> userIDs = new HashMap<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
+        uid = getIntent().getStringExtra("uid");
+        var api = SocialCompassAPI.provide();
+        SocialCompassUser selfUser = null;
+        try {
+            selfUser = api.getUser(uid);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        if(selfUser!=null){
+
+        }
         var db = SocialCompassDatabase.provide(this.getApplicationContext());
         var dao = db.getDao();
         dao.upsert(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 60.5f, -130.5f));
+        try {
+            api.addUser(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 60.5f, -130.5f));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         this.loadProfile();
 
         /*
@@ -77,8 +97,6 @@ public class ShowMapActivity extends AppCompatActivity {
 
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 200);
         }
-
-        uid = getIntent().getStringExtra("uid");
 
         /*
         Get location service and orientation service object
@@ -293,6 +311,7 @@ public class ShowMapActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
         layoutParams.circleAngle = theLoc.first;
         layoutParams.circleRadius = theLoc.second;
+        Log.d("updated", Integer.toString(theLoc.second));
     }
     public void onZoomInClicked(View view) {
         if(state>1 && state<=4){
