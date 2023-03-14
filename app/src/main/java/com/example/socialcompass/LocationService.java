@@ -8,6 +8,7 @@ package com.example.socialcompass;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 
@@ -22,6 +23,7 @@ import androidx.lifecycle.MutableLiveData;
 public class LocationService implements LocationListener, Service {
     private static LocationService instance;
     private Activity activity;
+    
 
     private MutableLiveData<Position> locationValue;
 
@@ -75,6 +77,7 @@ public class LocationService implements LocationListener, Service {
      */
     public void onLocationChanged(@NonNull Position location) {
         this.locationValue.postValue(location);
+
     }
 
     /**
@@ -111,7 +114,9 @@ public class LocationService implements LocationListener, Service {
     }
 
     @Override
-    public void onLocationChanged(@NonNull android.location.Location location) {
+    public void onLocationChanged(@NonNull Location location) {
+        Position newPosition = new Position (location.getLatitude(), location.getLongitude());
+        onLocationChanged(newPosition);
 
     }
 }
