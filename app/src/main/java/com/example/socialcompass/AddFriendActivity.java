@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class AddFriendActivity extends AppCompatActivity {
         api = api.provide();
         try {
             SocialCompassUser friend = api.getUser(friendsID.getText().toString());
+            friend.private_code = friend.public_code;
+            Log.d(friend.label, friend.label);
             userDao.upsert(friend);
         } catch (IOException e) {
             e.printStackTrace();

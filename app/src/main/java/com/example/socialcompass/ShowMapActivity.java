@@ -54,6 +54,9 @@ public class ShowMapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
+        var db = SocialCompassDatabase.provide(this.getApplicationContext());
+        var dao = db.getDao();
+        dao.upsert(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 0, 0));
         this.loadProfile();
 
         /*
@@ -226,7 +229,11 @@ public class ShowMapActivity extends AppCompatActivity {
 //        label1 = preferences.getString("label1Name", "Label1");
 //        label2 = preferences.getString("label2Name", "Label2");
 //        label3 = preferences.getString("label3Name", "Label3");
-        loadUsers();
+        var db = SocialCompassDatabase.provide(this.getApplicationContext());
+        var dao = db.getDao();
+        var userList = dao.getAll();
+        userList.observe(this, this::loadUsers);
+
         manual_rotation = -1;
         try {
             manual_rotation = Integer.parseInt(preferences.getString("manual_rotation", "-1"));
@@ -300,7 +307,7 @@ public class ShowMapActivity extends AppCompatActivity {
 
     // return
     private Pair<Float, Integer> calculateLocation(float x, float y) {
-        return new Pair<>(0.0f, 0);
+        return new Pair<>(180.0f, 300);
     }
 
     private void updateUserView(TextView view, SocialCompassUser user) {
@@ -310,10 +317,34 @@ public class ShowMapActivity extends AppCompatActivity {
         layoutParams.circleRadius = theLoc.second;
     }
 
-    private void loadUsers() {
-        var db = SocialCompassDatabase.provide(this.getApplicationContext());
-        var dao = db.getDao();
-        var users = dao.getAll().getValue();
+    //    public void loadUsers() {
+//        var db = SocialCompassDatabase.provide(this.getApplicationContext());
+//        var dao = db.getDao();
+//        var users = dao.getAll().getValue();
+//        assert users != null;
+//        var api = SocialCompassAPI.provide();
+//        if (userIDs.isEmpty()) {
+//            for (var user : users) {
+//                var theLoc = calculateLocation(user.getLatitude(), user.getLongitude());
+//                addNewUserView(theLoc.first, theLoc.second, user.getLabel(), user.private_code);
+//            }
+//        } else {
+//            for (var id : userIDs.keySet()) {
+//                int idInt = Integer.parseInt(id);
+//                TextView userView = findViewById(idInt);
+//                String publicCode = userIDs.get(id);
+//                SocialCompassUser theUser;
+//                try {
+//                    theUser = api.getUser(publicCode);
+//                    updateUserView(userView, theUser);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//
+//    }
+    private void loadUsers(List<SocialCompassUser> users) {
         var api = SocialCompassAPI.provide();
         if (userIDs.isEmpty()) {
             for (var user : users) {

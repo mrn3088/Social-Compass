@@ -68,14 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
         editor.putString("manual_rotation", manualRotationOpt);
 
-        String publicID = UUID.randomUUID().toString();
-        String privateID = UUID.randomUUID().toString();
+        String theID = UUID.randomUUID().toString();
 
         TextView tv = findViewById(R.id.displayName);
         editor.putString("name", tv.getText().toString());
-        editor.putString("uid", publicID);
+        editor.putString("uid", theID);
         editor.apply();
-        SocialCompassUser theUser = new SocialCompassUser(privateID, publicID, tv.getText().toString(), 0.0f, 0.0f);
+        SocialCompassUser theUser = new SocialCompassUser(theID, theID, tv.getText().toString(), 0.0f, 0.0f);
         SocialCompassAPI api = new SocialCompassAPI();
         api = api.provide();
         try {
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, ShowMapActivity.class);
-        intent.putExtra("uid", publicID);
+        intent.putExtra("uid", theID);
         startActivity(intent);
 
     }
