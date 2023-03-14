@@ -40,11 +40,11 @@ public class ShowMapActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private Position destination1;
 
-    private int state = 2;
+    private int state = 4;
 
     private int dpscale = 450;
 
-    private int distanceScale = 10;
+    private int distanceScale = 500;
 
     private Position current = new Position(60, -130);
 
@@ -66,7 +66,7 @@ public class ShowMapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_map);
         var db = SocialCompassDatabase.provide(this.getApplicationContext());
         var dao = db.getDao();
-        dao.upsert(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 0, 0));
+        dao.upsert(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 60.5f, -130.5f));
         this.loadProfile();
 
         /*
@@ -118,6 +118,7 @@ public class ShowMapActivity extends AppCompatActivity {
 
                 current = currentLocation;
 
+                Log.d("observeLocation", "entered this");
                 var api = SocialCompassAPI.provide();
 
                 for (var id : userIDs.keySet()) {

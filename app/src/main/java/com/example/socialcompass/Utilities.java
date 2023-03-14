@@ -219,7 +219,7 @@ public class Utilities {
     }
 
     public static double calculateDistance(double lat1, double long1, double lat2, double long2){
-        return 6371.0*Math.acos(Math.cos((long1/180.0)*Math.PI)*Math.cos((long2/180.0)*Math.PI)*Math.cos(((lat1-lat2)/180.0))*Math.PI+Math.sin((lat1/180.0)*Math.PI)*Math.sin((lat2/180.0)*Math.PI));
+        return 6371.0*Math.acos(Math.cos((lat1/180.0)*Math.PI)*Math.cos((lat2/180.0)*Math.PI)*Math.cos(((long1-long2)/180.0)*Math.PI)+Math.sin((lat1/180.0)*Math.PI)*Math.sin((lat2/180.0)*Math.PI));
     }
 }
 
