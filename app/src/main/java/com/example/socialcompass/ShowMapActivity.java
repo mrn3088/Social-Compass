@@ -59,6 +59,7 @@ public class ShowMapActivity extends AppCompatActivity {
     private String uid;
 
     private Map<String, String> userIDs = new HashMap<>();
+    private Map<String, String> textID2imageID = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,7 +147,7 @@ public class ShowMapActivity extends AppCompatActivity {
                     SocialCompassUser theUser;
                     try {
                         theUser = api.getUser(publicCode);
-                        updateUserView(userView, theUser);
+                        updateUserView(id, theUser);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -307,13 +308,20 @@ public class ShowMapActivity extends AppCompatActivity {
 
 // Inflate a new instance of the TextView using label_template as a template
         TextView newTextView = new TextView(this);
+        ImageView newImageView = new ImageView(this);
         newTextView.setText(str);
         newTextView.setRotation(0);
-        var id = View.generateViewId();
-        userIDs.put(Integer.toString(id), public_code);
-        newTextView.setId(id);
+        newImageView.setImageResource(R.drawable.user_icon);
+        newImageView.setRotation(0);
+        var textViewID = View.generateViewId();
+        var imageViewID = View.generateViewId();
+        userIDs.put(Integer.toString(textViewID), public_code);
+        textID2imageID.put(Integer.toString(textViewID), Integer.toString(imageViewID));
+        newTextView.setId(textViewID);
+        newImageView.setId(imageViewID);
         newTextView.setTextSize(20);
         constraintLayout.addView(newTextView);
+        constraintLayout.addView(newImageView);
         ConstraintLayout.LayoutParams layoutparams = new ConstraintLayout.LayoutParams(
                 ConstraintLayout.LayoutParams.WRAP_CONTENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
@@ -322,6 +330,11 @@ public class ShowMapActivity extends AppCompatActivity {
         ConstraintSet cons = new ConstraintSet();
         cons.clone(constraintLayout);
         cons.constrainCircle(newTextView.getId(),
+                R.id.compass,
+                radius,
+                angle
+        );
+        cons.constrainCircle(newImageView.getId(),
                 R.id.compass,
                 radius,
                 angle
@@ -354,12 +367,26 @@ public class ShowMapActivity extends AppCompatActivity {
         return new Pair<>((relativeAngle + northAngle) % 360, radius);
     }
 
-    private void updateUserView(TextView view, SocialCompassUser user) {
+    private void updateUserView(String textViewID, SocialCompassUser user) {
+        TextView textView = findViewById(Integer.parseInt(textViewID));
+        ImageView imageView = findViewById(Integer.parseInt(textID2imageID.get(textViewID)));
         ConstraintLayout constraintLayout = this.findViewById(R.id.compass);
         var theLoc = calculateLocation(user.getLatitude(), user.getLongitude());
+        if (theLoc.second == Utilities.DISPLAY_MARGIN) {
+            textView.setVisibility(View.INVISIBLE);
+            imageView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.VISIBLE);
+            imageView.setVisibility(View.INVISIBLE);
+        }
         ConstraintSet cons = new ConstraintSet();
         cons.clone(constraintLayout);
-        cons.constrainCircle(view.getId(),
+        cons.constrainCircle(textView.getId(),
+                R.id.compass,
+                theLoc.second,
+                theLoc.first
+        );
+        cons.constrainCircle(imageView.getId(),
                 R.id.compass,
                 theLoc.second,
                 theLoc.first
@@ -416,12 +443,11 @@ public class ShowMapActivity extends AppCompatActivity {
         } else {
             for (var id : userIDs.keySet()) {
                 int idInt = Integer.parseInt(id);
-                TextView userView = findViewById(idInt);
                 String publicCode = userIDs.get(id);
                 SocialCompassUser theUser;
                 try {
                     theUser = api.getUser(publicCode);
-                    updateUserView(userView, theUser);
+                    updateUserView(id, theUser);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

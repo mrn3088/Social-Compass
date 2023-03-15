@@ -5,6 +5,8 @@
 
 package com.example.socialcompass;
 
+import static java.lang.Math.log;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.Pair;
@@ -263,10 +265,10 @@ public class Utilities {
                 return distance / 1.0 * 150;
             }
         } else {
-            if (distance >= 1000.0) {
+            if (distance >= 12450.5) {
                 return DISPLAY_MARGIN;
             } else if (distance >= 500.0) {
-                return (distance - 500.0) / (1000.0 - 500.0) * 100 + 350;
+                return (log(distance - 500.0)) / (log(12450.5) - log(500.0)) * 100 + 350;
             } else if (distance >= 10.0) {
                 return (distance - 10.0) / (500.0 - 10.0) * 100 + 250;
             } else if (distance >= 1.0) {
