@@ -28,12 +28,6 @@ public class SocialCompassRepository {
     public SocialCompassRepository(SocialCompassDao dao) {
         this.dao = dao;
     }
-//
-//    //Only used to initialize user and update location for user of phone, doesn't update any other users
-//    public void upsertSynced(SocialCompassUser user) throws Exception {
-//        upsertRemote(user);
-//        upsertLocal(user);
-//    }
 
     // Local Methods
     // =============

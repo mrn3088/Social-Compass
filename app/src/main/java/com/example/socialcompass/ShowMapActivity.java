@@ -58,7 +58,7 @@ public class ShowMapActivity extends AppCompatActivity {
     private Map<String, String> userIDs = new HashMap<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
         uid = getIntent().getStringExtra("uid");
@@ -72,7 +72,7 @@ public class ShowMapActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
-        if(selfUser!=null){
+        if (selfUser != null) {
 
         }
         var db = SocialCompassDatabase.provide(this.getApplicationContext());
@@ -282,14 +282,14 @@ public class ShowMapActivity extends AppCompatActivity {
     // return
     private Pair<Float, Integer> calculateLocation(float x, float y) {
         double distance = Utilities.calculateDistance(current.getLatitude(), current.getLongitude(), x, y);
-        Integer radius = (int)(dpscale*distance/distanceScale);
+        Integer radius = (int) (dpscale * distance / distanceScale);
         Float relativeAngle = Utilities.relativeAngleUtils(current.getLatitude(), current.getLongitude(), (double) x, (double) y);
         TextView north = (TextView) findViewById(R.id.North);
         ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
 
         Float northAngle = northlayoutparams.circleAngle;
 
-        if(radius>450){
+        if (radius > 450) {
             radius = 450;
         }
 
@@ -299,7 +299,8 @@ public class ShowMapActivity extends AppCompatActivity {
         Log.d("x", Float.toString(x));
         Log.d("y", Float.toString(y));
         Log.d("dp", Integer.toString(radius));
-        return new Pair<>((relativeAngle+northAngle)%360, radius);
+
+        return new Pair<>((relativeAngle + northAngle) % 360, radius);
     }
 
     private void updateUserView(TextView view, SocialCompassUser user) {
@@ -319,16 +320,17 @@ public class ShowMapActivity extends AppCompatActivity {
 
         Log.d("updated", Integer.toString(theLoc.second));
     }
+
     public void onZoomInClicked(View view) {
-        if(state>1 && state<=4){
+        if (state > 1 && state <= 4) {
             state--;
-            if(state == 1){
+            if (state == 1) {
                 this.distanceScale = 1;
-            }else if(state == 2){
+            } else if (state == 2) {
                 this.distanceScale = 10;
-            }else if(state == 3){
+            } else if (state == 3) {
                 this.distanceScale = 100;
-            }else{
+            } else {
                 this.distanceScale = 500;
             }
             this.reobserveLocation();
@@ -336,51 +338,25 @@ public class ShowMapActivity extends AppCompatActivity {
             Utilities.displayAlert(this, "Cannot zoom in more!");
         }
     }
-    public void onZoomOutClicked(View view){
-        if(state>=1 && state<4){
+
+    public void onZoomOutClicked(View view) {
+        if (state >= 1 && state < 4) {
             state++;
-            if(state == 1){
+            if (state == 1) {
                 this.distanceScale = 1;
-            }else if(state == 2){
+            } else if (state == 2) {
                 this.distanceScale = 10;
-            }else if(state == 3){
+            } else if (state == 3) {
                 this.distanceScale = 100;
-            }else{
+            } else {
                 this.distanceScale = 500;
             }
             this.reobserveLocation();
-        }else{
+        } else {
             Utilities.displayAlert(this, "Cannot zoom out more!");
         }
     }
 
-    //    public void loadUsers() {
-//        var db = SocialCompassDatabase.provide(this.getApplicationContext());
-//        var dao = db.getDao();
-//        var users = dao.getAll().getValue();
-//        assert users != null;
-//        var api = SocialCompassAPI.provide();
-//        if (userIDs.isEmpty()) {
-//            for (var user : users) {
-//                var theLoc = calculateLocation(user.getLatitude(), user.getLongitude());
-//                addNewUserView(theLoc.first, theLoc.second, user.getLabel(), user.private_code);
-//            }
-//        } else {
-//            for (var id : userIDs.keySet()) {
-//                int idInt = Integer.parseInt(id);
-//                TextView userView = findViewById(idInt);
-//                String publicCode = userIDs.get(id);
-//                SocialCompassUser theUser;
-//                try {
-//                    theUser = api.getUser(publicCode);
-//                    updateUserView(userView, theUser);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//    }
     private void loadUsers(List<SocialCompassUser> users) {
         var api = SocialCompassAPI.provide();
         if (userIDs.isEmpty()) {

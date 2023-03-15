@@ -218,8 +218,8 @@ public class Utilities {
         return valueDisplayMap.getOrDefault(str, str);
     }
 
-    public static double calculateDistance(double lat1, double long1, double lat2, double long2){
-        return 3958.8*Math.acos(Math.cos((lat1/180.0)*Math.PI)*Math.cos((lat2/180.0)*Math.PI)*Math.cos(((long1-long2)/180.0)*Math.PI)+Math.sin((lat1/180.0)*Math.PI)*Math.sin((lat2/180.0)*Math.PI));
+    public static double calculateDistance(double lat1, double long1, double lat2, double long2) {
+        return 3958.8 * Math.acos(Math.cos((lat1 / 180.0) * Math.PI) * Math.cos((lat2 / 180.0) * Math.PI) * Math.cos(((long1 - long2) / 180.0) * Math.PI) + Math.sin((lat1 / 180.0) * Math.PI) * Math.sin((lat2 / 180.0) * Math.PI));
     }
 }
 
