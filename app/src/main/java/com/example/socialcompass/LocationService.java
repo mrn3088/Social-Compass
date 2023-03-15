@@ -5,6 +5,7 @@
 
 package com.example.socialcompass;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -17,13 +18,15 @@ import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import java.util.List;
+
 /**
  * This class is LocationService class used to track users' location
  */
 public class LocationService implements LocationListener, Service {
     private static LocationService instance;
     private Activity activity;
-    
+
 
     private MutableLiveData<Position> locationValue;
 
@@ -75,7 +78,7 @@ public class LocationService implements LocationListener, Service {
      *
      * @param location New location
      */
-     
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
         this.locationValue.postValue(new Position(location.getLatitude(), location.getLongitude()));
@@ -113,10 +116,10 @@ public class LocationService implements LocationListener, Service {
     public void onPause() {
         this.unregisterSensorListeners();
     }
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        Position newPosition = new Position (location.getLatitude(), location.getLongitude());
-        onLocationChanged(newPosition);
+
+    public long timeSinceGpsUpdate() {
+        @SuppressLint("MissingPermission") Location loc = instance.locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        return System.currentTimeMillis() - loc.getTime();
 
     }
 }

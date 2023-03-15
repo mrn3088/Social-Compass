@@ -24,6 +24,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +33,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import okhttp3.internal.Util;
 
@@ -137,24 +143,22 @@ public class ShowMapActivity extends AppCompatActivity {
         ScheduledFuture<?> poller;
         ScheduledExecutorService schedular = Executors.newScheduledThreadPool(1);
         poller = schedular.scheduleAtFixedRate(() -> {
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                minutesNoGPS.set((float) 0);
-            } else {
-                minutesNoGPS.set(minutesNoGPS.get() + 1);
-            }
-            onGpsChanged(minutesNoGPS.get());
-
+            LocationService newService = (LocationService) locationService;
+            long timeSinceUpdateMillis = newService.timeSinceGpsUpdate();
+            int timeSinceUpdateMinutes = (int) timeSinceUpdateMillis / (1000 * 60);
+            runOnUiThread(() -> {
+                onGpsChanged(timeSinceUpdateMinutes);
+            });
         }, 0, 60, TimeUnit.SECONDS);
     }
 
-    private void onGpsChanged(float minutesNoGps) {
+    private void onGpsChanged(int minutesNoGps) {
         Button gpsButton  = findViewById(R.id.displayGpsStatus);
         if ((minutesNoGps > 0) && (minutesNoGps < 60)) {
             gpsButton.setText("" + minutesNoGps + "Minutes without GPS");
             gpsButton.setBackgroundColor(0xfc1303);
         } else if (minutesNoGps > 60) {
-            int hoursSince = (int)minutesNoGps/60;
+            int hoursSince = minutesNoGps/60;
             gpsButton.setText("" + hoursSince + "Hours without GPS");
             gpsButton.setBackgroundColor(0xfc1303);
         } else {

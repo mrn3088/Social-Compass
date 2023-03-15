@@ -171,4 +171,17 @@
         app:layout_constraintVertical_bias="0.95"
         />
 
+    <Button
+        android:id="@+id/displayGpsStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GPS active"
+        android:backgroundTint="#0ADF12"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/compass"
+        app:layout_constraintHorizontal_bias="0.509"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.937" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
