@@ -5,12 +5,14 @@
 
 package com.example.socialcompass;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -117,6 +119,11 @@ public class LocationService implements LocationListener, Service {
     public void onLocationChanged(@NonNull Location location) {
         Position newPosition = new Position (location.getLatitude(), location.getLongitude());
         onLocationChanged(newPosition);
+    }
+
+    public long timeSinceLastGpsUpdate() {
+        @SuppressLint("MissingPermission") Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        return System.currentTimeMillis() - loc.getTime();
 
     }
 }

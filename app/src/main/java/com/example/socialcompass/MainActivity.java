@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONException;
 import org.w3c.dom.Text;
 
 import java.util.Arrays;
@@ -82,6 +83,8 @@ public class MainActivity extends AppCompatActivity {
             api.addUser(theUser);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
 
         Intent intent = new Intent(this, ShowMapActivity.class);
