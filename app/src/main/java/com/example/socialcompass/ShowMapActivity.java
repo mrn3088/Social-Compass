@@ -44,7 +44,7 @@ public class ShowMapActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private Position destination1;
 
-    private int state = 4;
+    private int state = 2;
 
     private int dpscale = 450;
 
