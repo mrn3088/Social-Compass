@@ -29,12 +29,6 @@ public class SocialCompassRepository {
         this.dao = dao;
     }
 
-    //Only used to initialize user and update location for user of phone, doesn't update any other users
-    public void upsertSynced(SocialCompassUser user) throws Exception {
-        upsertRemote(user);
-        upsertLocal(user);
-    }
-
     // Local Methods
     // =============
 
@@ -61,7 +55,7 @@ public class SocialCompassRepository {
         SocialCompassAPI api = new SocialCompassAPI();
         api = api.provide();
         SocialCompassUser user = api.getUser(userID);
-        MutableLiveData<SocialCompassUser> currUser = new MutableLiveData<SocialCompassUser>();
+        MutableLiveData<SocialCompassUser> currUser = new MutableLiveData<>();
         currUser.setValue(user);
         return currUser;
     }

@@ -5,6 +5,8 @@
 
 package com.example.socialcompass;
 
+import static java.lang.Math.log;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.util.Pair;
@@ -20,6 +22,10 @@ import java.util.Optional;
  */
 public class Utilities {
     static final int MAX_LABEL_LENGTH = 20;
+    static final int INVISIBLE_CIRCLE = 3000;
+
+    static final double DISPLAY_MARGIN = 450.0;
+
     static final String USE_PHONE_ORIENTATION = "-1";
     static final String INCORRECT_EMPTY = "You need to enter at least one location!";
     static final String INCORRECT_FORMAT = "your coordinates are not entered in correct format!\nPl" +
@@ -218,8 +224,59 @@ public class Utilities {
         return valueDisplayMap.getOrDefault(str, str);
     }
 
-    public static double calculateDistance(double lat1, double long1, double lat2, double long2){
-        return 6371.0*Math.acos(Math.cos((long1/180.0)*Math.PI)*Math.cos((long2/180.0)*Math.PI)*Math.cos(((lat1-lat2)/180.0))*Math.PI+Math.sin((lat1/180.0)*Math.PI)*Math.sin((lat2/180.0)*Math.PI));
+    public static double calculateDistance(double lat1, double long1, double lat2, double long2) {
+        return 3958.8 * Math.acos(Math.cos((lat1 / 180.0) * Math.PI) * Math.cos((lat2 / 180.0) * Math.PI) * Math.cos(((long1 - long2) / 180.0) * Math.PI) + Math.sin((lat1 / 180.0) * Math.PI) * Math.sin((lat2 / 180.0) * Math.PI));
+    }
+
+    private static double getOuterCircleActualDistance(int state) {
+        if (state == 1) {
+            return 1.0;
+        } else if (state == 2) {
+            return 10.0;
+        } else if (state == 3) {
+            return 500.0;
+        } else {
+            return 1000.0;
+        }
+    }
+
+    public static double calculateUserViewRadius(double distance, int state) {
+        if (state == 1) {
+            if (distance >= 1.0) {
+                return DISPLAY_MARGIN;
+            }
+            return distance / 1.0 * DISPLAY_MARGIN;
+        } else if (state == 2) {
+            if (distance >= 10.0) {
+                return DISPLAY_MARGIN;
+            } else if (distance >= 1.0) {
+                return (distance - 1.0) / (10.0 - 1.0) * 225.5 + 225.5;
+            } else {
+                return distance / 1.0 * 225.5;
+            }
+        } else if (state == 3) {
+            if (distance >= 500.0) {
+                return DISPLAY_MARGIN;
+            } else if (distance >= 10.0) {
+                return (distance - 10.0) / (500.0 - 10.0) * 150 + 300;
+            } else if (distance >= 1.0) {
+                return (distance - 1.0) / (10.0 - 1.0) * 150 + 150;
+            } else {
+                return distance / 1.0 * 150;
+            }
+        } else {
+            if (distance >= 12450.5) {
+                return DISPLAY_MARGIN;
+            } else if (distance >= 500.0) {
+                return (log(distance - 500.0)) / (log(12450.5) - log(500.0)) * 100 + 350;
+            } else if (distance >= 10.0) {
+                return (distance - 10.0) / (500.0 - 10.0) * 100 + 250;
+            } else if (distance >= 1.0) {
+                return (distance - 1.0) / (10.0 - 1.0) * 100 + 150;
+            } else {
+                return distance / 1.0 * 150;
+            }
+        }
     }
 }
 
