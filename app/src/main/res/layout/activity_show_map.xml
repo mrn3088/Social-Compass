@@ -29,8 +29,10 @@
             android:layout_marginBottom="50dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/compass" />
 
         <TextView
@@ -44,7 +46,8 @@
             app:layout_constraintCircleAngle="0"
             app:layout_constraintCircleRadius="165dp"
             tools:layout_editor_absoluteX="167dp"
-            tools:layout_editor_absoluteY="-21dp" />
+            tools:layout_editor_absoluteY="-21dp"
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/label1"
@@ -57,7 +60,8 @@
             app:layout_constraintCircleAngle="0"
             app:layout_constraintCircleRadius="165dp"
             tools:layout_editor_absoluteX="167dp"
-            tools:layout_editor_absoluteY="-21dp" />
+            tools:layout_editor_absoluteY="-21dp"
+            tools:ignore="MissingConstraints" />
         <TextView
             android:id="@+id/label2"
             android:layout_width="wrap_content"
@@ -69,7 +73,8 @@
             app:layout_constraintCircleAngle="0"
             app:layout_constraintCircleRadius="165dp"
             tools:layout_editor_absoluteX="167dp"
-            tools:layout_editor_absoluteY="-21dp"/>
+            tools:layout_editor_absoluteY="-21dp"
+            tools:ignore="MissingConstraints" />
         <TextView
             android:id="@+id/label3"
             android:layout_width="wrap_content"
@@ -81,7 +86,8 @@
             app:layout_constraintCircleAngle="0"
             app:layout_constraintCircleRadius="165dp"
             tools:layout_editor_absoluteX="167dp"
-            tools:layout_editor_absoluteY="-21dp"/>
+            tools:layout_editor_absoluteY="-21dp"
+            tools:ignore="MissingConstraints" />
 
         <Button
             android:id="@+id/back_button"
@@ -107,16 +113,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+    <TextView
         android:id="@+id/displayGpsStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="Test Tester"
+        android:textColor="#000000"
+        android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.933"
+        app:layout_constraintHorizontal_bias="0.936"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.909" />
+        app:layout_constraintVertical_bias="0.954" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,6 +20,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -105,23 +106,26 @@ public class ShowMapActivity extends AppCompatActivity {
         poller = schedular.scheduleAtFixedRate(() -> {
             LocationService newService = (LocationService) locationService;
             long timeSinceUpdate = newService.timeSinceLastGpsUpdate();
-            int minutesSinceUpdate = (int) (timeSinceUpdate / (60 * 1000));
-            onGpsChanged(minutesSinceUpdate);
-        }, 0, 30, TimeUnit.SECONDS);
+            Log.d("GPS", "time since update: " + timeSinceUpdate);
+            int minutesSinceUpdate = (int) (timeSinceUpdate / (60*1000));
+            runOnUiThread(() -> {
+                onGpsChanged(minutesSinceUpdate);
+            });
+        }, 0, 3, TimeUnit.SECONDS);
     }
 
     private void onGpsChanged(int minutesNoGps) {
-        Button gpsButton  = findViewById(R.id.displayGpsStatus);
+        TextView gpsButton  = (TextView) findViewById(R.id.displayGpsStatus);
         if ((minutesNoGps > 0) && (minutesNoGps < 60)) {
             gpsButton.setText("" + minutesNoGps + "Minutes without GPS");
-            gpsButton.setBackgroundColor(0xfc1303);
+            gpsButton.setTextColor(0xfc1303);
         } else if (minutesNoGps > 60) {
             int hoursSince = minutesNoGps/60;
             gpsButton.setText("" + hoursSince + "Hours without GPS");
-            gpsButton.setBackgroundColor(0xfc1303);
+            gpsButton.setTextColor(0xfc1303);
         } else {
             gpsButton.setText("GPS active");
-            gpsButton.setBackgroundColor(0x0ADF12);
+            gpsButton.setTextColor(0x0ADF12);
         }
     }
 
