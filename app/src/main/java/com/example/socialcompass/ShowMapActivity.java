@@ -49,11 +49,7 @@ public class ShowMapActivity extends AppCompatActivity {
 
     private Position current = new Position(60, -130);
 
-    private String label1;
-    private Position destination2;
-    private String label2;
-    private Position destination3;
-    private String label3;
+
     private Position previousLocation = new Position(0, 0);
     private int manual_rotation;
     private float orientation;
