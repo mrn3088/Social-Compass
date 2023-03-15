@@ -133,6 +133,35 @@ public class ShowMapActivity extends AppCompatActivity {
         }
         this.reobserveLocation();
 
+        try {
+            refreshPositions();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private void refreshPositions() throws IOException, InterruptedException {
+        ScheduledFuture<?> poller;
+        ScheduledExecutorService schedular = Executors.newScheduledThreadPool(1);
+        poller = schedular.scheduleAtFixedRate(() -> {
+            SocialCompassDatabase db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
+            SocialCompassDao dao = db.getDao();
+            LiveData<List<SocialCompassUser>> allFriends = dao.getAll();
+            List<SocialCompassUser> friendList = allFriends.getValue();
+            SocialCompassAPI api = new SocialCompassAPI();
+            api = api.provide();
+            for (SocialCompassUser friend : friendList) {
+                String currID = friend.public_code;
+                try {
+                    dao.upsert(api.getUser(currID));
+                } catch (Exception e) {
+                    Log.d("EXC", e.toString());
+                }
+            }
+        }, 0, 1, TimeUnit.MINUTES);
     }
 
     private void trackGps() {
@@ -149,21 +178,18 @@ public class ShowMapActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 onGpsChanged(timeSinceUpdateMinutes);
             });
-        }, 0, 60, TimeUnit.SECONDS);
+        }, 0, 3, TimeUnit.SECONDS);
     }
 
     private void onGpsChanged(int minutesNoGps) {
-        Button gpsButton  = findViewById(R.id.displayGpsStatus);
+        Button gpsButton  = (Button) findViewById(R.id.displayGpsStatus);
         if ((minutesNoGps > 0) && (minutesNoGps < 60)) {
-            gpsButton.setText("" + minutesNoGps + "Minutes without GPS");
-            gpsButton.setBackgroundColor(0xfc1303);
+            gpsButton.setText("" + minutesNoGps + "M");
         } else if (minutesNoGps > 60) {
             int hoursSince = minutesNoGps/60;
-            gpsButton.setText("" + hoursSince + "Hours without GPS");
-            gpsButton.setBackgroundColor(0xfc1303);
+            gpsButton.setText("" + hoursSince + "H");
         } else {
-            gpsButton.setText("GPS active");
-            gpsButton.setBackgroundColor(0x0ADF12);
+            gpsButton.setText("GPS ACTIVE");
         }
     }
 
