@@ -23,6 +23,7 @@ import androidx.lifecycle.MutableLiveData;
 public class LocationService implements LocationListener, Service {
     private static LocationService instance;
     private Activity activity;
+    
 
     private MutableLiveData<Position> locationValue;
 
@@ -74,6 +75,7 @@ public class LocationService implements LocationListener, Service {
      *
      * @param location New location
      */
+     
     @Override
     public void onLocationChanged(@NonNull Location location) {
         this.locationValue.postValue(new Position(location.getLatitude(), location.getLongitude()));
@@ -111,5 +113,10 @@ public class LocationService implements LocationListener, Service {
     public void onPause() {
         this.unregisterSensorListeners();
     }
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        Position newPosition = new Position (location.getLatitude(), location.getLongitude());
+        onLocationChanged(newPosition);
 
+    }
 }

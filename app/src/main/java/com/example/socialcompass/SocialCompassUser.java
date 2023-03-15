@@ -30,7 +30,7 @@ public class SocialCompassUser {
     @NonNull
     public String private_code;
 
-    public SocialCompassUser(@NonNull String private_code, @NonNull String public_code, @NonNull String label, @NonNull float latitude, float longitude) {
+    public SocialCompassUser(@NonNull String private_code, @NonNull String public_code, @NonNull String label, @NonNull float latitude,@NonNull float longitude) {
         this.private_code = private_code;
         this.public_code = public_code;
         this.label = label;

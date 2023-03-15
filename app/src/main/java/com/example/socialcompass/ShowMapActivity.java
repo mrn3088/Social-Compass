@@ -13,9 +13,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -106,6 +108,7 @@ public class ShowMapActivity extends AppCompatActivity {
         compass = (ConstraintLayout) findViewById(R.id.compass);
         cp = new ConstraintProperties(compass);
         TextView north = (TextView) findViewById(R.id.North);
+        trackGps();
 
         /*
         Two different modes: Orientation manual setting vs orientation tracking
@@ -124,6 +127,40 @@ public class ShowMapActivity extends AppCompatActivity {
         }
         this.reobserveLocation();
 
+    }
+
+    private void trackGps() {
+        AtomicReference<Float> minutesNoGPS = new AtomicReference<>((float) 0);
+        // create a poller that will every minute see if we still have gps access
+        // if the poller returns that we do not have gps access, increment secondsNoGps by 60
+        // call on method to display secondsnoGps to user
+        ScheduledFuture<?> poller;
+        ScheduledExecutorService schedular = Executors.newScheduledThreadPool(1);
+        poller = schedular.scheduleAtFixedRate(() -> {
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                minutesNoGPS.set((float) 0);
+            } else {
+                minutesNoGPS.set(minutesNoGPS.get() + 1);
+            }
+            onGpsChanged(minutesNoGPS.get());
+
+        }, 0, 60, TimeUnit.SECONDS);
+    }
+
+    private void onGpsChanged(float minutesNoGps) {
+        Button gpsButton  = findViewById(R.id.displayGpsStatus);
+        if ((minutesNoGps > 0) && (minutesNoGps < 60)) {
+            gpsButton.setText("" + minutesNoGps + "Minutes without GPS");
+            gpsButton.setBackgroundColor(0xfc1303);
+        } else if (minutesNoGps > 60) {
+            int hoursSince = (int)minutesNoGps/60;
+            gpsButton.setText("" + hoursSince + "Hours without GPS");
+            gpsButton.setBackgroundColor(0xfc1303);
+        } else {
+            gpsButton.setText("GPS active");
+            gpsButton.setBackgroundColor(0x0ADF12);
+        }
     }
 
     /**
