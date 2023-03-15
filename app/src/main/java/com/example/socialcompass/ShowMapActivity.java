@@ -22,6 +22,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
@@ -29,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import okhttp3.internal.Util;
 
 /**
  * This class is ShowMapActivity class used to support show map page
@@ -135,6 +138,7 @@ public class ShowMapActivity extends AppCompatActivity {
                 Log.d("observeLocations", "entered this");
                 var api = SocialCompassAPI.provide();
 
+                updateCircles();
                 for (var id : userIDs.keySet()) {
                     int idInt = Integer.parseInt(id);
                     TextView userView = findViewById(idInt);
@@ -150,6 +154,52 @@ public class ShowMapActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void updateCircles() {
+        ImageView circle1 = findViewById(R.id.circle1);
+        ImageView circle2 = findViewById(R.id.circle2);
+        ImageView circle3 = findViewById(R.id.circle3);
+        ImageView circle4 = findViewById(R.id.circle4);
+
+        if(state==1){
+            circle1.getLayoutParams().width = 900;
+            circle1.getLayoutParams().height = 900;
+            circle2.getLayoutParams().width = Utilities.INVISIBLE_CIRCLE;
+            circle2.getLayoutParams().height = Utilities.INVISIBLE_CIRCLE;
+            circle3.getLayoutParams().width = Utilities.INVISIBLE_CIRCLE;
+            circle3.getLayoutParams().height = Utilities.INVISIBLE_CIRCLE;
+            circle4.getLayoutParams().width = Utilities.INVISIBLE_CIRCLE;
+            circle4.getLayoutParams().height = Utilities.INVISIBLE_CIRCLE;
+        }else if(state==2){
+            circle1.getLayoutParams().width = 900/2;
+            circle1.getLayoutParams().height = 900/2;
+            circle2.getLayoutParams().width = 900;
+            circle2.getLayoutParams().height = 900;
+            circle3.getLayoutParams().width = Utilities.INVISIBLE_CIRCLE;
+            circle3.getLayoutParams().height = Utilities.INVISIBLE_CIRCLE;
+            circle4.getLayoutParams().width = Utilities.INVISIBLE_CIRCLE;
+            circle4.getLayoutParams().height = Utilities.INVISIBLE_CIRCLE;
+
+        }else if(state==3){
+            circle1.getLayoutParams().width = 300;
+            circle1.getLayoutParams().height = 300;
+            circle2.getLayoutParams().width = 600;
+            circle2.getLayoutParams().height = 600;
+            circle3.getLayoutParams().width = 900;
+            circle3.getLayoutParams().height = 900;
+            circle4.getLayoutParams().width = Utilities.INVISIBLE_CIRCLE;
+            circle4.getLayoutParams().height = Utilities.INVISIBLE_CIRCLE;
+        }else{
+            circle1.getLayoutParams().width = 300;
+            circle1.getLayoutParams().height = 300;
+            circle2.getLayoutParams().width = 500;
+            circle2.getLayoutParams().height = 500;
+            circle3.getLayoutParams().width = 700;
+            circle3.getLayoutParams().height = 700;
+            circle4.getLayoutParams().width = 900;
+            circle4.getLayoutParams().height = 900;
+        }
     }
 
     /**
@@ -282,7 +332,8 @@ public class ShowMapActivity extends AppCompatActivity {
     // return
     private Pair<Float, Integer> calculateLocation(float x, float y) {
         double distance = Utilities.calculateDistance(current.getLatitude(), current.getLongitude(), x, y);
-        Integer radius = (int) (dpscale * distance / distanceScale);
+//        Integer radius = (int) (dpscale * distance / distanceScale);
+        Integer radius = (int) Utilities.calculateUserViewRadius(distance, this.state);
         Float relativeAngle = Utilities.relativeAngleUtils(current.getLatitude(), current.getLongitude(), (double) x, (double) y);
         TextView north = (TextView) findViewById(R.id.North);
         ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
@@ -306,9 +357,6 @@ public class ShowMapActivity extends AppCompatActivity {
     private void updateUserView(TextView view, SocialCompassUser user) {
         ConstraintLayout constraintLayout = this.findViewById(R.id.compass);
         var theLoc = calculateLocation(user.getLatitude(), user.getLongitude());
-        //ConstraintLayout.LayoutParams layoutParams = (ConstraintLayout.LayoutParams) view.getLayoutParams();
-        //layoutParams.circleAngle = theLoc.first;
-        //layoutParams.circleRadius = theLoc.second;
         ConstraintSet cons = new ConstraintSet();
         cons.clone(constraintLayout);
         cons.constrainCircle(view.getId(),
