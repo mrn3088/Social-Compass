@@ -183,7 +183,7 @@ public class ShowMapActivity extends AppCompatActivity {
         }, 0, 3, TimeUnit.SECONDS);
     }
 
-    private void onGpsChanged(int minutesNoGps) {
+    public void onGpsChanged(int minutesNoGps) {
         Button gpsButton  = (Button) findViewById(R.id.displayGpsStatus);
         if ((minutesNoGps > 0) && (minutesNoGps < 60)) {
             gpsButton.setText("" + minutesNoGps + "M");
@@ -232,7 +232,7 @@ public class ShowMapActivity extends AppCompatActivity {
         });
     }
 
-    private void updateCircles() {
+    public void updateCircles() {
         ImageView circle1 = findViewById(R.id.circle1);
         ImageView circle2 = findViewById(R.id.circle2);
         ImageView circle3 = findViewById(R.id.circle3);
