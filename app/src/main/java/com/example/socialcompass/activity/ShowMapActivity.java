@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -144,6 +145,48 @@ public class ShowMapActivity extends AppCompatActivity {
 
     public void setUpViewModel(){
         this.viewmodel = new ViewModelProvider(this).get(SocialCompassViewModel.class);
+    }
+
+    private void checkCollisions(int labelID) {
+        Rect rect1 = new Rect();
+        Rect rect2 = new Rect();
+        // look through all labels currently on screen
+        for (String label2ID : userIDs.keySet()) {
+            // makes sure we don't track a label as colliding with itself
+            if (Integer.parseInt(label2ID) != labelID) {
+                // get textview of labels we are currently looking at
+                TextView labelOne = findViewById(labelID);
+                TextView labelTwo = findViewById(Integer.parseInt(label2ID));
+
+                // set rect1, rect2, to point at the rectangles created by the textviews
+                labelOne.getGlobalVisibleRect(rect1);
+                labelTwo.getGlobalVisibleRect(rect2);
+
+                // must update imageView's associated with labels as well as labels themselves
+                ImageView imageViewOne = findViewById(Integer.parseInt(textID2imageID.get(Integer.toString(labelID))));
+                ImageView imageviewTwo = findViewById(Integer.parseInt(textID2imageID.get(label2ID)));
+                // checks if rectangles created by labels collide with each other
+                if (Rect.intersects(rect1, rect2)) {
+                    Log.d("COLLISION", "labels DO collide");
+                    Log.d("VISIBILITY", "set labels to invisible");
+                    // if labels collide wipe text off screen
+                    labelOne.setVisibility(View.INVISIBLE);
+                    labelTwo.setVisibility(View.INVISIBLE);
+                    // must update imageView as well
+                    imageViewOne.setVisibility(View.INVISIBLE);
+                    imageviewTwo.setVisibility(View.INVISIBLE);
+                } else {
+                    Log.d("COLLISION", "labels do NOT collide");
+                    Log.d("VISIBILITY", "set labels to visible");
+                    // if labels do not collide then make sure text appears on screen
+                    labelOne.setVisibility(View.VISIBLE);
+                    labelTwo.setVisibility(View.VISIBLE);
+                    // again, update imageView
+                    imageViewOne.setVisibility(View.VISIBLE);
+                    imageviewTwo.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     private void refreshPositions() throws IOException, InterruptedException {
@@ -383,6 +426,7 @@ public class ShowMapActivity extends AppCompatActivity {
                 angle
         );
         cons.applyTo(constraintLayout);
+        checkCollisions(textViewID);
         //Log.d("width", Integer.toString(newTextView.getMeasuredHeight()));
         //Log.d("height", Integer.toString(newTextView.getMeasuredWidth()));
     }
@@ -434,9 +478,10 @@ public class ShowMapActivity extends AppCompatActivity {
         );
         cons.applyTo(constraintLayout);
 
-        Log.d("width", Integer.toString(textView.getMeasuredHeight()));
-        Log.d("height", Integer.toString(textView.getMeasuredWidth()));
+        //Log.d("width", Integer.toString(textView.getMeasuredHeight()));
+        //Log.d("height", Integer.toString(textView.getMeasuredWidth()));
 
+        checkCollisions(Integer.parseInt(textViewID));
         //Log.d("updated", Integer.toString(theLoc.second));
     }
 
@@ -480,6 +525,5 @@ public class ShowMapActivity extends AppCompatActivity {
                 }
             }
         }
-
     }
 }
