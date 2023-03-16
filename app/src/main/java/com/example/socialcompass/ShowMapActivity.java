@@ -17,10 +17,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Rect;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +33,11 @@ import android.widget.TextView;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -134,6 +138,50 @@ public class ShowMapActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
 
+        checkCollisions();
+
+    }
+
+    private void checkCollisions() {
+        // construct poller and schedular that run following code every 3 seconds
+        // go through all of our active friends and see if any two users have an overlap
+        // if an overlap is found check if it's because they have same radius, or just text overlaps
+        // if same radius push one out, and one in
+        // if text just overlaps, set each one to have smaller text/
+        ScheduledFuture<?> poller;
+        ScheduledExecutorService schedular = Executors.newScheduledThreadPool(1);
+        poller = schedular.scheduleAtFixedRate(() -> {
+            Rect rect1 = new Rect();
+            Rect rect2 = new Rect();
+            for (String text1 : textID2imageID.keySet()) {
+                for (String text2 : textID2imageID.keySet()) {
+                    if (!text1.equals(text2)) {
+                            runOnUiThread(() -> {
+                                Log.d("invisibility", "sets text to invisible");
+                                TextView textView1 = findViewById(Integer.parseInt(text1));
+                                TextView textView2 = findViewById(Integer.parseInt(text2));
+
+                                textView1.getGlobalVisibleRect(rect1);
+                                textView2.getGlobalVisibleRect(rect2);
+
+                                if (Rect.intersects(rect1, rect2)) {
+                                    Log.d("intersection", "Rect 1 intersects rect2, collision between textViews");
+
+                                    int horizontalOffset = (int) ((rect1.right + rect2.left) / 2 - rect2.centerX());
+                                    textView2.offsetLeftAndRight(horizontalOffset);
+//                                textView1.setVisibility(View.INVISIBLE);
+//                                textView2.setVisibility(View.INVISIBLE);
+                                } else {
+                                    Log.d("intersection", "No collision between 2 rects");
+                                }
+                            });
+                    }
+                }
+            }
+        }, 5, 5, TimeUnit.SECONDS);
+
+
+
     }
 
     private void refreshPositions() throws IOException, InterruptedException {
@@ -173,7 +221,7 @@ public class ShowMapActivity extends AppCompatActivity {
             runOnUiThread(() -> {
                 onGpsChanged(timeSinceUpdateMinutes);
             });
-        }, 0, 3, TimeUnit.SECONDS);
+        }, 0, 1, TimeUnit.MINUTES);
     }
 
     private void onGpsChanged(int minutesNoGps) {
@@ -342,8 +390,6 @@ public class ShowMapActivity extends AppCompatActivity {
 
 
 
-
-
     public void addNewUserView(float angle, int radius, String str, String public_code) {
         // Get a reference to the ConstraintLayout
         ConstraintLayout constraintLayout = this.findViewById(R.id.compass);
@@ -351,7 +397,13 @@ public class ShowMapActivity extends AppCompatActivity {
 // Inflate a new instance of the TextView using label_template as a template
         TextView newTextView = new TextView(this);
         ImageView newImageView = new ImageView(this);
-        newTextView.setText(str);
+
+        if(str.length() > 7) {
+            String truncatedName = str.substring(0, 6) + "...";
+            newTextView.setText(truncatedName);
+        } else {
+            newTextView.setText(str);
+        }
         newTextView.setRotation(0);
         newImageView.setImageResource(R.drawable.user_icon);
         newImageView.setRotation(0);
