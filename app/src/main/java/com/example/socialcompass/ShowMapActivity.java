@@ -137,51 +137,49 @@ public class ShowMapActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-        checkCollisions();
-
     }
 
-    private void checkCollisions() {
-        // construct poller and schedular that run following code every 3 seconds
-        // go through all of our active friends and see if any two users have an overlap
-        // if an overlap is found check if it's because they have same radius, or just text overlaps
-        // if same radius push one out, and one in
-        // if text just overlaps, set each one to have smaller text/
-        ScheduledFuture<?> poller;
-        ScheduledExecutorService schedular = Executors.newScheduledThreadPool(1);
-        poller = schedular.scheduleAtFixedRate(() -> {
-            Rect rect1 = new Rect();
-            Rect rect2 = new Rect();
-            for (String text1 : textID2imageID.keySet()) {
-                for (String text2 : textID2imageID.keySet()) {
-                    if (!text1.equals(text2)) {
-                            runOnUiThread(() -> {
-                                Log.d("invisibility", "sets text to invisible");
-                                TextView textView1 = findViewById(Integer.parseInt(text1));
-                                TextView textView2 = findViewById(Integer.parseInt(text2));
+    // method is called any time a label is created or updated
+    private void checkCollisions(int labelID) {
+        Rect rect1 = new Rect();
+        Rect rect2 = new Rect();
+        // look through all labels currently on screen
+        for (String label2ID : textID2imageID.keySet()) {
+            // makes sure we don't track a label as colliding with itself
+            if (Integer.parseInt(label2ID) != labelID) {
+                // get textview of labels we are currently looking at
+                TextView labelOne = findViewById(labelID);
+                TextView labelTwo = findViewById(Integer.parseInt(label2ID));
 
-                                textView1.getGlobalVisibleRect(rect1);
-                                textView2.getGlobalVisibleRect(rect2);
+                // set rect1, rect2, to point at the rectangles created by the textviews
+                labelOne.getGlobalVisibleRect(rect1);
+                labelTwo.getGlobalVisibleRect(rect2);
 
-                                if (Rect.intersects(rect1, rect2)) {
-                                    Log.d("intersection", "Rect 1 intersects rect2, collision between textViews");
-
-                                    int horizontalOffset = (int) ((rect1.right + rect2.left) / 2 - rect2.centerX());
-                                    textView2.offsetLeftAndRight(horizontalOffset);
-//                                textView1.setVisibility(View.INVISIBLE);
-//                                textView2.setVisibility(View.INVISIBLE);
-                                } else {
-                                    Log.d("intersection", "No collision between 2 rects");
-                                }
-                            });
-                    }
+                // must update imageView's associated with labels as well as labels themselves
+                ImageView imageViewOne = findViewById(Integer.parseInt(textID2imageID.get(labelID)));
+                ImageView imageviewTwo = findViewById(Integer.parseInt(textID2imageID.get(label2ID)));
+                // checks if rectangles created by labels collide with each other
+                if (Rect.intersects(rect1, rect2)) {
+                    Log.d("COLLISION", "labels DO collide");
+                    Log.d("VISIBILITY", "set labels to invisible");
+                    // if labels collide wipe text off screen
+                    labelOne.setVisibility(View.INVISIBLE);
+                    labelTwo.setVisibility(View.INVISIBLE);
+                    // must update imageView as well
+                    imageViewOne.setVisibility(View.INVISIBLE);
+                    imageviewTwo.setVisibility(View.INVISIBLE);
+                } else {
+                    Log.d("COLLISION", "labels do NOT collide");
+                    Log.d("VISIBILITY", "set labels to visible");
+                    // if labels do not collide then make sure text appears on screen
+                    labelOne.setVisibility(View.VISIBLE);
+                    labelTwo.setVisibility(View.VISIBLE);
+                    // again, update imageView
+                    imageViewOne.setVisibility(View.VISIBLE);
+                    imageviewTwo.setVisibility(View.VISIBLE);
                 }
             }
-        }, 5, 5, TimeUnit.SECONDS);
-
-
-
+        }
     }
 
     private void refreshPositions() throws IOException, InterruptedException {
@@ -434,6 +432,7 @@ public class ShowMapActivity extends AppCompatActivity {
                 angle
         );
         cons.applyTo(constraintLayout);
+        checkCollisions(textViewID);
     }
 
     // return
@@ -482,8 +481,8 @@ public class ShowMapActivity extends AppCompatActivity {
                 theLoc.first
         );
         cons.applyTo(constraintLayout);
-
         Log.d("updated", Integer.toString(theLoc.second));
+        checkCollisions(Integer.parseInt(textViewID));
     }
 
     public void onZoomInClicked(View view) {
