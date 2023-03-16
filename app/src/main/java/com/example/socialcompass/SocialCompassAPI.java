@@ -77,7 +77,7 @@ public class SocialCompassAPI {
 
         Gson gson = new Gson();
         AdaptedUser newUser = new AdaptedUser(user);
-        RequestBody body = RequestBody.create(gson.toJson(newUser).toString(), JSON);
+        RequestBody body = RequestBody.create(gson.toJson(newUser), JSON);
         String noSpaceID = user.public_code.replace(" ", "%20");
         Request request = new Request.Builder()
                 .url("https://socialcompass.goto.ucsd.edu/location/" + noSpaceID)

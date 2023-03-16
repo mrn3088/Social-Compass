@@ -80,12 +80,14 @@ public class ShowMapActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
-        uid = getIntent().getStringExtra("uid");
-        label = getIntent().getStringExtra("name");
-        private_code = getIntent().getStringExtra("private_code");
-        var db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
-        var dao = db.getDao();
-        var repo = new SocialCompassRepository(dao);
+        preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
+        uid = preferences.getString("uid", "");
+        private_code = preferences.getString("private_code", "");
+        label = preferences.getString("name", "");
+        
+        Log.d("get public", uid);
+        Log.d("get private", private_code);
+
         this.loadProfile();
 
         /*
@@ -196,19 +198,18 @@ public class ShowMapActivity extends AppCompatActivity {
 
                 current = currentLocation;
 
-                var api = SocialCompassAPI.provide();
-                try {
-                    api.addUser(new SocialCompassUser(private_code, uid, label, (float) currentLocation.getLatitude(), (float) currentLocation.getLongitude()));
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
-
-                Log.d("observeLocations", "entered this");
                 SocialCompassDatabase db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
                 SocialCompassDao dao = db.getDao();
                 SocialCompassRepository repo = new SocialCompassRepository(dao);
+                try {
+                    repo.upsertRemote(new SocialCompassUser(private_code, uid, label, (float) currentLocation.getLatitude(), (float) currentLocation.getLongitude()));
+                    Log.d("Public code", uid);
+                    Log.d("Private code", private_code);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                Log.d("observeLocations", "entered this");
 
 
                 updateCircles();

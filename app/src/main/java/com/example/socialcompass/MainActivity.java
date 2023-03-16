@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
             manualRotationOpt = manualRotationStr;
         }
 
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
         editor.putString("manual_rotation", manualRotationOpt);
@@ -74,13 +75,16 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = findViewById(R.id.displayName);
         editor.putString("name", tv.getText().toString());
         editor.putString("uid", publicID);
+        Log.d("added uid", publicID);
+        editor.putString("private_code", privateID);
+        Log.d("added private_code", privateID);
         editor.apply();
         SocialCompassUser theUser = new SocialCompassUser(privateID, publicID, tv.getText().toString(), 0.0f, 0.0f);
         var db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
         var dao = db.getDao();
         var repo = new SocialCompassRepository(dao);
         try {
-            repo.upsertSynced(theUser);
+            repo.upsertRemote(theUser);
         } catch (Exception e) {
             e.printStackTrace();
         }
