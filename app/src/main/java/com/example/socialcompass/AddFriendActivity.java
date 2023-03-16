@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class AddFriendActivity extends AppCompatActivity {
     TextView friendsID;
-    SocialCompassAPI api;
+    SocialCompassRepository repo;
     SocialCompassDatabase db;
     SocialCompassDao userDao;
 
@@ -23,7 +23,7 @@ public class AddFriendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_friend);
         db = SocialCompassDatabase.provide(getApplicationContext());
         userDao = db.getDao();
-        api = new SocialCompassAPI();
+        repo = new SocialCompassRepository(userDao);
 
         TextView usersID = findViewById(R.id.usersID);
         friendsID = findViewById(R.id.friendID);
@@ -40,9 +40,8 @@ public class AddFriendActivity extends AppCompatActivity {
             Utilities.displayAlert(this, "Already added this friend");
             return;
         }
-        api = api.provide();
         try {
-            SocialCompassUser friend = api.getUser(friendsID.getText().toString());
+            SocialCompassUser friend = repo.getSynced(friendsID.getText().toString()).getValue();
             friend.private_code = friend.public_code;
             Log.d(friend.label, friend.label);
             userDao.upsert(friend);
@@ -50,6 +49,8 @@ public class AddFriendActivity extends AppCompatActivity {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

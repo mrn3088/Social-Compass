@@ -76,10 +76,11 @@ public class MainActivity extends AppCompatActivity {
         editor.putString("uid", publicID);
         editor.apply();
         SocialCompassUser theUser = new SocialCompassUser(privateID, publicID, tv.getText().toString(), 0.0f, 0.0f);
-        SocialCompassAPI api = new SocialCompassAPI();
-        api = api.provide();
+        var db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
+        var dao = db.getDao();
+        var repo = new SocialCompassRepository(dao);
         try {
-            api.addUser(theUser);
+            repo.upsertSynced(theUser);
         } catch (Exception e) {
             e.printStackTrace();
         }

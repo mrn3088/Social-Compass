@@ -43,6 +43,7 @@ import okhttp3.internal.Util;
 
 /**
  * This class is ShowMapActivity class used to support show map page
+ * @invariant user must have an active registered profile
  */
 public class ShowMapActivity extends AppCompatActivity {
     private Service orientationService;
@@ -74,27 +75,19 @@ public class ShowMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
         uid = getIntent().getStringExtra("uid");
-        var api = SocialCompassAPI.provide();
+        var db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
+        var dao = db.getDao();
+        var repo = new SocialCompassRepository(dao);
         SocialCompassUser selfUser = null;
         try {
-            selfUser = api.getUser(uid);
+            selfUser = repo.getSynced(uid).getValue();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
-
-        if (selfUser != null) {
-
-        }
-        var db = SocialCompassDatabase.provide(this.getApplicationContext());
-        var dao = db.getDao();
-//        dao.upsert(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 60.5f, -130.5f));
-//        try {
-//            api.addUser(new SocialCompassUser("3117", "3117", "Ruinan—Ma", 60.5f, -130.5f));
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
         this.loadProfile();
 
         /*
@@ -149,14 +142,14 @@ public class ShowMapActivity extends AppCompatActivity {
         poller = schedular.scheduleAtFixedRate(() -> {
             SocialCompassDatabase db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
             SocialCompassDao dao = db.getDao();
-            LiveData<List<SocialCompassUser>> allFriends = dao.getAll();
+            SocialCompassRepository repo = new SocialCompassRepository(dao);
+
+            LiveData<List<SocialCompassUser>> allFriends = repo.getAllLocal();
             List<SocialCompassUser> friendList = allFriends.getValue();
-            SocialCompassAPI api = new SocialCompassAPI();
-            api = api.provide();
             for (SocialCompassUser friend : friendList) {
                 String currID = friend.public_code;
                 try {
-                    dao.upsert(api.getUser(currID));
+                    dao.upsert(repo.getRemote(currID).getValue());
                 } catch (Exception e) {
                     Log.d("EXC", e.toString());
                 }
@@ -165,7 +158,6 @@ public class ShowMapActivity extends AppCompatActivity {
     }
 
     private void trackGps() {
-        AtomicReference<Float> minutesNoGPS = new AtomicReference<>((float) 0);
         // create a poller that will every minute see if we still have gps access
         // if the poller returns that we do not have gps access, increment secondsNoGps by 60
         // call on method to display secondsnoGps to user
@@ -204,7 +196,10 @@ public class ShowMapActivity extends AppCompatActivity {
                 current = currentLocation;
 
                 Log.d("observeLocations", "entered this");
-                var api = SocialCompassAPI.provide();
+                SocialCompassDatabase db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
+                SocialCompassDao dao = db.getDao();
+                SocialCompassRepository repo = new SocialCompassRepository(dao);
+
 
                 updateCircles();
                 for (var id : userIDs.keySet()) {
@@ -213,7 +208,7 @@ public class ShowMapActivity extends AppCompatActivity {
                     String publicCode = userIDs.get(id);
                     SocialCompassUser theUser;
                     try {
-                        theUser = api.getUser(publicCode);
+                        theUser = repo.getSynced(publicCode).getValue();
                         updateUserView(id, theUser);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -290,6 +285,7 @@ public class ShowMapActivity extends AppCompatActivity {
 
     /**
      * Called when the user taps the Back button
+     * BUG::: BACK BUTTON WILL ALWAYS END UP WITH US ENTERING SHOW MAP AGAIN PLZ FIX
      */
     public void onBackClicked(View view) {
         Intent intent = new Intent(this, MainActivity.class);
@@ -311,19 +307,16 @@ public class ShowMapActivity extends AppCompatActivity {
     }
 
     /**
-     * load the 3 destinations and their labels from the shared preferences
+     * load user's friends and their labels from the shared preferences
+     *
+     *
      */
     public void loadProfile() {
         preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
-//        destination1 = new Position((double) preferences.getFloat("label1Lat", 0f), (double) preferences.getFloat("label1Long", 0f));
-//        destination2 = new Position((double) preferences.getFloat("label2Lat", 0f), (double) preferences.getFloat("label2Long", 0f));
-//        destination3 = new Position((double) preferences.getFloat("label3Lat", 0f), (double) preferences.getFloat("label3Long", 0f));
-//        label1 = preferences.getString("label1Name", "Label1");
-//        label2 = preferences.getString("label2Name", "Label2");
-//        label3 = preferences.getString("label3Name", "Label3");
         var db = SocialCompassDatabase.provide(this.getApplicationContext());
         var dao = db.getDao();
-        var userList = dao.getAll();
+        var repo = new SocialCompassRepository(dao);
+        var userList = repo.getAllLocal();
         userList.observe(this, this::loadUsers);
 
         manual_rotation = -1;
@@ -500,7 +493,9 @@ public class ShowMapActivity extends AppCompatActivity {
     }
 
     private void loadUsers(List<SocialCompassUser> users) {
-        var api = SocialCompassAPI.provide();
+        var db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
+        var dao = db.getDao();
+        var repo = new SocialCompassRepository(dao);
         if (userIDs.isEmpty()) {
             for (var user : users) {
                 Log.d("code", user.public_code);
@@ -513,7 +508,7 @@ public class ShowMapActivity extends AppCompatActivity {
                 String publicCode = userIDs.get(id);
                 SocialCompassUser theUser;
                 try {
-                    theUser = api.getUser(publicCode);
+                    theUser = repo.getSynced(publicCode).getValue();
                     updateUserView(id, theUser);
                 } catch (Exception e) {
                     e.printStackTrace();
