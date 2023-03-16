@@ -21,7 +21,7 @@ public class SocialCompassAPI {
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-    private static String serverURL = "";
+    public static String serverURL = "";
     private OkHttpClient client;
 
     public SocialCompassAPI() {
@@ -97,5 +97,9 @@ public class SocialCompassAPI {
 
         t.start();
         t.join();
+    }
+
+    public static void setServerURL(String url){
+        serverURL = url;
     }
 }

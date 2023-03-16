@@ -22,6 +22,11 @@ import org.robolectric.RobolectricTestRunner;
 
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.socialcompass.activity.ShowMapActivity;
+import com.example.socialcompass.entity.Position;
+import com.example.socialcompass.service.LocationService;
+import com.example.socialcompass.service.OrientationService;
+
 
 @RunWith(RobolectricTestRunner.class)
 public class MS2Story5Test {
@@ -88,7 +93,6 @@ public class MS2Story5Test {
             assertEquals(expected, text1Angle, 0.1);
 
         });
-
          */
     }
 }

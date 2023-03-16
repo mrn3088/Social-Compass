@@ -16,7 +16,7 @@ public class MS2Story2Test {
         double lat2 = 90.0;
         double long2 = 90.0;
         double calculatedDistance = 0;
-        double expectedDistance = 10007.54;
+        double expectedDistance = 6218.47;
 
         calculatedDistance = Utilities.calculateDistance(lat1, long1,lat2,long2);
 
