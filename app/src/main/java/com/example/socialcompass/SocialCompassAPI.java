@@ -32,7 +32,9 @@ public class SocialCompassAPI {
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
+    private static String serverURL = "https://socialcompass.goto.ucsd.edu/";
     private OkHttpClient client;
+
     public SocialCompassAPI() {
         this.client = new OkHttpClient();
     }
@@ -44,11 +46,19 @@ public class SocialCompassAPI {
         return instance;
     }
 
+    public void useURL(String anURL) {
+        if (!anURL.endsWith("/")) {
+            anURL += "/";
+        }
+        serverURL = anURL;
+    }
+
+
     public SocialCompassUser getUser(String public_code) throws IOException, InterruptedException {
         final String[] fullBody = new String[1];
         String noSpaceID = public_code.replace(" ", "%20");
         Request request = new Request.Builder()
-                .url("https://socialcompass.goto.ucsd.edu/location/" + noSpaceID)
+                .url(serverURL + "location/" + noSpaceID)
                 .build();
         //try isn't running, operating on background thread, need completion block? or stop main thread and run on separate thread.
         Thread t = new Thread(new Runnable() {
@@ -80,7 +90,7 @@ public class SocialCompassAPI {
         RequestBody body = RequestBody.create(gson.toJson(newUser), JSON);
         String noSpaceID = user.public_code.replace(" ", "%20");
         Request request = new Request.Builder()
-                .url("https://socialcompass.goto.ucsd.edu/location/" + noSpaceID)
+                .url(serverURL + "location/" + noSpaceID)
                 .put(body)
                 .build();
         Thread t = new Thread(new Runnable() {

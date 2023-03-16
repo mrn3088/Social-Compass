@@ -59,13 +59,12 @@ public class ShowMapActivity extends AppCompatActivity {
 
     private int dpscale = 450;
 
-    private int distanceScale = 500;
+
 
     private Position current = new Position(60, -130);
 
 
     private Position previousLocation = new Position(0, 0);
-    private int manual_rotation;
     private float orientation;
     private String uid;
 
@@ -106,24 +105,24 @@ public class ShowMapActivity extends AppCompatActivity {
         orientationService = OrientationService.singleton(this);
         compass = (ConstraintLayout) findViewById(R.id.compass);
         cp = new ConstraintProperties(compass);
-        TextView north = (TextView) findViewById(R.id.North);
+        updateCircles();
         trackGps();
 
         /*
         Two different modes: Orientation manual setting vs orientation tracking
          */
-        if (!((this.manual_rotation >= 0) && (this.manual_rotation < 360))) {
-            /*
-            Orientation tracking
-             */
-            this.reobserveOrientation();
-        } else {
-            /*
-            Orientation manual setting
-             */
-            ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
-            northlayoutparams.circleAngle = 360.0f - manual_rotation;
-        }
+//        if (!((this.manual_rotation >= 0) && (this.manual_rotation < 360))) {
+//            /*
+//            Orientation tracking
+//             */
+//            this.reobserveOrientation();
+//        } else {
+//            /*
+//            Orientation manual setting
+//             */
+//            ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
+//            northlayoutparams.circleAngle = 360.0f - manual_rotation;
+//        }
         this.reobserveLocation();
 
         try {
@@ -208,16 +207,13 @@ public class ShowMapActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 Log.d("observeLocations", "entered this");
 
-
                 updateCircles();
+
                 for (var id : userIDs.keySet()) {
                     int idInt = Integer.parseInt(id);
-                    TextView userView = findViewById(idInt);
                     String publicCode = userIDs.get(id);
-                    //SocialCompassUser theUser;
                     try {
                         repo.getSynced(publicCode).observeForever(theUsers->{
                             updateUserView(id, theUsers);
@@ -295,15 +291,6 @@ public class ShowMapActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Called when the user taps the Back button
-     * BUG::: BACK BUTTON WILL ALWAYS END UP WITH US ENTERING SHOW MAP AGAIN PLZ FIX
-     */
-    public void onBackClicked(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
     public void onAddFriendsClicked(View view) {
         Intent i = new Intent(this, AddFriendActivity.class);
         i.putExtra("uid", uid);
@@ -331,11 +318,7 @@ public class ShowMapActivity extends AppCompatActivity {
         var userList = repo.getAllLocal();
         userList.observe(this, this::loadUsers);
 
-        manual_rotation = -1;
-        try {
-            manual_rotation = Integer.parseInt(preferences.getString("manual_rotation", "-1"));
-        } catch (NumberFormatException e) {
-        }
+
     }
 
     /**
@@ -356,23 +339,9 @@ public class ShowMapActivity extends AppCompatActivity {
         return previousLocation;
     }
 
-    /**
-     * For test use only
-     *
-     * @param latitude, longitude
-     */
-    public void setDestination1(Double latitude, Double longitude) {
-        destination1 = new Position(latitude, longitude);
-    }
 
-    /**
-     * For test use only
-     *
-     * @param orientation
-     */
-    public void setOrientation(float orientation) {
-        this.orientation = orientation;
-    }
+
+
 
     public void addNewUserView(float angle, int radius, String str, String public_code) {
         // Get a reference to the ConstraintLayout
@@ -417,8 +386,7 @@ public class ShowMapActivity extends AppCompatActivity {
     // return
     private Pair<Float, Integer> calculateLocation(float x, float y) {
         double distance = Utilities.calculateDistance(current.getLatitude(), current.getLongitude(), x, y);
-//        Integer radius = (int) (dpscale * distance / distanceScale);
-        Integer radius = (int) Utilities.calculateUserViewRadius(distance, this.state);
+        int radius = (int) Utilities.calculateUserViewRadius(distance, this.state);
         Float relativeAngle = Utilities.relativeAngleUtils(current.getLatitude(), current.getLongitude(), (double) x, (double) y);
         TextView north = (TextView) findViewById(R.id.North);
         ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
@@ -468,15 +436,7 @@ public class ShowMapActivity extends AppCompatActivity {
     public void onZoomInClicked(View view) {
         if (state > 1 && state <= 4) {
             state--;
-            if (state == 1) {
-                this.distanceScale = 1;
-            } else if (state == 2) {
-                this.distanceScale = 10;
-            } else if (state == 3) {
-                this.distanceScale = 100;
-            } else {
-                this.distanceScale = 500;
-            }
+            updateCircles();
             this.reobserveLocation();
         } else {
             Utilities.displayAlert(this, "Cannot zoom in more!");
@@ -486,15 +446,7 @@ public class ShowMapActivity extends AppCompatActivity {
     public void onZoomOutClicked(View view) {
         if (state >= 1 && state < 4) {
             state++;
-            if (state == 1) {
-                this.distanceScale = 1;
-            } else if (state == 2) {
-                this.distanceScale = 10;
-            } else if (state == 3) {
-                this.distanceScale = 100;
-            } else {
-                this.distanceScale = 500;
-            }
+            updateCircles();
             this.reobserveLocation();
         } else {
             Utilities.displayAlert(this, "Cannot zoom out more!");

@@ -24,7 +24,7 @@ public class SocialCompassRepository {
     private final OkHttpClient client = new OkHttpClient();
     public static final MediaType JSON
             = MediaType.get("applicaion/json; charset=utf-8");
-
+    private SocialCompassAPI api;
     public SocialCompassRepository(SocialCompassDao dao) {
         this.dao = dao;
     }
@@ -69,16 +69,11 @@ public class SocialCompassRepository {
         dao.upsert(user);
     }
 
-    public boolean existsLocal(String title) {
-        return dao.exists(title);
-    }
-
     // Remote Methods
     // ==============
 
     public LiveData<SocialCompassUser> getRemote(String userID) throws Exception {
-        SocialCompassAPI api = new SocialCompassAPI();
-        api = api.provide();
+        api = SocialCompassAPI.provide();
         SocialCompassUser user = api.getUser(userID);
         MutableLiveData<SocialCompassUser> currUser = new MutableLiveData<>();
         currUser.setValue(user);
@@ -86,14 +81,12 @@ public class SocialCompassRepository {
     }
 
     public void upsertRemote(SocialCompassUser user) throws Exception {
-        SocialCompassAPI api = new SocialCompassAPI();
-        api = api.provide();
+        api = SocialCompassAPI.provide();
         api.addUser(user);
     }
 
     public SocialCompassUser getRemoteWithoutLiveData(String userID) throws Exception{
-        SocialCompassAPI api = new SocialCompassAPI();
-        api = api.provide();
+        api = SocialCompassAPI.provide();
         SocialCompassUser user = api.getUser(userID);
         return user;
     }

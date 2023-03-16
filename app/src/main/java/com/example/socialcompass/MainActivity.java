@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 public class MainActivity extends AppCompatActivity {
     // IF SHARED PREFERENCES DON'T EXIST STAY ON PAGE
     // ELSE IMMEDIATELY LEAVE MAIN ACTIVITY AND LOAD MAP!
-    private int manual_rotation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
         // check if there is an active user
         // if no active user exists, prompt registration
         // else move immediatly to map
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
         String uid = preferences.getString("uid", "No value");
-        if (uid != "No value") {
+        if (!uid.equals("No value")) {
             Intent intent = new Intent(this, ShowMapActivity.class);
             intent.putExtra("uid", uid);
             startActivity(intent);
@@ -55,24 +54,28 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSubmitLabelsClicked(View view) {
 
-        String manualRotationStr = ((TextView) findViewById(R.id.orientation_input)).getText().toString();
-        String manualRotationOpt = Utilities.USE_PHONE_ORIENTATION;
-        if (!manualRotationStr.equals("") && !Utilities.validOrientation(manualRotationStr)) {
-            Utilities.displayAlert(this, "Orientation needs to be a integer between 0 and 359!");
-            return;
-        } else {
-            manualRotationOpt = manualRotationStr;
+        String url = ((TextView) findViewById(R.id.orientation_input)).getText().toString();
+
+        if (url.equals("")) {
+            url = Utilities.DEFAULT_URL;
         }
+
+        SocialCompassAPI.provide().useURL(url);
 
         SharedPreferences preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
-        editor.putString("manual_rotation", manualRotationOpt);
 
         String publicID = UUID.randomUUID().toString();
         String privateID = UUID.randomUUID().toString();
 
         TextView tv = findViewById(R.id.displayName);
+
+        if (tv.getText().toString().equals("")) {
+            Utilities.displayAlert(this, "Displayed name cannot be empty!");
+            return;
+        }
+
         editor.putString("name", tv.getText().toString());
         editor.putString("uid", publicID);
         Log.d("added uid", publicID);

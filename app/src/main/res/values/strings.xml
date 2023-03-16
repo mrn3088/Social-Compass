@@ -11,4 +11,10 @@
     <string name="welcome_to_social_compass">Welcome To Social Compass!!</string>
     <string name="label_1">Label 1:</string>
     <string name="label_2">Label 2:</string>
+    <string name="https_socialcompass_goto_ucsd_edu">https://socialcompass.goto.ucsd.edu</string>
+    <string name="server_url">Server URL</string>
+    <string name="server_url_">Server URL:</string>
+    <string name="enter_display_name">Enter Display Name:</string>
+    <string name="displayed_name">Displayed Name</string>
+    <string name="please_enter_your_user_name_and_server_url">Please enter your user name and server url</string>
 </resources>

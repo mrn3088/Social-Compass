@@ -36,6 +36,8 @@ public class Utilities {
         put("-360.0 -360.0", "");
     }};
 
+    static final String DEFAULT_URL = "https://socialcompass.goto.ucsd.edu/";
+
     /**
      * Display an alert dialog
      *
