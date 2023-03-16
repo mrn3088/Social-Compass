@@ -17,4 +17,8 @@
     <string name="enter_display_name">Enter Display Name:</string>
     <string name="displayed_name">Displayed Name</string>
     <string name="please_enter_your_user_name_and_server_url">Please enter your user name and server url</string>
+    <string name="friend_id">Friend ID</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
+    <string name="enter_friends_ids">Enter Friends IDs!</string>
 </resources>

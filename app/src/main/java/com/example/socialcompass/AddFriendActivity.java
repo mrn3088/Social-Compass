@@ -35,9 +35,17 @@ public class AddFriendActivity extends AppCompatActivity {
     }
 
     public void onSaveClicked(View view) {
-
+        TextView myID = findViewById(R.id.usersID);
+        if (myID.getText().toString().equals(friendsID.getText().toString())) {
+            Utilities.displayAlert(this, "Cannot add yourself");
+            return;
+        }
         if (userDao.exists(friendsID.getText().toString())) {
             Utilities.displayAlert(this, "Already added this friend");
+            return;
+        }
+        if (friendsID.getText().toString().equals("")) {
+            Utilities.displayAlert(this, "Friend ID not entered");
             return;
         }
         try {
@@ -46,13 +54,12 @@ public class AddFriendActivity extends AppCompatActivity {
             friend.private_code = friend.public_code;
             Log.d(friend.label, friend.label);
             userDao.upsert(friend);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            friendsID.setText("");
+            Utilities.displayAlert(this,"Successfully added friend: " + friend.label);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            Utilities.displayAlert(this,"User not found");
         }
+
     }
 
     public void onBackClicked(View view) {
