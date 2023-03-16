@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
         // else move immediatly to map
         SharedPreferences preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
         String uid = preferences.getString("uid", "No value");
+
+
+
+
         if (!uid.equals("No value")) {
             Intent intent = new Intent(this, ShowMapActivity.class);
             intent.putExtra("uid", uid);
@@ -53,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onSubmitLabelsClicked(View view) {
-
         String url = ((TextView) findViewById(R.id.orientation_input)).getText().toString();
 
         if (url.equals("")) {
@@ -78,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         editor.putString("name", tv.getText().toString());
         editor.putString("uid", publicID);
+        editor.putString("server_url", url);
         Log.d("added uid", publicID);
         editor.putString("private_code", privateID);
         Log.d("added private_code", privateID);

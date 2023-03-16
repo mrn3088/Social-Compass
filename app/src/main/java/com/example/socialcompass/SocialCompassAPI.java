@@ -32,7 +32,7 @@ public class SocialCompassAPI {
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-    private static String serverURL = "https://socialcompass.goto.ucsd.edu/";
+    private static String serverURL = "";
     private OkHttpClient client;
 
     public SocialCompassAPI() {

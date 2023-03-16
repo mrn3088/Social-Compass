@@ -83,7 +83,8 @@ public class ShowMapActivity extends AppCompatActivity {
         uid = preferences.getString("uid", "");
         private_code = preferences.getString("private_code", "");
         label = preferences.getString("name", "");
-        
+        var serverURL = preferences.getString("server_url", "");
+        SocialCompassAPI.provide().useURL(serverURL);
         Log.d("get public", uid);
         Log.d("get private", private_code);
 
