@@ -463,6 +463,7 @@ public class ShowMapActivity extends AppCompatActivity {
         } else {
             textView.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.INVISIBLE);
+            checkCollisions(Integer.parseInt(textViewID));
         }
         ConstraintSet cons = new ConstraintSet();
         cons.clone(constraintLayout);
@@ -481,7 +482,7 @@ public class ShowMapActivity extends AppCompatActivity {
         //Log.d("width", Integer.toString(textView.getMeasuredHeight()));
         //Log.d("height", Integer.toString(textView.getMeasuredWidth()));
 
-        checkCollisions(Integer.parseInt(textViewID));
+        //checkCollisions(Integer.parseInt(textViewID));
         //Log.d("updated", Integer.toString(theLoc.second));
     }
 
