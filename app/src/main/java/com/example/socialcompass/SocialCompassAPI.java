@@ -44,6 +44,10 @@ public class SocialCompassAPI {
         return instance;
     }
 
+    /*
+    @requires valid user code already saved to server
+    @ensures users data is retrieved
+     */
     public SocialCompassUser getUser(String public_code) throws IOException, InterruptedException {
         final String[] fullBody = new String[1];
         String noSpaceID = public_code.replace(" ", "%20");
@@ -73,6 +77,10 @@ public class SocialCompassAPI {
         return user;
     }
 
+    /*
+    @requires non null user
+    @ensures server has most recent user data
+     */
     public void addUser(SocialCompassUser user) throws InterruptedException, JSONException {
 
         Gson gson = new Gson();

@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /*
+    @ensures new user is created and sent to server
+     */
     public void onSubmitLabelsClicked(View view) {
 
         String manualRotationStr = ((TextView) findViewById(R.id.orientation_input)).getText().toString();

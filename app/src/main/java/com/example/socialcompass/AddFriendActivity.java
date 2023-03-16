@@ -34,6 +34,10 @@ public class AddFriendActivity extends AppCompatActivity {
         usersID.setText(uid);
     }
 
+    /*
+    @requires user with inputed id to exist
+    @ensures user with inpputed id is added to dao
+     */
     public void onSaveClicked(View view) {
 
         if (userDao.exists(friendsID.getText().toString())) {

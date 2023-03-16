@@ -13,6 +13,9 @@ public abstract class SocialCompassDatabase extends RoomDatabase {
 
     public abstract SocialCompassDao getDao();
 
+    /*
+    @ensures a database object is returned
+     */
     public synchronized static SocialCompassDatabase provide(Context context) {
         if (instance == null) {
             instance = SocialCompassDatabase.make(context);
@@ -20,6 +23,9 @@ public abstract class SocialCompassDatabase extends RoomDatabase {
         return instance;
     }
 
+    /*
+    @ensures a database object is instantiated
+     */
     private static SocialCompassDatabase make(Context context) {
         return Room.databaseBuilder(context, SocialCompassDatabase.class, "social_compass.db")
                 .allowMainThreadQueries()
