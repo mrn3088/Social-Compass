@@ -1,23 +1,16 @@
-package com.example.socialcompass;
-
-import android.provider.MediaStore;
+package com.example.socialcompass.model;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
-import com.google.gson.Gson;
+import com.example.socialcompass.entity.SocialCompassUser;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class SocialCompassRepository {
     private final SocialCompassDao dao;

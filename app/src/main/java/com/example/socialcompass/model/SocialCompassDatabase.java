@@ -1,4 +1,4 @@
-package com.example.socialcompass;
+package com.example.socialcompass.model;
 
 import android.content.Context;
 
@@ -6,6 +6,8 @@ import androidx.annotation.VisibleForTesting;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+
+import com.example.socialcompass.entity.SocialCompassUser;
 
 @Database(entities = {SocialCompassUser.class}, version = 1, exportSchema = false)
 public abstract class SocialCompassDatabase extends RoomDatabase {

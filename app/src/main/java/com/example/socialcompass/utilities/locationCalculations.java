@@ -1,4 +1,6 @@
-package com.example.socialcompass;
+package com.example.socialcompass.utilities;
+
+import com.example.socialcompass.entity.Position;
 
 public class locationCalculations {
     public static float relativeAngleUtils(Position userLocation, Position destination) {

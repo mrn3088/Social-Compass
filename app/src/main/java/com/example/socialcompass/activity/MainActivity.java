@@ -2,30 +2,25 @@
  * This file has MainActivity class used to support main page
  */
 
-package com.example.socialcompass;
+package com.example.socialcompass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Editable;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.socialcompass.R;
+import com.example.socialcompass.model.SocialCompassAPI;
+import com.example.socialcompass.model.SocialCompassDatabase;
+import com.example.socialcompass.model.SocialCompassRepository;
+import com.example.socialcompass.entity.SocialCompassUser;
+import com.example.socialcompass.utilities.Utilities;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * This class is MainActivity class used to support main page

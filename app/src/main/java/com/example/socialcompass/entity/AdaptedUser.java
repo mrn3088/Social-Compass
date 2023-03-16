@@ -1,4 +1,4 @@
-package com.example.socialcompass;
+package com.example.socialcompass.entity;
 
 import com.google.gson.Gson;
 

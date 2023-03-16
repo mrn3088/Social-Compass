@@ -1,7 +1,8 @@
 package com.example.socialcompass;
 
-import static com.example.socialcompass.Utilities.calculateDistance;
 import static org.junit.Assert.assertEquals;
+
+import com.example.socialcompass.utilities.Utilities;
 
 import org.junit.Test;
 

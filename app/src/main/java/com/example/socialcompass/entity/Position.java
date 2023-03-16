@@ -1,4 +1,4 @@
-package com.example.socialcompass;
+package com.example.socialcompass.entity;
 
 public class Position {
     private double latitude;

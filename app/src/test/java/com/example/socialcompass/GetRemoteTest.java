@@ -5,9 +5,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import android.util.Log;
-
-import androidx.lifecycle.MutableLiveData;
+import com.example.socialcompass.model.SocialCompassAPI;
+import com.example.socialcompass.entity.SocialCompassUser;
 
 public class GetRemoteTest {
 

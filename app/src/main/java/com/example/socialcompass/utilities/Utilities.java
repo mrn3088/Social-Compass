@@ -3,7 +3,7 @@
  * static methods used in the app
  */
 
-package com.example.socialcompass;
+package com.example.socialcompass.utilities;
 
 import static java.lang.Math.log;
 
@@ -22,9 +22,9 @@ import java.util.Optional;
  */
 public class Utilities {
     static final int MAX_LABEL_LENGTH = 20;
-    static final int INVISIBLE_CIRCLE = 3000;
+    public static final int INVISIBLE_CIRCLE = 3000;
 
-    static final double DISPLAY_MARGIN = 450.0;
+    public static final double DISPLAY_MARGIN = 450.0;
 
     static final String USE_PHONE_ORIENTATION = "-1";
     static final String INCORRECT_EMPTY = "You need to enter at least one location!";
@@ -36,7 +36,7 @@ public class Utilities {
         put("-360.0 -360.0", "");
     }};
 
-    static final String DEFAULT_URL = "https://socialcompass.goto.ucsd.edu/";
+    public static final String DEFAULT_URL = "https://socialcompass.goto.ucsd.edu/";
 
     /**
      * Display an alert dialog

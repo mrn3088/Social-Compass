@@ -1,7 +1,7 @@
 /**
  * This file has Service interface which defines the template for sensor service
  */
-package com.example.socialcompass;
+package com.example.socialcompass.service;
 
 import android.app.Activity;
 

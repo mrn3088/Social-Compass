@@ -1,7 +1,7 @@
 /**
  * This file has OrientationService class which is used to track orientation
  */
-package com.example.socialcompass;
+package com.example.socialcompass.service;
 
 import android.app.Activity;
 import android.content.Context;

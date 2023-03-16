@@ -15,7 +15,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
-import org.bouncycastle.pqc.jcajce.provider.qtesla.SignatureSpi;
+import com.example.socialcompass.activity.ShowMapActivity;
+import com.example.socialcompass.service.OrientationService;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

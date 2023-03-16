@@ -1,15 +1,19 @@
-package com.example.socialcompass;
+package com.example.socialcompass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import java.io.IOException;
+import com.example.socialcompass.R;
+import com.example.socialcompass.model.SocialCompassDao;
+import com.example.socialcompass.model.SocialCompassDatabase;
+import com.example.socialcompass.model.SocialCompassRepository;
+import com.example.socialcompass.entity.SocialCompassUser;
+import com.example.socialcompass.utilities.Utilities;
 
 public class AddFriendActivity extends AppCompatActivity {
     TextView friendsID;

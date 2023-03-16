@@ -1,9 +1,11 @@
 package com.example.socialcompass;
 
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 
 import static org.junit.Assert.assertEquals;
+
+import com.example.socialcompass.entity.Position;
+import com.example.socialcompass.utilities.locationCalculations;
 
 public class PositionTests {
 

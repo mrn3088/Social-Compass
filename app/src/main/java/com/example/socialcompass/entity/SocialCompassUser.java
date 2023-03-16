@@ -1,4 +1,4 @@
-package com.example.socialcompass;
+package com.example.socialcompass.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;

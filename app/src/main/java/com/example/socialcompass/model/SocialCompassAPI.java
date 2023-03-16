@@ -1,30 +1,19 @@
-package com.example.socialcompass;
+package com.example.socialcompass.model;
 
-import static com.example.socialcompass.SocialCompassRepository.JSON;
-
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
+import com.example.socialcompass.entity.AdaptedUser;
+import com.example.socialcompass.entity.SocialCompassUser;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
 
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import okio.BufferedSink;
 
 public class SocialCompassAPI {
     private volatile static SocialCompassAPI instance = null;

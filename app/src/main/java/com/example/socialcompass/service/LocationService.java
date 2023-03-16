@@ -3,7 +3,7 @@
  * to track the location
  */
 
-package com.example.socialcompass;
+package com.example.socialcompass.service;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -18,7 +18,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import java.util.List;
+import com.example.socialcompass.entity.Position;
 
 /**
  * This class is LocationService class used to track users' location

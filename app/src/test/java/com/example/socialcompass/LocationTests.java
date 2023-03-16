@@ -18,6 +18,10 @@ import org.robolectric.RobolectricTestRunner;
 
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.socialcompass.activity.ShowMapActivity;
+import com.example.socialcompass.entity.Position;
+import com.example.socialcompass.service.LocationService;
+
 @RunWith(RobolectricTestRunner.class)
 public class LocationTests {
     @Rule

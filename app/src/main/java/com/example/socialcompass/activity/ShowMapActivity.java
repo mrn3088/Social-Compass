@@ -3,7 +3,7 @@
  * the show map page
  */
 
-package com.example.socialcompass;
+package com.example.socialcompass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -12,34 +12,37 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONException;
+import com.example.socialcompass.service.LocationService;
+import com.example.socialcompass.service.OrientationService;
+import com.example.socialcompass.entity.Position;
+import com.example.socialcompass.R;
+import com.example.socialcompass.service.Service;
+import com.example.socialcompass.model.SocialCompassAPI;
+import com.example.socialcompass.entity.SocialCompassUser;
+import com.example.socialcompass.viewmodel.SocialCompassViewModel;
+import com.example.socialcompass.utilities.Utilities;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicReference;
 
 //import okhttp3.internal.Util;
 
@@ -75,10 +78,13 @@ public class ShowMapActivity extends AppCompatActivity {
     private Map<String, String> userIDs = new HashMap<>();
     private Map<String, String> textID2imageID = new HashMap<>();
 
+    private SocialCompassViewModel viewmodel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
+        setUpViewModel();
         preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
         uid = preferences.getString("uid", "");
         private_code = preferences.getString("private_code", "");
@@ -136,22 +142,23 @@ public class ShowMapActivity extends AppCompatActivity {
 
     }
 
+    public void setUpViewModel(){
+        this.viewmodel = new ViewModelProvider(this).get(SocialCompassViewModel.class);
+    }
+
     private void refreshPositions() throws IOException, InterruptedException {
         ScheduledFuture<?> poller;
         ScheduledExecutorService schedular = Executors.newScheduledThreadPool(1);
         poller = schedular.scheduleAtFixedRate(() -> {
-            SocialCompassDatabase db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
-            SocialCompassDao dao = db.getDao();
-            SocialCompassRepository repo = new SocialCompassRepository(dao);
 
-            LiveData<List<SocialCompassUser>> allFriends = repo.getAllLocal();
+            LiveData<List<SocialCompassUser>> allFriends = viewmodel.getAllUserLocal();
             List<SocialCompassUser> friendList = allFriends.getValue();
             for (SocialCompassUser friend : friendList) {
                 String currID = friend.public_code;
                 try {
                     //dao.upsert(repo.getRemote(currID).getValue());
-                    repo.getRemote(currID).observe(this, theUser->{
-                        dao.upsert(theUser);
+                    viewmodel.getUserRemote(currID).observe(this, theUser->{
+                        viewmodel.upsert(theUser);
                     });
                 } catch (Exception e) {
                     Log.d("EXC", e.toString());
@@ -198,11 +205,8 @@ public class ShowMapActivity extends AppCompatActivity {
 
                 current = currentLocation;
 
-                SocialCompassDatabase db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
-                SocialCompassDao dao = db.getDao();
-                SocialCompassRepository repo = new SocialCompassRepository(dao);
                 try {
-                    repo.upsertRemote(new SocialCompassUser(private_code, uid, label, (float) currentLocation.getLatitude(), (float) currentLocation.getLongitude()));
+                    viewmodel.upsertRemote(new SocialCompassUser(private_code, uid, label, (float) currentLocation.getLatitude(), (float) currentLocation.getLongitude()));
                     Log.d("Public code", uid);
                     Log.d("Private code", private_code);
                 } catch (Exception e) {
@@ -216,7 +220,7 @@ public class ShowMapActivity extends AppCompatActivity {
                     int idInt = Integer.parseInt(id);
                     String publicCode = userIDs.get(id);
                     try {
-                        repo.getSynced(publicCode).observeForever(theUsers->{
+                        viewmodel.getUserSynced(publicCode).observeForever(theUsers->{
                             updateUserView(id, theUsers);
                         });
                     } catch (Exception e) {
@@ -313,10 +317,7 @@ public class ShowMapActivity extends AppCompatActivity {
      */
     public void loadProfile() {
         preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
-        var db = SocialCompassDatabase.provide(this.getApplicationContext());
-        var dao = db.getDao();
-        var repo = new SocialCompassRepository(dao);
-        var userList = repo.getAllLocal();
+        var userList = viewmodel.getAllUserLocal();
         userList.observe(this, this::loadUsers);
 
 
@@ -382,6 +383,8 @@ public class ShowMapActivity extends AppCompatActivity {
                 angle
         );
         cons.applyTo(constraintLayout);
+        //Log.d("width", Integer.toString(newTextView.getMeasuredHeight()));
+        //Log.d("height", Integer.toString(newTextView.getMeasuredWidth()));
     }
 
     // return
@@ -395,12 +398,12 @@ public class ShowMapActivity extends AppCompatActivity {
         Float northAngle = northlayoutparams.circleAngle;
 
 
-        Log.d("Distance", Double.toString(distance));
-        Log.d("current lat", Double.toString(current.getLatitude()));
-        Log.d("current long", Double.toString(current.getLongitude()));
-        Log.d("x", Float.toString(x));
-        Log.d("y", Float.toString(y));
-        Log.d("dp", Integer.toString(radius)+""+this.state);
+        //Log.d("Distance", Double.toString(distance));
+        //Log.d("current lat", Double.toString(current.getLatitude()));
+        //Log.d("current long", Double.toString(current.getLongitude()));
+        //Log.d("x", Float.toString(x));
+        //Log.d("y", Float.toString(y));
+        //Log.d("dp", Integer.toString(radius)+""+this.state);
 
         return new Pair<>((relativeAngle + northAngle) % 360, radius);
     }
@@ -431,7 +434,10 @@ public class ShowMapActivity extends AppCompatActivity {
         );
         cons.applyTo(constraintLayout);
 
-        Log.d("updated", Integer.toString(theLoc.second));
+        Log.d("width", Integer.toString(textView.getMeasuredHeight()));
+        Log.d("height", Integer.toString(textView.getMeasuredWidth()));
+
+        //Log.d("updated", Integer.toString(theLoc.second));
     }
 
     public void onZoomInClicked(View view) {
@@ -455,9 +461,6 @@ public class ShowMapActivity extends AppCompatActivity {
     }
 
     private void loadUsers(List<SocialCompassUser> users) {
-        var db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
-        var dao = db.getDao();
-        var repo = new SocialCompassRepository(dao);
         if (userIDs.isEmpty()) {
             for (var user : users) {
                 Log.d("code", user.public_code);
@@ -469,7 +472,7 @@ public class ShowMapActivity extends AppCompatActivity {
                 int idInt = Integer.parseInt(id);
                 String publicCode = userIDs.get(id);
                 try {
-                    repo.getSynced(publicCode).observeForever(theUsers->{
+                    viewmodel.getUserSynced(publicCode).observeForever(theUsers->{
                         updateUserView(id, theUsers);
                     });
                 } catch (Exception e) {

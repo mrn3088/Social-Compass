@@ -18,6 +18,10 @@ import org.robolectric.RobolectricTestRunner;
 
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.socialcompass.activity.ShowMapActivity;
+import com.example.socialcompass.service.OrientationService;
+import com.example.socialcompass.utilities.Utilities;
+
 @RunWith(RobolectricTestRunner.class)
 public class OrientationTest {
     @Rule
