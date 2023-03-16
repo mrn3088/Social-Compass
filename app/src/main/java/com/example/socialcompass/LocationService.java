@@ -92,16 +92,6 @@ public class LocationService implements LocationListener, Service {
     }
 
     /**
-     * Set mock location source
-     *
-     * @param mockDataSource Mock location source
-     */
-    public void setMockOrientationSource(MutableLiveData<Position> mockDataSource) {
-        unregisterSensorListeners();
-        this.locationValue = mockDataSource;
-    }
-
-    /**
      * Get location
      *
      * @return Location

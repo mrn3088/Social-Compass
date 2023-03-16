@@ -87,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        // FOR TESTING PURPOSES ONLY
+        TextView setPublicCode = (TextView) findViewById(R.id.publicCode);
+        setPublicCode.setText(publicID);
+
 
         Intent intent = new Intent(this, ShowMapActivity.class);
         intent.putExtra("uid", publicID);
