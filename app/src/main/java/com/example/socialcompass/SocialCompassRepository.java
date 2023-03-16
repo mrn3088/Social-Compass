@@ -65,6 +65,7 @@ public class SocialCompassRepository {
     }
 
     public void upsertLocal(SocialCompassUser user) {
+        user.private_code = user.public_code;
         dao.upsert(user);
     }
 

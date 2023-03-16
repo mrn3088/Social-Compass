@@ -39,7 +39,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
-import okhttp3.internal.Util;
+//import okhttp3.internal.Util;
 
 /**
  * This class is ShowMapActivity class used to support show map page
@@ -149,7 +149,10 @@ public class ShowMapActivity extends AppCompatActivity {
             for (SocialCompassUser friend : friendList) {
                 String currID = friend.public_code;
                 try {
-                    dao.upsert(repo.getRemote(currID).getValue());
+                    //dao.upsert(repo.getRemote(currID).getValue());
+                    repo.getRemote(currID).observe(this, theUser->{
+                        dao.upsert(theUser);
+                    });
                 } catch (Exception e) {
                     Log.d("EXC", e.toString());
                 }
@@ -206,10 +209,11 @@ public class ShowMapActivity extends AppCompatActivity {
                     int idInt = Integer.parseInt(id);
                     TextView userView = findViewById(idInt);
                     String publicCode = userIDs.get(id);
-                    SocialCompassUser theUser;
+                    //SocialCompassUser theUser;
                     try {
-                        theUser = repo.getSynced(publicCode).getValue();
-                        updateUserView(id, theUser);
+                        repo.getSynced(publicCode).observeForever(theUsers->{
+                            updateUserView(id, theUsers);
+                        });
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -413,16 +417,13 @@ public class ShowMapActivity extends AppCompatActivity {
 
         Float northAngle = northlayoutparams.circleAngle;
 
-        if (radius > 450) {
-            radius = 450;
-        }
 
         Log.d("Distance", Double.toString(distance));
         Log.d("current lat", Double.toString(current.getLatitude()));
         Log.d("current long", Double.toString(current.getLongitude()));
         Log.d("x", Float.toString(x));
         Log.d("y", Float.toString(y));
-        Log.d("dp", Integer.toString(radius));
+        Log.d("dp", Integer.toString(radius)+""+this.state);
 
         return new Pair<>((relativeAngle + northAngle) % 360, radius);
     }
@@ -506,10 +507,10 @@ public class ShowMapActivity extends AppCompatActivity {
             for (var id : userIDs.keySet()) {
                 int idInt = Integer.parseInt(id);
                 String publicCode = userIDs.get(id);
-                SocialCompassUser theUser;
                 try {
-                    theUser = repo.getSynced(publicCode).getValue();
-                    updateUserView(id, theUser);
+                    repo.getSynced(publicCode).observeForever(theUsers->{
+                        updateUserView(id, theUsers);
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

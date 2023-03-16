@@ -268,7 +268,8 @@ public class Utilities {
             if (distance >= 12450.5) {
                 return DISPLAY_MARGIN;
             } else if (distance >= 500.0) {
-                return (log(distance - 500.0)) / (log(12450.5) - log(500.0)) * 100 + 350;
+                //return (log(distance - 500.0)) / (log(12450.5) - log(500.0)) * 100 + 350;
+                return (distance-500.0)/(12450.5-500.0)*100+350;
             } else if (distance >= 10.0) {
                 return (distance - 10.0) / (500.0 - 10.0) * 100 + 250;
             } else if (distance >= 1.0) {
