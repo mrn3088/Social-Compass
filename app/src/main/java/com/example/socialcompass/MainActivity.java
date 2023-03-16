@@ -87,6 +87,8 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, ShowMapActivity.class);
         intent.putExtra("uid", publicID);
+        intent.putExtra("private_code", privateID);
+        intent.putExtra("name", tv.getText().toString());
         startActivity(intent);
 
     }

@@ -28,6 +28,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +69,10 @@ public class ShowMapActivity extends AppCompatActivity {
     private float orientation;
     private String uid;
 
+    private String label;
+
+    private String private_code;
+
     private Map<String, String> userIDs = new HashMap<>();
     private Map<String, String> textID2imageID = new HashMap<>();
 
@@ -75,6 +81,8 @@ public class ShowMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
         uid = getIntent().getStringExtra("uid");
+        label = getIntent().getStringExtra("name");
+        private_code = getIntent().getStringExtra("private_code");
         var db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
         var dao = db.getDao();
         var repo = new SocialCompassRepository(dao);
@@ -187,6 +195,15 @@ public class ShowMapActivity extends AppCompatActivity {
             public void onChanged(Position currentLocation) {
 
                 current = currentLocation;
+
+                var api = SocialCompassAPI.provide();
+                try {
+                    api.addUser(new SocialCompassUser(private_code, uid, label, (float) currentLocation.getLatitude(), (float) currentLocation.getLongitude()));
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
 
                 Log.d("observeLocations", "entered this");
                 SocialCompassDatabase db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
