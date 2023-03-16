@@ -31,6 +31,9 @@ public class SocialCompassRepository {
 
     // Synced Methods
     // =============
+    /*
+    @requires non null title
+     */
     public LiveData<SocialCompassUser> getSynced(String title) throws Exception {
         if(getRemote(title).getValue() != null) {
             return getRemote(title);
@@ -66,7 +69,10 @@ public class SocialCompassRepository {
 
     // Remote Methods
     // ==============
-
+    /*
+    @requires user id corresponds to a user in the server
+    @ensures local has most updated user instance from server
+     */
     public LiveData<SocialCompassUser> getRemote(String userID) throws Exception {
         SocialCompassAPI api = new SocialCompassAPI();
         api = api.provide();
@@ -76,6 +82,10 @@ public class SocialCompassRepository {
         return currUser;
     }
 
+    /*
+    @requires non null user
+    @ensures server has most updated version of user
+     */
     public void upsertRemote(SocialCompassUser user) throws Exception {
         SocialCompassAPI api = new SocialCompassAPI();
         api = api.provide();
