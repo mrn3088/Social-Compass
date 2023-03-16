@@ -78,16 +78,6 @@ public class ShowMapActivity extends AppCompatActivity {
         var db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
         var dao = db.getDao();
         var repo = new SocialCompassRepository(dao);
-        SocialCompassUser selfUser = null;
-        try {
-            selfUser = repo.getSynced(uid).getValue();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         this.loadProfile();
 
         /*

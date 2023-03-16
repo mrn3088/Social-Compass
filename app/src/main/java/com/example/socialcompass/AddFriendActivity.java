@@ -41,7 +41,8 @@ public class AddFriendActivity extends AppCompatActivity {
             return;
         }
         try {
-            SocialCompassUser friend = repo.getSynced(friendsID.getText().toString()).getValue();
+            //SocialCompassUser friend = repo.getSynced(friendsID.getText().toString()).getValue();
+            SocialCompassUser friend = repo.getRemoteWithoutLiveData(friendsID.getText().toString());
             friend.private_code = friend.public_code;
             Log.d(friend.label, friend.label);
             userDao.upsert(friend);

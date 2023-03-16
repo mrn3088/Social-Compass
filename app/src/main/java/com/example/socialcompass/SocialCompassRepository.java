@@ -90,4 +90,11 @@ public class SocialCompassRepository {
         api = api.provide();
         api.addUser(user);
     }
+
+    public SocialCompassUser getRemoteWithoutLiveData(String userID) throws Exception{
+        SocialCompassAPI api = new SocialCompassAPI();
+        api = api.provide();
+        SocialCompassUser user = api.getUser(userID);
+        return user;
+    }
 }
