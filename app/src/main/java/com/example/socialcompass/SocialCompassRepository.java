@@ -32,20 +32,12 @@ public class SocialCompassRepository {
     // Synced Methods
     // =============
     public LiveData<SocialCompassUser> getSynced(String title) throws Exception {
-        var user = new MediatorLiveData<SocialCompassUser>();
-
-        Observer<SocialCompassUser> updateFromRemote = theirUser -> {
-            var ourUser = user.getValue();
-            if(theirUser == null) return;
-            if(ourUser == null) {
-                upsertLocal(theirUser);
-            }
-        };
-
-        user.addSource(getLocal(title), user::postValue);
-        user.addSource(getRemote(title), updateFromRemote);
-
-        return user;
+        if(getRemote(title).getValue() != null) {
+            return getRemote(title);
+        }
+        else {
+            return getLocal(title);
+        }
     }
 
     public void upsertSynced(SocialCompassUser user) throws Exception {
