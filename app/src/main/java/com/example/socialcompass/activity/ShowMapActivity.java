@@ -151,9 +151,9 @@ public class ShowMapActivity extends AppCompatActivity {
         Rect rect1 = new Rect();
         Rect rect2 = new Rect();
         // look through all labels currently on screen
-        for (String label2ID : userIDs.keySet()) {
+        for (String label2ID : textID2imageID.keySet()) {
             // makes sure we don't track a label as colliding with itself
-            if (Integer.parseInt(label2ID) != labelID) {
+            if (!label2ID.equals(Integer.toString(labelID))) {
                 // get textview of labels we are currently looking at
                 TextView labelOne = findViewById(labelID);
                 TextView labelTwo = findViewById(Integer.parseInt(label2ID));
@@ -163,18 +163,20 @@ public class ShowMapActivity extends AppCompatActivity {
                 labelTwo.getGlobalVisibleRect(rect2);
 
                 // must update imageView's associated with labels as well as labels themselves
-                ImageView imageViewOne = findViewById(Integer.parseInt(textID2imageID.get(Integer.toString(labelID))));
-                ImageView imageviewTwo = findViewById(Integer.parseInt(textID2imageID.get(label2ID)));
+                //ImageView imageViewOne = findViewById(Integer.parseInt(textID2imageID.get(Integer.toString(labelID))));
+                //ImageView imageviewTwo = findViewById(Integer.parseInt(textID2imageID.get(label2ID)));
                 // checks if rectangles created by labels collide with each other
                 if (Rect.intersects(rect1, rect2)) {
                     Log.d("COLLISION", "labels DO collide");
                     Log.d("VISIBILITY", "set labels to invisible");
+                    Log.d("ID", Integer.toString(labelID));
+                    Log.d("ID2", label2ID);
                     // if labels collide wipe text off screen
                     labelOne.setVisibility(View.INVISIBLE);
                     labelTwo.setVisibility(View.INVISIBLE);
                     // must update imageView as well
-                    imageViewOne.setVisibility(View.INVISIBLE);
-                    imageviewTwo.setVisibility(View.INVISIBLE);
+                    //imageViewOne.setVisibility(View.INVISIBLE);
+                    //imageviewTwo.setVisibility(View.INVISIBLE);
                 } else {
                     Log.d("COLLISION", "labels do NOT collide");
                     Log.d("VISIBILITY", "set labels to visible");
@@ -182,13 +184,12 @@ public class ShowMapActivity extends AppCompatActivity {
                     labelOne.setVisibility(View.VISIBLE);
                     labelTwo.setVisibility(View.VISIBLE);
                     // again, update imageView
-                    imageViewOne.setVisibility(View.VISIBLE);
-                    imageviewTwo.setVisibility(View.VISIBLE);
+                    //imageViewOne.setVisibility(View.VISIBLE);
+                    //imageviewTwo.setVisibility(View.VISIBLE);
                 }
             }
         }
     }
-
     private void refreshPositions() throws IOException, InterruptedException {
         ScheduledFuture<?> poller;
         ScheduledExecutorService schedular = Executors.newScheduledThreadPool(1);

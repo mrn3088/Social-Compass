@@ -24,7 +24,7 @@ public class Utilities {
     static final int MAX_LABEL_LENGTH = 20;
     public static final int INVISIBLE_CIRCLE = 3000;
 
-    public static final double DISPLAY_MARGIN = 450.0;
+    public static final int DISPLAY_MARGIN = 450;
 
     static final String USE_PHONE_ORIENTATION = "-1";
     static final String INCORRECT_EMPTY = "You need to enter at least one location!";
