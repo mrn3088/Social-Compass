@@ -98,10 +98,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // FOR TESTING PURPOSES ONLY
-        TextView setPublicCode = (TextView) findViewById(R.id.publicCode);
-        setPublicCode.setText(publicID);
-
 
         // for testing purpose only
         TextView setPublicCode = (TextView) findViewById(R.id.publicCode);

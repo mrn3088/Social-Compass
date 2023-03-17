@@ -122,12 +122,29 @@ public class OrientationService implements SensorEventListener, Service {
         return this.azimuth;
     }
 
+    /**
+     * Set mock orientation data
+     *
+     * @param mockDataSource mock data source
+     */
+    public void setMockOrientationSource(MutableLiveData<Float> mockDataSource) {
+        unregisterSensorListeners();
+        this.azimuth = mockDataSource;
+    }
 
     /**
      * Called when the activity is starting.
      */
     public void onPause() {
         this.unregisterSensorListeners();
+    }
+
+    /**
+     * Called when the activity will start interacting with the user.
+     */
+    public void setMockOrientationData(MutableLiveData<Float> mockData) {
+        unregisterSensorListeners();
+        this.azimuth = mockData;
     }
 
 

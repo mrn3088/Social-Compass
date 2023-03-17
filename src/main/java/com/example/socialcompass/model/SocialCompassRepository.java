@@ -28,16 +28,21 @@ public class SocialCompassRepository {
 
     // Synced Methods
     // =============
-    /*
-    @requires non null title
-     */
     public LiveData<SocialCompassUser> getSynced(String title) throws Exception {
-        if(getRemote(title).getValue() != null) {
-            return getRemote(title);
-        }
-        else {
-            return getLocal(title);
-        }
+        var user = new MediatorLiveData<SocialCompassUser>();
+
+        Observer<SocialCompassUser> updateFromRemote = theirUser -> {
+            var ourUser = user.getValue();
+            if(theirUser == null) return;
+            if(ourUser == null) {
+                upsertLocal(theirUser);
+            }
+        };
+
+        user.addSource(getLocal(title), user::postValue);
+        user.addSource(getRemote(title), updateFromRemote);
+
+        return user;
     }
 
     public void upsertSynced(SocialCompassUser user) throws Exception {
@@ -63,10 +68,7 @@ public class SocialCompassRepository {
 
     // Remote Methods
     // ==============
-    /*
-    @requires user id corresponds to a user in the server
-    @ensures local has most updated user instance from server
-     */
+
     public LiveData<SocialCompassUser> getRemote(String userID) throws Exception {
         api = SocialCompassAPI.provide();
         SocialCompassUser user = api.getUser(userID);
@@ -75,10 +77,6 @@ public class SocialCompassRepository {
         return currUser;
     }
 
-    /*
-    @requires non null user
-    @ensures server has most updated version of user
-     */
     public void upsertRemote(SocialCompassUser user) throws Exception {
         api = SocialCompassAPI.provide();
         api.addUser(user);

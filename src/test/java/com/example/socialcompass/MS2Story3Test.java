@@ -90,8 +90,6 @@ public class MS2Story3Test {
             assertEquals(Utilities.INVISIBLE_CIRCLE, circle4.getLayoutParams().width);
             assertEquals(Utilities.INVISIBLE_CIRCLE, circle4.getLayoutParams().height);
 
-
-
         });
     }
 }

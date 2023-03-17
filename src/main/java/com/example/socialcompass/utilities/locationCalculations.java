@@ -7,10 +7,6 @@ package com.example.socialcompass.utilities;
 import com.example.socialcompass.entity.Position;
 
 public class locationCalculations {
-    /*
-    @requires positions to be valid real world locations
-    @ensures accurate angle between two locations is returned
-     */
     public static float relativeAngleUtils(Position userLocation, Position destination) {
         Double latitudeDifference = destination.getLatitude() - userLocation.getLatitude();
         Double longitudeDifference = destination.getLongitude() - userLocation.getLongitude();
@@ -34,7 +30,6 @@ public class locationCalculations {
         return 0f;
     }
 
-
     public static float relativeAngle(Position currentLocation, Position destination) {
         return relativeAngleUtils(currentLocation, destination);
     }
@@ -55,10 +50,6 @@ public class locationCalculations {
         return miles * 1609.34;
     }
 
-    /*
-    @requires positions to be valid real world locations
-    @ensures accurate distance between two locations is returned
-     */
     public static double distance(Position locationOne, Position locationTwo) {
         // if Positions are equal return zero distance
         if (locationOne.getLatitude() == locationTwo.getLatitude()
