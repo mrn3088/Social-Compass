@@ -19,6 +19,7 @@ import org.robolectric.RobolectricTestRunner;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.socialcompass.activity.ShowMapActivity;
+import com.example.socialcompass.activity.ShowMapActivityMocking;
 import com.example.socialcompass.service.OrientationService;
 import com.example.socialcompass.utilities.Utilities;
 
@@ -68,7 +69,7 @@ public class OrientationTest {
         float testValueTwo = (float) 0;
         float testValueThree = (float) (Math.PI / 2);
 
-        var scenario = ActivityScenario.launch(ShowMapActivity.class);
+        var scenario = ActivityScenario.launch(ShowMapActivityMocking.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
             var orientationService = OrientationService.singleton(activity);

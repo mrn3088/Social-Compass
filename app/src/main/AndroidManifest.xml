@@ -41,6 +41,9 @@
         <activity
             android:name=".activity.MockFriendActivity"
             android:exported="true" />
+        <activity
+            android:name=".activity.ShowMapActivityMocking"
+            android:exported="true" />
 
     </application>
 

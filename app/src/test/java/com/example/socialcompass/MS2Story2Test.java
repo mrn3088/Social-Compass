@@ -9,6 +9,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.socialcompass.activity.ShowMapActivity;
+import com.example.socialcompass.activity.ShowMapActivityMocking;
 import com.example.socialcompass.entity.Position;
 import com.example.socialcompass.entity.SocialCompassUser;
 import com.example.socialcompass.model.SocialCompassAPI;
@@ -44,7 +45,7 @@ public class MS2Story2Test {
         Position testValueTwo = new Position(56.9987, 10.002);
         Position testValueThree = new Position(34.555, 45.6676);
 
-        var scenario = ActivityScenario.launch(ShowMapActivity.class);
+        var scenario = ActivityScenario.launch(ShowMapActivityMocking.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
 

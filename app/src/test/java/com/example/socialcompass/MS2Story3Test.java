@@ -14,6 +14,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.example.socialcompass.activity.ShowMapActivity;
+import com.example.socialcompass.activity.ShowMapActivityMocking;
 import com.example.socialcompass.utilities.Utilities;
 
 import org.junit.Rule;
@@ -39,7 +40,7 @@ public class MS2Story3Test {
 
     @Test
     public void zoomInOutTest(){
-        var scenario = ActivityScenario.launch(ShowMapActivity.class);
+        var scenario = ActivityScenario.launch(ShowMapActivityMocking.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
             activity.updateCircles();
