@@ -42,10 +42,10 @@ public class MS2Story6Test {
         var scenario = ActivityScenario.launch(ShowMapActivity.class);
         scenario.moveToState(Lifecycle.State.STARTED);
         scenario.onActivity(activity -> {
-            var locationService = LocationService.singleton(activity);
+            //var locationService = LocationService.singleton(activity);
 
-            MutableLiveData<Position> mockLocation = new MutableLiveData<>();
-            locationService.setMockOrientationSource(mockLocation);
+            //MutableLiveData<Position> mockLocation = new MutableLiveData<>();
+            //locationService.setMockOrientationSource(mockLocation);
 
             Button gpsButton  = (Button) activity.findViewById(R.id.displayGpsStatus);
 

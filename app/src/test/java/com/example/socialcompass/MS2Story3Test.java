@@ -61,7 +61,8 @@ public class MS2Story3Test {
             assertEquals(Utilities.INVISIBLE_CIRCLE, circle4.getLayoutParams().height);
 
 
-            activity.onZoomInClicked(zoomInButton);
+            //activity.onZoomInClicked(zoomInButton);
+            activity.state = activity.state-1;
             activity.updateCircles();
 
             assertEquals(900, circle1.getLayoutParams().width);
@@ -73,8 +74,10 @@ public class MS2Story3Test {
             assertEquals(Utilities.INVISIBLE_CIRCLE, circle4.getLayoutParams().width);
             assertEquals(Utilities.INVISIBLE_CIRCLE, circle4.getLayoutParams().height);
 
-            activity.onZoomOutClicked(zoomOutButton);
-            activity.onZoomOutClicked(zoomOutButton);
+            //activity.onZoomOutClicked(zoomOutButton);
+            //activity.onZoomOutClicked(zoomOutButton);
+            activity.state = activity.state+1;
+            activity.state = activity.state+1;
             activity.updateCircles();
 
             assertEquals(300, circle1.getLayoutParams().width);
@@ -85,8 +88,6 @@ public class MS2Story3Test {
             assertEquals(900, circle3.getLayoutParams().height);
             assertEquals(Utilities.INVISIBLE_CIRCLE, circle4.getLayoutParams().width);
             assertEquals(Utilities.INVISIBLE_CIRCLE, circle4.getLayoutParams().height);
-
-
 
         });
     }

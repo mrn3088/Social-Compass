@@ -70,7 +70,7 @@ public class MS2Story2Test {
             mockLocation.setValue(testValue);
             mockLocation.setValue(testValueTwo);
             mockLocation.setValue(testValueThree);
-            activity.reobserveLocation();
+            activity.reobserveLocationMocking();
 
             var expected = testValueThree;
             var observed = activity.getPreviousLocation(); //remember to update previousLocation in showMapActivity

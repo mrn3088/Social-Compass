@@ -60,7 +60,7 @@ public class ShowMapActivity extends AppCompatActivity {
     private ConstraintProperties cp;
     private SharedPreferences preferences;
 
-    private int state = 2;
+    public int state = 2;
 
     private Position current = new Position(60, -130);
 
@@ -619,5 +619,41 @@ public class ShowMapActivity extends AppCompatActivity {
         this.uid = uid;
         this.private_code = private_code;
         this.label = label;
+    }
+
+    public void reobserveLocationMocking() {
+        ((LocationService) locationService).getLocation().observe(this, new Observer<Position>() {
+            @Override
+            public void onChanged(Position currentLocation) {
+
+                current = currentLocation;
+
+                previousLocation = currentLocation;
+
+                try {
+                    viewmodel.upsertRemote(new SocialCompassUser(private_code, uid, label, (float) currentLocation.getLatitude(), (float) currentLocation.getLongitude()));
+                    Log.d("Public code", uid);
+                    Log.d("Private code", private_code);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Log.d("observeLocations", "entered this");
+
+                updateCircles();
+
+                for (var id : userIDs.keySet()) {
+                    int idInt = Integer.parseInt(id);
+                    String publicCode = userIDs.get(id);
+                    try {
+                        viewmodel.getUserSynced(publicCode).observeForever(theUsers->{
+                            updateUserView(id, theUsers);
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+        });
     }
 }
