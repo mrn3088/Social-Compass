@@ -38,8 +38,10 @@ import com.example.socialcompass.utilities.Utilities;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -80,6 +82,13 @@ public class ShowMapActivity extends AppCompatActivity {
     private Map<String, String> textID2imageID = new HashMap<>();
 
     private SocialCompassViewModel viewmodel;
+
+    private Set<String> collidedLabels;
+
+
+    private Map<String, String> userLabels = new HashMap<>();
+
+    private static final int MAX_TRUNCATED_LENGTH = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,12 +159,14 @@ public class ShowMapActivity extends AppCompatActivity {
     private void checkCollisions(int labelID) {
         Rect rect1 = new Rect();
         Rect rect2 = new Rect();
+        boolean changedLabel = false;
+        TextView labelOne = findViewById(labelID);
         // look through all labels currently on screen
         for (String label2ID : textID2imageID.keySet()) {
             // makes sure we don't track a label as colliding with itself
             if (!label2ID.equals(Integer.toString(labelID))) {
                 // get textview of labels we are currently looking at
-                TextView labelOne = findViewById(labelID);
+
                 TextView labelTwo = findViewById(Integer.parseInt(label2ID));
 
                 // set rect1, rect2, to point at the rectangles created by the textviews
@@ -163,32 +174,71 @@ public class ShowMapActivity extends AppCompatActivity {
                 labelTwo.getGlobalVisibleRect(rect2);
 
                 // must update imageView's associated with labels as well as labels themselves
-                //ImageView imageViewOne = findViewById(Integer.parseInt(textID2imageID.get(Integer.toString(labelID))));
-                //ImageView imageviewTwo = findViewById(Integer.parseInt(textID2imageID.get(label2ID)));
+                // ImageView imageViewOne = findViewById(Integer.parseInt(textID2imageID.get(Integer.toString(labelID))));
+                // ImageView imageviewTwo = findViewById(Integer.parseInt(textID2imageID.get(label2ID)));
                 // checks if rectangles created by labels collide with each other
                 if (Rect.intersects(rect1, rect2)) {
+                    changedLabel = true;
                     Log.d("COLLISION", "labels DO collide");
                     Log.d("VISIBILITY", "set labels to invisible");
                     Log.d("ID", Integer.toString(labelID));
                     Log.d("ID2", label2ID);
                     // if labels collide wipe text off screen
-                    labelOne.setVisibility(View.INVISIBLE);
-                    labelTwo.setVisibility(View.INVISIBLE);
+                    //labelOne.setVisibility(View.INVISIBLE);
+                    //labelTwo.setVisibility(View.INVISIBLE);
+                    float angle1 = ((ConstraintLayout.LayoutParams)labelOne.getLayoutParams()).circleAngle;
+                    float angle2 = ((ConstraintLayout.LayoutParams)labelTwo.getLayoutParams()).circleAngle;
+                    if(Math.abs(angle1-angle2)< 5){
+                        useTruncateLabel(labelOne);
+                    } else {
+                        useFullLabel(labelOne);
+
+                        stackLabel(labelOne, labelTwo);
+                        //useTruncateLabel(labelOne);
+
+                    }
+                    break;
                     // must update imageView as well
                     //imageViewOne.setVisibility(View.INVISIBLE);
                     //imageviewTwo.setVisibility(View.INVISIBLE);
-                } else {
-                    Log.d("COLLISION", "labels do NOT collide");
-                    Log.d("VISIBILITY", "set labels to visible");
-                    // if labels do not collide then make sure text appears on screen
-                    labelOne.setVisibility(View.VISIBLE);
-                    labelTwo.setVisibility(View.VISIBLE);
-                    // again, update imageView
-                    //imageViewOne.setVisibility(View.VISIBLE);
-                    //imageviewTwo.setVisibility(View.VISIBLE);
                 }
             }
         }
+        if (!changedLabel) {
+            useFullLabel(labelOne);
+        }
+    }
+
+    private void useTruncateLabel(TextView view) {
+        String originalText = view.getText().toString();
+        view.setText(originalText.substring(0, Math.min(MAX_TRUNCATED_LENGTH, originalText.length())));
+    }
+
+    private void useFullLabel(TextView view) {
+        String originalText = userLabels.get(String.valueOf(view.getId()));
+        view.setText(originalText);
+    }
+
+
+    public void stackLabel(TextView label1, TextView label2){
+        float angle1 = ((ConstraintLayout.LayoutParams)label1.getLayoutParams()).circleAngle;
+        float angle2 = ((ConstraintLayout.LayoutParams)label2.getLayoutParams()).circleAngle;
+        float y_coordinate1 = ((ConstraintLayout.LayoutParams)label1.getLayoutParams()).circleRadius;
+        float y_coordinate2 = ((ConstraintLayout.LayoutParams)label2.getLayoutParams()).circleRadius;
+        TextView upper = null;
+        TextView lower = null;
+        if(y_coordinate1>y_coordinate2){
+            upper = label1;
+            lower = label2;
+        }else{
+            lower = label1;
+            upper = label2;
+        }
+        ((ConstraintLayout.LayoutParams)upper.getLayoutParams()).circleRadius+=40;
+        ((ConstraintLayout.LayoutParams)upper.getLayoutParams()).circleAngle+=20;
+        ((ConstraintLayout.LayoutParams)lower.getLayoutParams()).circleRadius-=40;
+        ((ConstraintLayout.LayoutParams)lower.getLayoutParams()).circleAngle-=20;
+
     }
     private void refreshPositions() throws IOException, InterruptedException {
         ScheduledFuture<?> poller;
@@ -404,6 +454,7 @@ public class ShowMapActivity extends AppCompatActivity {
         var imageViewID = View.generateViewId();
         userIDs.put(Integer.toString(textViewID), public_code);
         textID2imageID.put(Integer.toString(textViewID), Integer.toString(imageViewID));
+        userLabels.put(Integer.toString(textViewID), str);
         newTextView.setId(textViewID);
         newImageView.setId(imageViewID);
         newTextView.setTextSize(20);
