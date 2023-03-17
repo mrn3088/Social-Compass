@@ -1,3 +1,7 @@
+/**
+ * This class is a mediator for local database and remote server
+ */
+
 package com.example.socialcompass.model;
 
 import androidx.lifecycle.LiveData;

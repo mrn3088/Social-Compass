@@ -1,3 +1,7 @@
+/**
+ * A SocialCompassDao class to query local database
+ */
+
 package com.example.socialcompass.model;
 
 import androidx.lifecycle.LiveData;

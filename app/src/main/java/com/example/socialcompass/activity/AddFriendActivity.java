@@ -1,3 +1,8 @@
+/**
+ * This file is an AddFriendActivity class which provides the page
+ * for the users to input other users' id and add them as friends.
+ */
+
 package com.example.socialcompass.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +43,11 @@ public class AddFriendActivity extends AppCompatActivity {
         usersID.setText(uid);
     }
 
+    /**
+     * The method binded to save button, which is used to get user from
+     * remote server and insert it into database.
+     * @param view
+     */
     public void onSaveClicked(View view) {
         TextView myID = findViewById(R.id.usersID);
         if (myID.getText().toString().equals(friendsID.getText().toString())) {
@@ -53,7 +63,7 @@ public class AddFriendActivity extends AppCompatActivity {
             return;
         }
         try {
-            //SocialCompassUser friend = repo.getSynced(friendsID.getText().toString()).getValue();
+            // get from remote and insert into local database
             SocialCompassUser friend = repo.getRemoteWithoutLiveData(friendsID.getText().toString());
             friend.private_code = friend.public_code;
             Log.d(friend.label, friend.label);
@@ -66,6 +76,10 @@ public class AddFriendActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method binded to back button which is used to go back to show map activity.
+     * @param view
+     */
     public void onBackClicked(View view) {
         Intent intent = new Intent(this, ShowMapActivity.class);
         startActivity(intent);

@@ -1,3 +1,8 @@
+/**
+ * This is a MockFriendActivity class which is used to add a mocking object
+ * into compass which can be used for testing or demoing purposes.
+ */
+
 package com.example.socialcompass.activity;
 
 import android.content.Intent;
@@ -35,6 +40,14 @@ public class MockFriendActivity extends AppCompatActivity {
         repo = new SocialCompassRepository(userDao);
     }
 
+    /**
+     * generate a random location for mocking object within a given range.
+     * @param latitude
+     * @param longitude
+     * @param minDistanceInMiles
+     * @param maxDistanceInMiles
+     * @return
+     */
     public static double[] getRandomLocation(double latitude, double longitude, double minDistanceInMiles, double maxDistanceInMiles) {
         double minDistanceInKm = minDistanceInMiles * MILE_TO_KM;
         double maxDistanceInKm = maxDistanceInMiles * MILE_TO_KM;
@@ -51,6 +64,10 @@ public class MockFriendActivity extends AppCompatActivity {
         return new double[]{newLatitude, newLongitude};
     }
 
+    /**
+     * method binded to save button
+     * @return
+     */
     public boolean saveLabel() {
         TextView theLat = findViewById(R.id.MockLatitude);
         TextView theLong = findViewById(R.id.MockLongitude);
@@ -78,6 +95,11 @@ public class MockFriendActivity extends AppCompatActivity {
         Long = tmpLong;
         return true;
     }
+
+    /**
+     * The following methods all specify a range to generate mocking object
+     * @param view
+     */
 
     public void onClickedOne(View view) {
         TextView myID = findViewById(R.id.mockID);

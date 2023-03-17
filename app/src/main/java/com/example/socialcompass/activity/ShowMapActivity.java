@@ -47,7 +47,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-//import okhttp3.internal.Util;
 
 /**
  * This class is ShowMapActivity class used to support show map page
@@ -60,13 +59,8 @@ public class ShowMapActivity extends AppCompatActivity {
     private ConstraintLayout compass;
     private ConstraintProperties cp;
     private SharedPreferences preferences;
-    private Position destination1;
 
     private int state = 2;
-
-    private int dpscale = 450;
-
-
 
     private Position current = new Position(60, -130);
 
@@ -83,9 +77,6 @@ public class ShowMapActivity extends AppCompatActivity {
     private Map<String, String> textID2imageID = new HashMap<>();
 
     private SocialCompassViewModel viewmodel;
-
-    private Set<String> collidedLabels;
-
 
     private Map<String, String> userLabels = new HashMap<>();
 
@@ -138,10 +129,17 @@ public class ShowMapActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method to set up view model
+     */
     public void setUpViewModel(){
         this.viewmodel = new ViewModelProvider(this).get(SocialCompassViewModel.class);
     }
 
+    /**
+     * method to check for collision for a given user ID
+     * @param labelID
+     */
     private void checkCollisions(int labelID) {
         Rect rect1 = new Rect();
         Rect rect2 = new Rect();
@@ -160,8 +158,6 @@ public class ShowMapActivity extends AppCompatActivity {
                 labelTwo.getGlobalVisibleRect(rect2);
 
                 // must update imageView's associated with labels as well as labels themselves
-                // ImageView imageViewOne = findViewById(Integer.parseInt(textID2imageID.get(Integer.toString(labelID))));
-                // ImageView imageviewTwo = findViewById(Integer.parseInt(textID2imageID.get(label2ID)));
                 // checks if rectangles created by labels collide with each other
                 if (Rect.intersects(rect1, rect2)) {
                     changedLabel = true;
@@ -170,8 +166,6 @@ public class ShowMapActivity extends AppCompatActivity {
                     Log.d("ID", Integer.toString(labelID));
                     Log.d("ID2", label2ID);
                     // if labels collide wipe text off screen
-                    //labelOne.setVisibility(View.INVISIBLE);
-                    //labelTwo.setVisibility(View.INVISIBLE);
                     float angle1 = ((ConstraintLayout.LayoutParams)labelOne.getLayoutParams()).circleAngle;
                     float angle2 = ((ConstraintLayout.LayoutParams)labelTwo.getLayoutParams()).circleAngle;
                     if (Math.abs(angle1-angle2)> 5){
@@ -192,17 +186,30 @@ public class ShowMapActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to truncate labels
+     * @param view
+     */
     private void useTruncateLabel(TextView view) {
         String originalText = view.getText().toString();
         view.setText(originalText.substring(0, Math.min(MAX_TRUNCATED_LENGTH, originalText.length())));
     }
 
+    /**
+     * Method to untruncate labels
+     * @param view
+     */
     private void useFullLabel(TextView view) {
         String originalText = userLabels.get(String.valueOf(view.getId()));
         view.setText(originalText);
     }
 
 
+    /**
+     * Method to stack close labels
+     * @param label1
+     * @param label2
+     */
     public void stackLabel(TextView label1, TextView label2){
         float angle1 = ((ConstraintLayout.LayoutParams)label1.getLayoutParams()).circleAngle;
         float angle2 = ((ConstraintLayout.LayoutParams)label2.getLayoutParams()).circleAngle;
@@ -223,6 +230,12 @@ public class ShowMapActivity extends AppCompatActivity {
         ((ConstraintLayout.LayoutParams)lower.getLayoutParams()).circleAngle-=20;
 
     }
+
+    /**
+     * Method to refresh users in local database from remote server
+     * @throws IOException
+     * @throws InterruptedException
+     */
     private void refreshPositions() throws IOException, InterruptedException {
         ScheduledFuture<?> poller;
         ScheduledExecutorService schedular = Executors.newScheduledThreadPool(1);
@@ -244,6 +257,9 @@ public class ShowMapActivity extends AppCompatActivity {
         }, 0, 1, TimeUnit.MINUTES);
     }
 
+    /**
+     * Method to track GPS signal
+     */
     private void trackGps() {
         // create a poller that will every minute see if we still have gps access
         // if the poller returns that we do not have gps access, increment secondsNoGps by 60
@@ -260,6 +276,10 @@ public class ShowMapActivity extends AppCompatActivity {
         }, 0, 3, TimeUnit.SECONDS);
     }
 
+    /**
+     * Method to display GPS status
+     * @param minutesNoGps
+     */
     public void onGpsChanged(int minutesNoGps) {
         Button gpsButton  = (Button) findViewById(R.id.displayGpsStatus);
         if ((minutesNoGps > 0) && (minutesNoGps < 60)) {
@@ -309,6 +329,10 @@ public class ShowMapActivity extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * Method to update circles according to state
+     */
     public void updateCircles() {
         ImageView circle1 = findViewById(R.id.circle1);
         ImageView circle2 = findViewById(R.id.circle2);
@@ -316,6 +340,7 @@ public class ShowMapActivity extends AppCompatActivity {
         ImageView circle4 = findViewById(R.id.circle4);
 
         if(state==1){
+            // state 1
             circle1.getLayoutParams().width = 900;
             circle1.getLayoutParams().height = 900;
             circle2.getLayoutParams().width = Utilities.INVISIBLE_CIRCLE;
@@ -325,6 +350,7 @@ public class ShowMapActivity extends AppCompatActivity {
             circle4.getLayoutParams().width = Utilities.INVISIBLE_CIRCLE;
             circle4.getLayoutParams().height = Utilities.INVISIBLE_CIRCLE;
         }else if(state==2){
+            //state 2
             circle1.getLayoutParams().width = 900/2;
             circle1.getLayoutParams().height = 900/2;
             circle2.getLayoutParams().width = 900;
@@ -335,6 +361,7 @@ public class ShowMapActivity extends AppCompatActivity {
             circle4.getLayoutParams().height = Utilities.INVISIBLE_CIRCLE;
 
         }else if(state==3){
+            //state 3
             circle1.getLayoutParams().width = 300;
             circle1.getLayoutParams().height = 300;
             circle2.getLayoutParams().width = 600;
@@ -344,6 +371,7 @@ public class ShowMapActivity extends AppCompatActivity {
             circle4.getLayoutParams().width = Utilities.INVISIBLE_CIRCLE;
             circle4.getLayoutParams().height = Utilities.INVISIBLE_CIRCLE;
         }else{
+            //state 4
             circle1.getLayoutParams().width = 300;
             circle1.getLayoutParams().height = 300;
             circle2.getLayoutParams().width = 500;
@@ -373,12 +401,20 @@ public class ShowMapActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * binded to add friend button, go to add friend activity
+     * @param view
+     */
     public void onAddFriendsClicked(View view) {
         Intent i = new Intent(this, AddFriendActivity.class);
         i.putExtra("uid", uid);
         startActivity(i);
     }
 
+    /**
+     * binded to add mock friend button, go to mock friend activity
+     * @param view
+     */
     public void onMockFriendsClicked(View view) {
         Intent i = new Intent(this, MockFriendActivity.class);
         startActivity(i);
@@ -467,10 +503,14 @@ public class ShowMapActivity extends AppCompatActivity {
         );
         cons.applyTo(constraintLayout);
         checkCollisions(textViewID);
-        //Log.d("width", Integer.toString(newTextView.getMeasuredHeight()));
-        //Log.d("height", Integer.toString(newTextView.getMeasuredWidth()));
     }
 
+    /**
+     * calculate a user's location on the screen, radius and orientation angle
+     * @param x
+     * @param y
+     * @return
+     */
     // return
     private Pair<Float, Integer> calculateLocation(float x, float y) {
         double distance = Utilities.calculateDistance(current.getLatitude(), current.getLongitude(), x, y);
@@ -481,17 +521,15 @@ public class ShowMapActivity extends AppCompatActivity {
 
         Float northAngle = northlayoutparams.circleAngle;
 
-
-        //Log.d("Distance", Double.toString(distance));
-        //Log.d("current lat", Double.toString(current.getLatitude()));
-        //Log.d("current long", Double.toString(current.getLongitude()));
-        //Log.d("x", Float.toString(x));
-        //Log.d("y", Float.toString(y));
-        //Log.d("dp", Integer.toString(radius)+""+this.state);
-
         return new Pair<>((relativeAngle + northAngle) % 360, radius);
     }
 
+
+    /**
+     * update user's text view according to remote server data
+     * @param textViewID
+     * @param user
+     */
     private void updateUserView(String textViewID, SocialCompassUser user) {
         TextView textView = findViewById(Integer.parseInt(textViewID));
         ImageView imageView = findViewById(Integer.parseInt(textID2imageID.get(textViewID)));
@@ -518,14 +556,12 @@ public class ShowMapActivity extends AppCompatActivity {
                 theLoc.first
         );
         cons.applyTo(constraintLayout);
-
-        //Log.d("width", Integer.toString(textView.getMeasuredHeight()));
-        //Log.d("height", Integer.toString(textView.getMeasuredWidth()));
-
-        //checkCollisions(Integer.parseInt(textViewID));
-        //Log.d("updated", Integer.toString(theLoc.second));
     }
 
+    /**
+     * Method binded to zoom in button
+     * @param view
+     */
     public void onZoomInClicked(View view) {
         if (state > 1 && state <= 4) {
             state--;
@@ -536,6 +572,10 @@ public class ShowMapActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method binded to zoom out button
+     * @param view
+     */
     public void onZoomOutClicked(View view) {
         if (state >= 1 && state < 4) {
             state++;
@@ -546,6 +586,10 @@ public class ShowMapActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to load all friends onto the screen
+     * @param users
+     */
     private void loadUsers(List<SocialCompassUser> users) {
         if (userIDs.isEmpty()) {
             for (var user : users) {

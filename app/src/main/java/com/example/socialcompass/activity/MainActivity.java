@@ -51,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method binded to submit button, which is used to create self as user and
+     * submit to remote server.
+     * @param view
+     */
     public void onSubmitLabelsClicked(View view) {
         String url = ((TextView) findViewById(R.id.orientation_input)).getText().toString();
 
@@ -74,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        // store user information in shared preferences
         editor.putString("name", tv.getText().toString());
         editor.putString("uid", publicID);
         editor.putString("server_url", url);
@@ -82,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
         Log.d("added private_code", privateID);
         editor.apply();
         SocialCompassUser theUser = new SocialCompassUser(privateID, publicID, tv.getText().toString(), 0.0f, 0.0f);
+
+        // upsert self user to remote server.
         var db = SocialCompassDatabase.provide(getApplicationContext()); //fix this later lmao
         var dao = db.getDao();
         var repo = new SocialCompassRepository(dao);
@@ -91,9 +99,11 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // for testing purpose only
         TextView setPublicCode = (TextView) findViewById(R.id.publicCode);
         setPublicCode.setText(publicID);
 
+        // store user information into intent and go to show map activity
         Intent intent = new Intent(this, ShowMapActivity.class);
         intent.putExtra("uid", publicID);
         intent.putExtra("private_code", privateID);

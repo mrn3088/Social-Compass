@@ -1,3 +1,7 @@
+/**
+ * A SocialCompassAPI class to deal with communication with remote server
+ */
+
 package com.example.socialcompass.model;
 
 import com.example.socialcompass.entity.AdaptedUser;
@@ -28,6 +32,10 @@ public class SocialCompassAPI {
         this.client = new OkHttpClient();
     }
 
+    /**
+     * Singleton pattern, return a API
+     * @return
+     */
     public static SocialCompassAPI provide() {
         if (instance == null) {
             instance = new SocialCompassAPI();
@@ -35,6 +43,10 @@ public class SocialCompassAPI {
         return instance;
     }
 
+    /**
+     * set URL for testing purposes
+     * @param anURL
+     */
     public void useURL(String anURL) {
         if (!anURL.endsWith("/")) {
             anURL += "/";
@@ -43,6 +55,13 @@ public class SocialCompassAPI {
     }
 
 
+    /**
+     * Get user from remote server
+     * @param public_code
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public SocialCompassUser getUser(String public_code) throws IOException, InterruptedException {
         final String[] fullBody = new String[1];
         String noSpaceID = public_code.replace(" ", "%20");
@@ -72,6 +91,12 @@ public class SocialCompassAPI {
         return user;
     }
 
+    /**
+     * add user to remote server
+     * @param user
+     * @throws InterruptedException
+     * @throws JSONException
+     */
     public void addUser(SocialCompassUser user) throws InterruptedException, JSONException {
 
         Gson gson = new Gson();
@@ -99,6 +124,10 @@ public class SocialCompassAPI {
         t.join();
     }
 
+    /**
+     * for testing purpose only
+     * @param url
+     */
     public static void setServerURL(String url){
         serverURL = url;
     }

@@ -1,4 +1,9 @@
+/**
+ * This is a Position class used to represent a lat, long pair
+ */
+
 package com.example.socialcompass.entity;
+
 
 public class Position {
     private double latitude;

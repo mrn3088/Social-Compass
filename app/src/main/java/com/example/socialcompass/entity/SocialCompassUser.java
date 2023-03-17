@@ -1,3 +1,7 @@
+/**
+ * A SocialCompassUser class as the object for database query
+ */
+
 package com.example.socialcompass.entity;
 
 import androidx.annotation.NonNull;

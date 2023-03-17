@@ -1,3 +1,7 @@
+/**
+ * This class sets up local database
+ */
+
 package com.example.socialcompass.model;
 
 import android.content.Context;
