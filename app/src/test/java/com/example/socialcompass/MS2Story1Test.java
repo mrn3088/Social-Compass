@@ -22,7 +22,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.IOException;
 import java.util.UUID;
 
-// Test exchanging User IDs
+// Story 1: exchanging User IDs
 @RunWith(RobolectricTestRunner.class)
 public class MS2Story1Test {
 

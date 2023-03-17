@@ -84,4 +84,9 @@ public class AddFriendActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowMapActivity.class);
         startActivity(intent);
     }
+
+    //for testing purpose
+    public SocialCompassDao getUserDao(){
+        return userDao;
+    }
 }

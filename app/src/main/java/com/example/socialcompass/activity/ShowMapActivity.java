@@ -76,7 +76,7 @@ public class ShowMapActivity extends AppCompatActivity {
     private Map<String, String> userIDs = new HashMap<>();
     private Map<String, String> textID2imageID = new HashMap<>();
 
-    private SocialCompassViewModel viewmodel;
+    public SocialCompassViewModel viewmodel;
 
     private Map<String, String> userLabels = new HashMap<>();
 
@@ -301,6 +301,8 @@ public class ShowMapActivity extends AppCompatActivity {
             public void onChanged(Position currentLocation) {
 
                 current = currentLocation;
+
+                previousLocation = currentLocation;
 
                 try {
                     viewmodel.upsertRemote(new SocialCompassUser(private_code, uid, label, (float) currentLocation.getLatitude(), (float) currentLocation.getLongitude()));
@@ -610,5 +612,12 @@ public class ShowMapActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    //For testing purpose
+    public void setUserInfo(String uid, String private_code, String label){
+        this.uid = uid;
+        this.private_code = private_code;
+        this.label = label;
     }
 }

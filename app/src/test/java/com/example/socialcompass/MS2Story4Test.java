@@ -22,6 +22,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+//Story 4: Setting up and Display user name
 @RunWith(RobolectricTestRunner.class)
 public class MS2Story4Test {
 

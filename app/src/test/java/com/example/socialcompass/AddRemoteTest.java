@@ -11,6 +11,7 @@ public class AddRemoteTest {
     @Test
     public void addRemoteTest1() throws Exception {
         SocialCompassAPI api = new SocialCompassAPI();
+        SocialCompassAPI.setServerURL("https://socialcompass.goto.ucsd.edu/");
         api = api.provide();
 
         SocialCompassUser newUser = new SocialCompassUser("a-non-existing-id",
