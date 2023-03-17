@@ -96,13 +96,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:rotation="0"
-            android:text="N"
+            android:text=""
             android:textSize="40dp"
             app:layout_constraintCircle="@+id/compass"
             app:layout_constraintCircleAngle="0"
             app:layout_constraintCircleRadius="165dp"
-            tools:layout_editor_absoluteX="167dp"
-            tools:layout_editor_absoluteY="-21dp" />
+            tools:layout_editor_absoluteX="186dp"
+            tools:layout_editor_absoluteY="-6dp" />
+
         <TextView
             android:id="@+id/label_template"
             android:layout_width="wrap_content"
@@ -117,19 +118,7 @@
             tools:layout_editor_absoluteY="-21dp" />
 
 
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onBackClicked"
-            android:text="Back"
-            app:layout_constraintBaseline_toBottomOf="parent"
-            app:layout_constraintBaseline_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.964" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -137,15 +126,17 @@
         android:id="@+id/addFriendsB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Friends"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="12dp"
         android:onClick="onAddFriendsClicked"
+        android:text="Add Friends"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/zoom_in"
         android:layout_width="63dp"
-        android:layout_height="47dp"
+        android:layout_height="63dp"
         android:onClick="onZoomInClicked"
         android:text="+"
         android:textSize="25sp"
@@ -160,7 +151,7 @@
     <Button
         android:id="@+id/zoom_out"
         android:layout_width="63dp"
-        android:layout_height="47dp"
+        android:layout_height="63dp"
         android:onClick="onZoomOutClicked"
         android:text="-"
         android:textSize="25sp"
@@ -184,5 +175,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.951"
         android:clickable="false"/>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:onClick="onMockFriendsClicked"
+        android:text="@string/add_mocked_friend"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

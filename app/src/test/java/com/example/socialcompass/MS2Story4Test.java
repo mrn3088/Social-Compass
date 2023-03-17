@@ -11,6 +11,9 @@ import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.socialcompass.activity.MainActivity;
+import com.example.socialcompass.model.SocialCompassAPI;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +22,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
+//Story 4: Setting up and Display user name
 @RunWith(RobolectricTestRunner.class)
 public class MS2Story4Test {
 

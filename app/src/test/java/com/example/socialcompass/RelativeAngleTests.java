@@ -9,11 +9,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
-import android.util.Pair;
+import com.example.socialcompass.utilities.Utilities;
 
 import org.junit.Test;
-
-import java.util.ArrayList;
 
 public class RelativeAngleTests {
     /**

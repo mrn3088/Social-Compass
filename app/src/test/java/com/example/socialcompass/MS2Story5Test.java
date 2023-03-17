@@ -22,73 +22,43 @@ import org.robolectric.RobolectricTestRunner;
 
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.socialcompass.activity.ShowMapActivity;
+import com.example.socialcompass.entity.Position;
+import com.example.socialcompass.service.LocationService;
+import com.example.socialcompass.service.OrientationService;
+import com.example.socialcompass.utilities.Utilities;
 
+//Story 6: showing distance between users
 @RunWith(RobolectricTestRunner.class)
 public class MS2Story5Test {
-    @Rule
-    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    @Rule
-    public GrantPermissionRule fRuntimePermissionRule = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_FINE_LOCATION);
-
-    @Rule
-    public GrantPermissionRule fRuntimePermissionRuleCoarse = GrantPermissionRule.grant(android.Manifest.permission.ACCESS_COARSE_LOCATION);
-
-    /**
-     * This is the test for user changing location
-     */
     @Test
-    public void locationSet() {
-        /*
-        Position testValue = new Position(35.006, 78.5546);
-        var scenario = ActivityScenario.launch(ShowMapActivity.class);
-        scenario.moveToState(Lifecycle.State.STARTED);
-        scenario.onActivity(activity -> {
-            var locationService = LocationService.singleton(activity);
-            var orientationService = OrientationService.singleton(activity);
-            var mockOrientation = new MutableLiveData<Float>();
-            mockOrientation.setValue(0f);
-            orientationService.setMockOrientationData(mockOrientation);
+    public void calculateDistanceTest(){
 
+        double lat1 = 0.0;
+        double long1 = 0.0;
+        double lat2 = 90.0;
+        double long2 = 90.0;
+        double calculatedDistance = 0;
+        double expectedDistance = 6218.47;
 
+        calculatedDistance = Utilities.calculateDistance(lat1, long1,lat2,long2);
 
-            activity.setOrientation(0f);
-            activity.reobserveOrientation();
-            var mockLocation = new MutableLiveData<Position>();
+        assertEquals(expectedDistance, calculatedDistance, 0.02);
+    }
 
-            locationService.setMockOrientationSource(mockLocation);
-            activity.reobserveLocation();
-            mockLocation.setValue(testValue);
+    @Test
+    public void calculateDistanceTest2(){
 
-            Pair<Double, Double> destination = Pair.create(20.0, 30.0);
-            activity.setDestination1(20.0, 30.0);
-            activity.reobserveLocation();
+        double lat1 = 100.0;
+        double long1 = 100.0;
+        double lat2 = 90.0;
+        double long2 = 90.0;
+        double calculatedDistance = 0;
+        double expectedDistance = 690.94;
 
-            TextView north = (TextView) activity.findViewById(R.id.North);
-            ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
-            float northAngle = northlayoutparams.circleAngle;
+        calculatedDistance = Utilities.calculateDistance(lat1, long1,lat2,long2);
 
-            TextView text1 = (TextView) activity.findViewById(R.id.label1);
-            ConstraintLayout.LayoutParams text1layoutparams =  (ConstraintLayout.LayoutParams) text1.getLayoutParams();
-            float text1Angle = text1layoutparams.circleAngle;
-
-            var expected = 252.826f;
-            assertEquals(252.826f, text1Angle, 0.1f);
-
-            Pair<Double, Double> destination2 = Pair.create(21.0,31.0);
-            activity.setDestination1(21.0, 31.0);
-            activity.reobserveLocation();
-
-            north = (TextView) activity.findViewById(R.id.North);
-            northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
-            text1 = (TextView) activity.findViewById(R.id.label1);
-            text1layoutparams =  (ConstraintLayout.LayoutParams) text1.getLayoutParams();
-            text1Angle = text1layoutparams.circleAngle;
-            expected = 253.589f;
-            assertEquals(expected, text1Angle, 0.1);
-
-        });
-
-         */
+        assertEquals(expectedDistance, calculatedDistance, 0.02);
     }
 }

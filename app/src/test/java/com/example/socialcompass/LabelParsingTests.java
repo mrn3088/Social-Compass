@@ -4,11 +4,13 @@
 
 package com.example.socialcompass;
 
-import static com.example.socialcompass.Utilities.parseCoordinate;
+import static com.example.socialcompass.utilities.Utilities.parseCoordinate;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
+
+import com.example.socialcompass.utilities.Utilities;
 
 import org.junit.Test;
 
@@ -25,7 +27,7 @@ public class LabelParsingTests {
         // accurate number of labels
        ArrayList<String> testList = new ArrayList<>();
        testList.add("labelOne"); testList.add("labelTwo"); testList.add("labelThree");
-       assertEquals(true,Utilities.namedLabels(testList));
+       assertEquals(true, Utilities.namedLabels(testList));
        // blank labels shouldn't be counted
         testList.clear();
         testList.add(" "); testList.add(""); testList.add("     ");

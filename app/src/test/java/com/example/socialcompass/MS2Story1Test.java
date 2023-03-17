@@ -11,6 +11,9 @@ import androidx.lifecycle.Lifecycle;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.rule.GrantPermissionRule;
 
+import com.example.socialcompass.entity.SocialCompassUser;
+import com.example.socialcompass.model.SocialCompassAPI;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +22,7 @@ import org.robolectric.RobolectricTestRunner;
 import java.io.IOException;
 import java.util.UUID;
 
-// Test exchanging User IDs
+// Story 1: exchanging User IDs
 @RunWith(RobolectricTestRunner.class)
 public class MS2Story1Test {
 
@@ -34,9 +37,8 @@ public class MS2Story1Test {
 
     @Test
     public void userIdTest(){
-/*
         SocialCompassAPI api = SocialCompassAPI.provide();
-
+        SocialCompassAPI.setServerURL("https://socialcompass.goto.ucsd.edu/");
         String privateID1 = UUID.randomUUID().toString();
         String privateID2 = UUID.randomUUID().toString();
         String publicID1 = UUID.randomUUID().toString();
@@ -48,7 +50,7 @@ public class MS2Story1Test {
         try {
             api.addUser(theUser1);
             api.addUser(theUser2);
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         SocialCompassUser newUser1 = null;
@@ -66,8 +68,6 @@ public class MS2Story1Test {
         assertEquals(newUser1.label, theUser1.label);
         assertEquals(newUser2.label, theUser2.label);
 
-
- */
 
     }
 }

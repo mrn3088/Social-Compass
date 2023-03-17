@@ -11,4 +11,24 @@
     <string name="welcome_to_social_compass">Welcome To Social Compass!!</string>
     <string name="label_1">Label 1:</string>
     <string name="label_2">Label 2:</string>
+    <string name="https_socialcompass_goto_ucsd_edu">https://socialcompass.goto.ucsd.edu</string>
+    <string name="server_url">Server URL</string>
+    <string name="server_url_">Server URL:</string>
+    <string name="enter_display_name">Enter Display Name:</string>
+    <string name="displayed_name">Displayed Name</string>
+    <string name="please_enter_your_user_name_and_server_url">Please enter your user name and server url</string>
+    <string name="friend_id">Friend ID</string>
+    <string name="save">Save</string>
+    <string name="back">Back</string>
+    <string name="enter_friends_ids">Enter Friends IDs!</string>
+    <string name="friend_name">Friend Name</string>
+    <string name="_0_1_miles">0-1 Miles</string>
+    <string name="_1_20_miles">1-20 miles</string>
+    <string name="_1_10_miles">1-10 miles</string>
+    <string name="_10_500_miles">10-500 miles</string>
+    <string name="_500_miles">500+ Miles</string>
+    <string name="enter_friend_name">Enter Friend Name</string>
+    <string name="add_mocked_friend">Add Mocked Friend</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 </resources>
