@@ -53,6 +53,7 @@ import java.util.concurrent.TimeUnit;
  * This class is ShowMapActivity class used to support show map page
  * @invariant user must have an active registered profile
  */
+
 public class ShowMapActivity extends AppCompatActivity {
     private Service orientationService;
     private Service locationService;
@@ -125,23 +126,8 @@ public class ShowMapActivity extends AppCompatActivity {
         updateCircles();
         trackGps();
 
-        /*
-        Two different modes: Orientation manual setting vs orientation tracking
-         */
-//        if (!((this.manual_rotation >= 0) && (this.manual_rotation < 360))) {
-//            /*
-//            Orientation tracking
-//             */
-//            this.reobserveOrientation();
-//        } else {
-//            /*
-//            Orientation manual setting
-//             */
-//            ConstraintLayout.LayoutParams northlayoutparams = (ConstraintLayout.LayoutParams) north.getLayoutParams();
-//            northlayoutparams.circleAngle = 360.0f - manual_rotation;
-//        }
         this.reobserveLocation();
-
+        this.reobserveOrientation();
         try {
             refreshPositions();
         } catch (IOException e) {
@@ -188,19 +174,16 @@ public class ShowMapActivity extends AppCompatActivity {
                     //labelTwo.setVisibility(View.INVISIBLE);
                     float angle1 = ((ConstraintLayout.LayoutParams)labelOne.getLayoutParams()).circleAngle;
                     float angle2 = ((ConstraintLayout.LayoutParams)labelTwo.getLayoutParams()).circleAngle;
-                    if(Math.abs(angle1-angle2)< 5){
+                    if (Math.abs(angle1-angle2)> 5){
+
                         useTruncateLabel(labelOne);
                     } else {
-                        useFullLabel(labelOne);
 
-                        stackLabel(labelOne, labelTwo);
-                        //useTruncateLabel(labelOne);
+                        useTruncateLabel(labelOne);
+//                        stackLabel(labelOne, labelTwo);
 
                     }
                     break;
-                    // must update imageView as well
-                    //imageViewOne.setVisibility(View.INVISIBLE);
-                    //imageviewTwo.setVisibility(View.INVISIBLE);
                 }
             }
         }
@@ -393,6 +376,11 @@ public class ShowMapActivity extends AppCompatActivity {
     public void onAddFriendsClicked(View view) {
         Intent i = new Intent(this, AddFriendActivity.class);
         i.putExtra("uid", uid);
+        startActivity(i);
+    }
+
+    public void onMockFriendsClicked(View view) {
+        Intent i = new Intent(this, MockFriendActivity.class);
         startActivity(i);
     }
 

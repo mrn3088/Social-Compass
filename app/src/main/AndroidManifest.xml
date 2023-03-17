@@ -38,6 +38,10 @@
         <activity
             android:name=".activity.ShowMapActivity"
             android:exported="true" />
+        <activity
+            android:name=".activity.MockFriendActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>
