@@ -86,7 +86,7 @@ public class ShowMapActivityMocking extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_map);
-        setUpViewModel();
+        //setUpViewModel();
         preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
         uid = preferences.getString("uid", "");
         private_code = preferences.getString("private_code", "");
@@ -437,10 +437,8 @@ public class ShowMapActivityMocking extends AppCompatActivity {
      */
     public void loadProfile() {
         preferences = getSharedPreferences("com.example.socialcompass", MODE_PRIVATE);
-        var userList = viewmodel.getAllUserLocal();
-        userList.observe(this, this::loadUsers);
-
-
+        //var userList = viewmodel.getAllUserLocal();
+        //userList.observe(this, this::loadUsers);
     }
 
     /**
